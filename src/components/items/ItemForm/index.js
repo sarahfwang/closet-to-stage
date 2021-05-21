@@ -6,7 +6,7 @@ import {compose} from 'recompose'
 import { withFirebase } from '../../firebase';
 import {withAuthorization} from '../../auth/Session'
 
-import './itemform.css'
+import './itemform.scss'
 //TODO: HANDLE ERRORS
 
 const INITIAL_STATE={
@@ -170,6 +170,9 @@ class Form extends Component {
   render(){
     const {item, images, error, progress} = this.state;
     const colors = ["red", "orange", "yellow", "green", "blue", "purple", "tan", "white", "black"]
+    const urls = ["https://images.unsplash.com/photo-1554080353-a576cf803bda?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cGhvdG98ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80",
+    "https://cdn.britannica.com/67/19367-050-885866B4/Valley-Taurus-Mountains-Turkey.jpg",
+    "https://dqaecz4y0qq82.cloudfront.net/products/mt735.jpg?preset=zoom&404=y"]
 
     return(
       <div>
@@ -178,7 +181,16 @@ class Form extends Component {
           <div className="row">
 
             <div className="col-img">
-              <h1>hi</h1>
+              <div className="img-cont add-cont">
+                  <div className="button-cont">
+                      <button>Add photos</button>
+                  </div>
+                </div>
+                  {urls.map(url => 
+                      <div className="img-cont">
+                          <img src={url}/>
+                      </div>
+                  )}
             </div>
 
             <div className="col-notes">
@@ -246,7 +258,7 @@ class Form extends Component {
                 onChange={this.onChange}
                 placeholder="size, ex: M, 2"
               />
-            
+              for real
                 <input
                   type="file"
                   accept="image/*"

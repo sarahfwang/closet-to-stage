@@ -38,6 +38,9 @@ const NavigationAuth = () =>( //use parentheses not bracket dumb b
           <Link to="/test">Test</Link>
         </li> 
         <li>
+          <Link to="/testbig">Test item</Link>
+        </li> 
+        <li>
           <Link to={ROUTES.ADMIN}>Admin</Link>
         </li>
       </ul>
