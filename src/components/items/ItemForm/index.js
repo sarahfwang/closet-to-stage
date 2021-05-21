@@ -6,27 +6,29 @@ import {compose} from 'recompose'
 import { withFirebase } from '../../firebase';
 import {withAuthorization} from '../../auth/Session'
 
-
+import './itemform.css'
+//TODO: HANDLE ERRORS
 
 const INITIAL_STATE={
   item:{
     itemName:'',
     type:'', //turn into a suggester input later
+    style:'',
     description:'',
     color:'',
     size:'',
-    //sleeveLength:'',
     quantity:'',
     brand:'',
     price:'',
-    isListed: false, //or should it be false initially?
-    error: null,
-    imageAsFile:'',
-    imageAsUrl: {
-      imgUrl: ''
-    },
+    isListed: false,  
   },
   userID: null,
+  images: {
+    imageAsFile:'',
+    imageAsUrl:'',
+  },
+  error: null,
+  progress: 0,
 }
 
 class Form extends Component {
@@ -53,48 +55,78 @@ class Form extends Component {
         } 
     }) 
     
+    console.log(this.state)
   }
 
   onSumbit = event =>{
-    const {item, userID, imageAsFile} = this.state
-      event.preventDefault()
+    const { item, userID, images: {imageAsFile} } = this.state
+    event.preventDefault()
+
     console.log('start of upload')
 
     if(imageAsFile === ''){
+      this.setState({error:"not an image file"})
       console.error('not an image file')
     }
+    else{
+      this.props.firebase.doAddItem({...item, imageAsUrl:'', userID, isListed: true})
+      .then(doc => {
+        this.uploadImage(doc, doc.id)
+      })
+    }
+    
+  }
 
-    const uploadTask = this.props.firebase.doAddImage(imageAsFile.name, imageAsFile)
-      
+  uploadImage = (ref, id) =>{
+    const {userID, images: {imageAsFile}} = this.state
+
+    console.log("doc.id:",id)
+
+    const imagesRef = this.props.firebase.storageRef().child(`users/${userID}/items/${id}/${imageAsFile.name}`)
+
+    const uploadTask = imagesRef.put(imageAsFile)
+    
+    //uploadTask.on has three callbacks: next, error, complete
       uploadTask.on('state-changed',
         (snapshot) => {
-          
+
+          var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100 
+          this.setState({progress})
+
           console.log(snapshot)
-        }, (err) => {
+        }, (error) => {
 
-          console.log(err)
+          //handle errors
+          this.setState({error})
+          console.log(error)
         }, () => {
+          //once complete
 
-          this.props.firebase.images().child(imageAsFile.name).getDownloadURL()
-            .then(fireBaseUrl => {
+          uploadTask.snapshot.ref.getDownloadURL()
+            .then(downloadUrl => {
               
-              this.setState({
-                imageAsUrl: {
-                  ...this.state.imageAsUrl,
-                  imgUrl: fireBaseUrl,
+              this.setState({ //fixed mistake: this.state.images
+                images:{
+                  ...this.state.images,
+                  imageAsUrl: downloadUrl,
                 }
               })
+
+              console.log('File available at', this.state.images.imageAsUrl)
             })
+            .then(()=>{
+              const imageAsUrl = this.state.images.imageAsUrl
+
+              ref.update({imageAsUrl})
+                .then(()=>{
+                  console.log("updated firestore imageAsUrl")
+                })
+
+            })
+            .then(this.onClear)
+
         }
       )
-      
-      this.props.firebase.doAddItem({...item, userID, isListed: true})
-        .then(()=>{
-          console.log("added item")
-        })
-    
-     
-    
     
   }
 
@@ -103,111 +135,150 @@ class Form extends Component {
   }
 
   handleImageAsFile = (e) =>{
+    //uploads image file to state 
       const image = e.target.files[0]
 
       this.setState({
-        ...this.state,
+        images:{
+          ...this.state.images,
           imageAsFile: image,
+        }
       })
+
+      //preview image
+      var reader = new FileReader();
+      reader.onload = () => {
+        var output = document.getElementById('preview_img')
+        output.src = reader.result
+      }
+  
+      reader.readAsDataURL(e.target.files[0])
+      
+  }
+
+  previewImg = (e) => {
+    var reader = new FileReader();
+    reader.onload = () => {
+      var output = document.getElementById('preview_img')
+      output.src = reader.result
+    }
+
+    reader.readAsDataURL(e.target.files[0])
+
   }
 
   render(){
-    const {item, error, imageAsUrl} = this.state;
+    const {item, images, error, progress} = this.state;
+    const colors = ["red", "orange", "yellow", "green", "blue", "purple", "tan", "white", "black"]
 
     return(
       <div>
       <form>
-        <input
-          name="itemName"
-          value={item.itemName}
-          type="text"
-          onChange={this.onChange}
-          placeholder="itemName"
-        />
-        <br />
-        <input
-          name="description"
-          value={item.description}
-          type="text"
-          onChange={this.onChange}
-          placeholder="description"
-        />
-        <br />
-        <input
-          name="type"
-          value={item.type}
-          type="text"
-          onChange={this.onChange}
-          placeholder="type"
-        />
-        <br />
-        <input
-          name="brand"
-          value={item.brand}
-          type="text"
-          onChange={this.onChange}
-          placeholder="brand"
-        />
-        <input
-          name="quantity" //make this have distinct numbers
-          value={item.quantity}
-          type="text"
-          onChange={this.onChange}
-          placeholder="quantity"
-        />
-        <br />
-        <label htmlFor = "color">color: </label>
-        <input
-          name="color"
-          value={item.color}
-          type="color"
-          onChange={this.onChange}
-          placeholder="color"
-        />
-        <div className="color">
-            <input type="checkbox" id="red"/>
-            <input type="checkbox" id="orange"/>
-            <input type="checkbox" id="yelllow"/>
-            <input type="checkbox" id="green"/>
-            <input type="checkbox" id="blue"/>
-            <input type="checkbox" id="purple"/>
-            <input type="checkbox" id="black"/>
-            <input type="checkbox" id="tan"/>
-            <input type="checkbox" id="white"/>
-        </div>
-        <br />
-        <input
-          name="size"
-          value={item.size}
-          type="text"
-          onChange={this.onChange}
-          placeholder="size, ex: M, 2"
-        />
-        <br />
-        <label htmlFor="price">$</label>
-        <input
-          name="price"
-          value={item.price}
-          type="text"
-          onChange={this.onChange}
-          placeholder="00.00"
-        />
-        <br/>
-        <input
-          type="file"
-          onChange ={this.handleImageAsFile}
-        />
+        <div className ="form-container">
+          <div className="row">
 
-        <br />
-        <button onClick={this.onSumbit}>
-          Add
-        </button>
-        <button onClick={this.onClear}>
-          Clear
-        </button>
-        <p>{error && `${error}`}</p>
+            <div className="col-img">
+              <h1>hi</h1>
+            </div>
+
+            <div className="col-notes">
+              <input
+                className="itemName"
+                value={item.itemName}
+                type="text"
+                onChange={this.onChange}
+                placeholder="Item Name"
+              />
+              <label htmlFor="price">$</label>
+                <input
+                  name="price"
+                  value={item.price}
+                  type="text"
+                  onChange={this.onChange}
+                  placeholder="00.00"
+                />
+                <input
+                  className="description"
+                  value={item.description}
+                  type="text"
+                  onChange={this.onChange}
+                  placeholder="description"
+                />
+                <input
+                  className="type"
+                  value={item.type}
+                  type="text"
+                  onChange={this.onChange}
+                  placeholder="type"
+                />
+          
+                <input
+                  className="brand"
+                  value={item.brand}
+                  type="text"
+                  onChange={this.onChange}
+                  placeholder="brand"
+                />
+            
+                <input
+                  className="quantity" //make this have distinct numbers
+                  value={item.quantity}
+                  type="text"
+                  onChange={this.onChange}
+                  placeholder="quantity"
+                />
+                <div className="color-selector">
+              
+                  {colors.map(color => 
+                    <div>
+                      <label htmlFor={color}>
+                        <input type="radio" id={color} name="color" value={color} onChange={this.onChange}/>
+                        <span className={`${color}-select`}></span>
+                      </label>
+                </div>
+
+                )}
+              </div>
+                <input
+                name="size"
+                value={item.size}
+                type="text"
+                onChange={this.onChange}
+                placeholder="size, ex: M, 2"
+              />
+            
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange ={this.handleImageAsFile}
+                />
+              </div>
+
+          </div>
+
+          <div className="row">
+            <button onClick={this.onSumbit}>
+              Add
+            </button>
+
+            <button onClick={this.onClear}>
+              Clear
+            </button>
+
+            <p>{error && `${error}`}</p>
+          </div>
+
+        </div> {/*end of form-container */}
+        
       </form>
-      {imageAsUrl?<img src={imageAsUrl.imgUrl} alt="image tag"/> : <h1></h1>}
+
+      <p>{progress}% uploaded</p>
+      {/*images.imageAsUrl?<img src={images.imageAsUrl} alt="image tag"/> : <h1></h1>*/}
+      <h1>test</h1>
+
+      preview
+      <input type="file" accept="image/*" onChange={this.previewImg}/>
+      <img id="preview_img"/>
       </div>
       
       )

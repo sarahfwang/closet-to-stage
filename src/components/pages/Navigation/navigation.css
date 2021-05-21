@@ -44,7 +44,7 @@
     text-transform: lowercase;
 }
 
-button {
+.header-nav button {
     padding:0;
     margin:0;
 }

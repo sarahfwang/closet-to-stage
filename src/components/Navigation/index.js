@@ -34,12 +34,19 @@ const NavigationAuth = () =>( //use parentheses not bracket dumb b
       <li>
         <Link to={ROUTES.ADMIN}>Admin</Link>
       </li>
+
+      <li>
+        <Link to="/testbig">Test big</Link>
+      </li>
+
       <li>
         <Link to={ROUTES.ITEM_PAGE}>ItemPage</Link>
       </li>
+      
       <li>
-        <Link to="/itemform">ItemForm BETA</Link>
+        <Link to="/itemform">ItemForm</Link>
       </li>
+      
       <li>
         <SignOutButton />
       </li>
@@ -61,6 +68,9 @@ const NavigationNonAuth = () =>(
       </li> */}
       <li>
         <Link to={ROUTES.SIGN_IN}>Sign In</Link>
+      </li>
+      <li>
+        <Link to="/testbig">Test big</Link>
       </li>
       
     </ul>

@@ -173,34 +173,48 @@ class Filter extends Component{
                     {/* <button onClick={this.routeChange}> New Path (router test)</button> */}
                     <h5>type</h5>
                     <div className="selector">
-                        <input className="type" type="checkbox" id="dress" name="dress" value="dress"  onClick={this.onClick("type")}/>
-                        <label htmlFor="dress">dress</label>
+                        <label htmlFor="dress">dress
+                            <input className="type" type="checkbox" id="dress" name="dress" value="dress"  onClick={this.onClick("type")}/>
+                            <span className="checkmark"></span>
+                        </label>
                     </div>
                     <div className="selector">
-                        <input className="type" type="checkbox" id="bottom" name="bottom" value="bottom" onClick={this.onClick("type")}/>
-                        <label htmlFor="bottom">bottom</label>
+                        <label htmlFor="bottom">bottom
+                            <input className="type" type="checkbox" id="bottom" name="bottom" value="bottom" onClick={this.onClick("type")}/>
+                            <span className="checkmark"></span>
+                        </label>
                     </div>
                     <div className="selector">
-                        <input className="type" type="checkbox" id="top" name="top" value="top" onClick={this.onClick("type")}/>
-                        <label htmlFor="top">top</label>
+                        <label htmlFor="top">top
+                            <input className="type" type="checkbox" id="top" name="top" value="top" onClick={this.onClick("type")}/>
+                            <span className="checkmark"></span>
+                        </label>
+                        
                     </div>
                     <div className="selector">
-                        <input className="type" type="checkbox" id="jumpsuit" name="jumpsuit" value="jumpsuit" onClick={this.onClick("type")}/>
-                        <label htmlFor="jumpsuit">jumpsuit</label>
+                        <label htmlFor="jumpsuit">jumpsuit
+                            <input className="type" type="checkbox" id="jumpsuit" name="jumpsuit" value="jumpsuit" onClick={this.onClick("type")}/>
+                            <span className="checkmark"></span>
+                        </label>
                     </div>
                      
                     <h5>brand</h5>
-                    <div className="selector">
+                    {/* <div className="selector">
                         <input type="checkbox" id="coscto" name="costco" value="costco" onClick={this.onClick("brand")}/>
+                        <span className="checkmark"></span>
                         <label htmlFor="costco">costco</label>
-                    </div>
+                    </div> */}
                     <div className="selector">
+                    <label htmlFor="capezio">capezio
                         <input type="checkbox" id="capezio" name="capezio" value="capezio" onClick={this.onClick("brand")}/>
-                        <label htmlFor="capezio">capezio</label>
+                        <span className="checkmark"></span>
+                    </label>
                     </div>
                     <div className="selector">
+                    <label htmlFor="kizzi">kizzi
                         <input type="checkbox" id="kizzi" name="kizzi" value="kizzi" onClick={this.onClick("brand")}/>
-                        <label htmlFor="kizzi">kizzi</label>
+                        <span className="checkmark"></span>
+                    </label>   
                     </div>
                     <div>
                         <Link to="/item-page?brand=costco">costco</Link>

@@ -6,7 +6,7 @@ import {withAuthorization} from '../../auth/Session'
 //import * as ROLES from '../../constants/roles'
 import PasswordChangeForm from '../PasswordChange' 
 import ItemEdit from '../../items/ItemEdit'
-import {ItemsList, Item} from '../../pages/ItemPage'
+
 import './account.css'
 
 //TODO: Delete item
@@ -84,12 +84,9 @@ class AccountPage extends Component {
 
         <a href="/itemform"> Add Item</a>
 
-        <div className="row">
-          <div className="items-list">
+        
             <ItemsList items = {userItems} /> 
-          </div>
-          
-        </div>
+        
         
 
       </div>
@@ -113,7 +110,7 @@ const User = ({user}) => (
     </div>
 )
 
-/*const ItemsList = (props) => { //props: {items: [{item1}, {item2}, ...]}
+const ItemsList = (props) => { //props: {items: [{item1}, {item2}, ...]}
   
   return (
     <div className="itemslist">
@@ -123,16 +120,16 @@ const User = ({user}) => (
     </div>
   )
 }
-*/
 
-/* const Item =  (props) =>{ //or use ({item}) instead of (props) and change accoridngly
+
+ const Item =  (props) =>{ //or use ({item}) instead of (props) and change accoridngly
   //console.log(props.item)
 return(
     <div className="item">
       <strong>itemName: {props.item.item.itemName}, color: {props.item.item.color} </strong>
     </div>
   )
-} */
+} 
  
 
 

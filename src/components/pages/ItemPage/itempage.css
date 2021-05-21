@@ -1,11 +1,11 @@
-.filter {
+/* .filter {
     float: left;
-    width: 15%;
+    width: 20%;
 }
 
 .items-list {
     float: left;
-    width: 85%;
+    width: 80%;
 }
 
 .items-list ul {
@@ -19,20 +19,37 @@
 .items-list li {
    position: relative;
    display: inline-block;
-   width: 33.33%;
-   padding-top: 50%;
+   width: 22%;
+   padding-top: 45%;
+   margin: 8px;
+   
    
 }
 
-.item-display {
+.item-card-display {
     position:absolute;
     top:0;
     bottom:0;
     left:0;
     right:0;
-    margin: 8px;
-    background-color:whitesmoke;
+    padding: 8px;
+    height: 100%;
+    width: 100%;
+   
+}
 
+.item-card-display a {
+  
+}
+.item-card-display img{
+    width:100%;
+    height:70%;
+    object-fit: cover;
+}
+
+.item-card-info, .testing-info{
+    line-height: 4px;
+    font-size: 8px;
 }
 
 .row:after{
@@ -41,6 +58,59 @@
     clear: both;
 }
 
+
+.test-items-list {
+    display: flex;
+    background-color: blue;
+}
+
+.test-card {
+    position: relative;
+    width: 25%;
+    height: 45px;
+    margin: 8px;
+  
+}
+
+.test-card-content {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    top:0px;
+    left:0;
+    width: 100%;
+    height: 100%;
+    background-color: whitesmoke;
+}
+
+.test-img-holder {
+    height: calc(200%/3);
+    background-color: grey;
+}
+
+.test-text-holder {
+    height: calc(100%/3);
+    background-color:lightblue;
+}
+
+.test-item-name {
+    font-size: .75em;
+    max-height: 3em;
+    width:100%;
+    text-overflow: ellipsis;
+    background-color: lightgoldenrodyellow;
+}
+
+.test-item-price{
+    font-size: .75em;
+    background-color: lightgoldenrodyellow;
+}
+
+.test-item-brand {
+    font-size:.5em;
+
+    background-color: lightgoldenrodyellow;
+}
 /* .container {
     display: inline-block;
 }
@@ -84,4 +154,4 @@ li{
     height: 20em;
     border: solid 1px black;
     margin: 10px;
-}  */
+}  */ 

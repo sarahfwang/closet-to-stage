@@ -21,7 +21,7 @@ class MessageBox extends React.Component{
         const msgRef = this.props.firebase.itemChats().doc(itemID).collection("messages")
 
         
-        msgRef.onSnapshot(snapshot =>{
+        msgRef.onSnapshot(snapshot =>{ //either get or on snapshot or set upload
             let messages = [] //have to set state outside of forEach function
         
             snapshot.forEach(doc => {

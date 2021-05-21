@@ -1,3 +1,113 @@
-.color red {
+.form-container{
+    margin: 1em;
+
+    background-color: rgb(247, 232, 242);
+}
+
+.form-container .row{
+    display: flex;
+}
+
+.col-img{
+    width: 50%;
+}
+
+.col-notes{
+    width: 50%;
+
+    display: flex;
+    flex-direction: column;
+
+}
+
+input{
+    padding: 0;
+    margin: 1em;
+}
+
+.itemName{
+    height: 2em;
+}
+
+.description{
+    height: 6em;
+}
+
+
+/*color*/
+.color-selector{
+    display:flex;
+    background-color: white;
+}
+
+.color-selector div {
+    padding: 0px;
+    margin:4px;
+    background-color: grey;
+}
+
+.color-selector input:checked ~ span{
+    border: 4px solid lightgrey;
+}
+
+
+.color-selector label{
+    position: relative;
+    display:block;
+}
+
+
+.color-selector input[type=radio] {
+    position: absolute;
+    width:0;
+    height:0;
+    opacity:0;
+    margin:0;
+    padding:0;
+}
+
+.color-selector span{
+    display: block;
+    height:1em;
+    width:1em;
+    border: 4px solid white;
     
 }
+
+.red-select {
+    background-color: tomato;
+}
+
+.orange-select {
+
+    background-color: darkorange;
+}
+
+.yellow-select {
+    background-color: gold;
+}
+
+.green-select {
+    background-color: olivedrab;
+}
+
+.blue-select {
+    background-color: steelblue;
+}
+
+.purple-select {
+    background-color: blueviolet;
+}
+.tan-select {
+    background-color: tan;
+}
+.white-select {
+    background-color: whitesmoke;
+    
+}
+.black-select {
+    background-color: black;
+}
+
+
+

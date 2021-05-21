@@ -42,7 +42,7 @@ class ItemEditForm extends Component {
 
         this.props.firebase.doChangeListing(itemID)
         event.preventDefault()
-        //didn't work when changingg state and passing it into a firebase function;
+        //didn't work when changing state and passing it into a firebase function;
         //kept reuploading and changing twice
         //firebase.js handles the isListed change
 
@@ -54,7 +54,7 @@ class ItemEditForm extends Component {
         console.log(itemID)
         this.props.firebase.doDeleteItem(itemID)
 
-        //event.preventDefault();
+        event.preventDefault();
     }
 
     render(){

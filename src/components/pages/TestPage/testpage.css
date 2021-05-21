@@ -1,0 +1,206 @@
+
+:root {
+    --lh: 1.2em;
+}
+
+[class*="col-"]{ /*targets col-filter and col-items*/
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.nav{
+    height: 4em;
+    margin: 1em;
+    background-color: lightgoldenrodyellow;
+}
+
+.items{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.t-item-card{
+    width: 50%;
+    padding: 1em;
+    box-sizing: border-box;
+}
+
+.t-img{
+    background-color: lightgoldenrodyellow;
+    padding-top: calc(400%/3);
+}
+
+
+.t-item-name{
+    margin:.5em 0;
+    padding:0;
+    font-size: 1.1875em;
+    font-weight: 500;
+
+    --max-lines: 2;
+    max-height: calc(var(--lh)*var(--max-lines)); /*line height times max-height*/
+    overflow: hidden;
+
+    position: relative;
+}
+
+.t-item-name::before {
+    content: "...";
+    position: absolute;
+    bottom:0;
+    right:0;
+}
+
+.t-item-name::after{
+    content:"";
+    position: absolute;
+    right:0;
+    width:1rem;
+    height: 1rem;
+    background:white;
+}
+
+.t-item-price{
+    margin:.5em 0;
+    padding:0;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.t-item-brand{
+    margin:0;
+    padding:0;
+    font-size: 18px;
+}
+
+@media only screen and (min-width:768px) {
+    .page {
+        display: flex;
+    }
+    .col-filter{
+        width: 25%;
+        padding: 1em;
+    }
+    .col-items{
+        width: 75%;
+    }
+    .t-item-card{
+        width: 33%;
+    }
+    .filter{
+        background-color: lightgoldenrodyellow;
+        padding: 1em;
+        height: auto;
+        box-sizing: border-box;
+    }
+    
+    .category .category-title{
+        margin:0;
+    }
+
+    .selector-wrapper{
+        display: flex; 
+        flex-direction: row;
+        margin: .75rem 0;
+    }
+
+    .selector-wrapper input[type="checkbox"]{
+        width:0;
+        height:0;
+
+        margin:0;
+
+        opacity: 0;
+    }
+
+    .selector-wrapper:hover > .checkmark::before{
+        content: "\2713 ";
+
+        display: flex;
+        justify-content: center;
+        align-self: center;
+
+        color: lightgrey;
+        font-weight: bold;
+    }
+   
+    .checkmark{
+        margin-right: .5em; /*TODO: make a part of label, not checkmark*/
+        padding-bottom: .125em;
+        display: block;
+        
+
+        width: 1.125em;
+        height: 1em;
+
+        background-color: white;
+    }
+
+    .selector-wrapper input:checked + .checkmark:before{
+        content: "\2713 ";
+
+        display: flex;
+        justify-content: center;
+        align-self: center;
+
+        color: black;
+        font-weight: bold;
+    }
+
+    .selector-wrapper:hover > .swatch-wrapper{
+        border: 1px solid grey;
+        border-radius: 50%;
+    }
+
+    .swatch-wrapper{
+        display: flex;
+        justify-content: center;
+        align-self: center;
+
+        border: 1px solid lightgoldenrodyellow;
+        border-radius: 50%;
+    }
+
+    .swatch-Red{
+        
+        width: 1.125em;
+        height: 1.125em;
+
+        margin: .125em;
+
+        border-radius: 50%;
+
+        background-color: tomato;
+
+    }
+    .swatch-Green{
+        
+        width: 1.125em;
+        height: 1.125em;
+
+        margin: .125em;
+
+        border-radius: 50%;
+
+        background-color: yellowgreen;
+
+    }
+
+    .swatch-label{
+        margin-left:.5em;
+        padding-top: .175em; /*1.125+.125*2 - var(--lh)*/
+    }
+   
+}
+
+@media only screen and (min-width: 992px) {
+    .col-filter{
+        width: 20%;
+    }
+    .col-items{
+        width: 80%;
+    }
+    .t-item-card{
+        width: 25%;
+    }
+}

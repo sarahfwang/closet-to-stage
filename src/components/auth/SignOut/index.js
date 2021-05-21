@@ -5,7 +5,7 @@ import "./signout.css"
 const SignOutButton = (props) =>{ //can also put ({firebase})
 
     return(
-        <div>
+        <div className="sign-out">
             <button onClick={()=>{props.firebase.doSignOut(); console.log("hi")}}> 
                 SignOut
             </button>

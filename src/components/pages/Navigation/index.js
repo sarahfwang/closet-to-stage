@@ -32,11 +32,11 @@ const NavigationAuth = () =>( //use parentheses not bracket dumb b
           <Link to={ROUTES.ITEM_PAGE}>ItemPage</Link>
         </li>
         <li>
-          <Link to="/itemform">ItemForm BETA</Link>
+          <Link to="/itemform">ItemForm</Link>
         </li>
-        {/* <li>
+        <li>
           <Link to="/test">Test</Link>
-        </li> */}
+        </li> 
         <li>
           <Link to={ROUTES.ADMIN}>Admin</Link>
         </li>

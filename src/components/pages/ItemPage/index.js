@@ -18,13 +18,14 @@ class ItemPageBase extends Component{
         }
     }
 
-    handleSearchResultsChange = (itemsList) => { //pass this to Filter
+    handleSearchResultsChange = (itemsList) => { //pass this to Filter 
         this.setState({itemsList})
         console.log(this.state)
     }
 
     componentDidMount(){ //work on uploading only a few items to each page
-          this.props.firebase.items() // this. referes to element it's called upon
+          console.log("hi")
+        this.props.firebase.items() // this. referes to element it's called upon
             .where('isListed','==',true)
             .get()
             .then(snapshot => { //TODO .get().then
@@ -33,11 +34,10 @@ class ItemPageBase extends Component{
                 snapshot.forEach(doc => {
                     console.log(doc.id, '=>',doc.data())
 
-                    itemsList.push({itemID:doc.id, ...doc.data()})
-                    
+                    itemsList.push({itemID: doc.id, ...doc.data()})
                 })
 
-                this.setState({itemsList: itemsList, fullList: itemsList})
+                this.setState({itemsList: itemsList, fullList: itemsList}) //itemsList changes, fullList does not
             })
 
     }
@@ -63,8 +63,38 @@ class ItemPageBase extends Component{
                         <p>sort by</p>
                     </div>
                     <ItemsList  items = {itemsList}/>
+                    <div className = "test-items-list">
+                        <div className= "test-card">
+                            <div className="test-card-content">
+                                <div className="test-img-holder">
+                                    <div className="test-img"></div>
+                                </div>
+                                <div className="test-text-holder">
+                                    <div className="test-item-name">
+                                        <p>test item name eeeeeeeeeeeeeeeeeeeeee</p>
+                                    </div>
+                                    <div className="test-item-price">
+                                        <p>$12.00</p>
+                                    </div>
+                                    <div className="test-item-brand">
+                                        <p>item brand here</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className= "test-card">
+                            <div className="test-card-content">
+                                <div className="test-img"></div>
+                            </div>
+                        </div>
+                        <div className= "test-card">
+                            <div className="test-card-content"></div>
+                        </div>
+                        <div className= "test-card">
+                            <div className="test-card-content"></div>
+                        </div>
+                    </div>
                 </div>
-                
             </div>
         )
     }
@@ -85,14 +115,25 @@ const ItemsList = ({items}) =>(
 const Item=(props)=>{
     //console.log(item.itemID)
     /* {itemName: , color: , itemID: ,} */
+
     return(
-        <div className="item-display">
-            <h3>itemName: {props.item.itemName}</h3>
-            <p>type: {props.item.type}</p>
-            <p>brand: {props.item.brand}</p>
-            <h3 style={{backgroundColor:`${props.item.color}`}}>color: {props.item.color} </h3>
-            <h5>itemID: {props.item.itemID}</h5> 
-            <p>userID: {props.item.userID} [prof pic]</p>
+        <div className="item-card-display">
+            <a href={`items/${props.item.itemID}`}> 
+                <img src={props.item.imageAsUrl}></img>
+            </a>
+            
+            <div className="item-card-info">
+                <p>{props.item.itemName}</p>
+                <p>{props.item.price}</p>
+                <p>{props.item.size}</p>
+                <p>{props.item.brand}</p>
+            </div>
+            <div className="testing-info">
+                <p>type: {props.item.type}</p>
+                <p>color: todo</p>
+                <p>itemID: {props.item.itemID}</p>
+                <p>userID: {props.item.userID}</p>
+            </div>
             <Link to={{pathname: `/items/${props.item.itemID}`}}>view</Link>
         </div>
         

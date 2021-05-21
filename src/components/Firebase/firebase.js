@@ -26,15 +26,16 @@ const firebaseConfig = {
       
        
       }
+        storageRef = () => (
+            this.storage.ref()
+        )
+
         doAddImage = (name, file) => {
             return(
                 this.storage.ref(`/images/${name}`).put(file)
             )
         }
 
-        images = () => (
-            this.storage.ref('images')
-        )
 
       //*** Auth API ***
         doCreateUserWithEmailAndPassword = (email, password) =>

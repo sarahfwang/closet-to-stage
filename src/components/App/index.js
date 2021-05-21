@@ -14,6 +14,8 @@ import Form from '../items/ItemForm'
 import Filter from '../pages/Filter'
 import Item from '../items/Item'
 import NewFilterPage from '../z-Test'
+import TestPage from '../pages/TestPage'
+import TestItemBig from '../TestItemBig'
 
 import * as ROUTES from '../../constants/routes';
 import { withAuthentication } from '../auth/Session';
@@ -64,7 +66,8 @@ const App = () => (
       <Route exact path="/filter" component = {Filter} />
       <Route exact path="/items/:itemID" component = {Item}/> {/*':' allows Item to access itemID */}
       <Route exact path="/items/:type?/:color?/brand?:" component={NewFilterPage}/>
-      {/* <Route path ="/test" component = {NewFilterPage} /> */}
+      {<Route path ="/test" component = {TestPage} />}
+      <Route exact path="/testbig" component = {TestItemBig}/>
     </div>
   </Router>
 );
