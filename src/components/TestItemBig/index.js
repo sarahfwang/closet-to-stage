@@ -6,13 +6,68 @@ class TestItemBig extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-            urls: ["https://images.unsplash.com/photo-1554080353-a576cf803bda?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cGhvdG98ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80",
-            "https://cdn.britannica.com/67/19367-050-885866B4/Valley-Taurus-Mountains-Turkey.jpg",
-            "https://dqaecz4y0qq82.cloudfront.net/products/mt735.jpg?preset=zoom&404=y"],
+            urls: [],
         }
     }
+
+    componentDidMount(){
+        
+        const imgInput = document.querySelector('.img-uploads')
+        const preview = document.querySelector('.preview')
+
+        this.setState({
+            imgInput,
+            preview
+        })
+
+        imgInput.style.opacity = 0;
+        
+        imgInput.addEventListener('change', this.updateImageDisplay)
+            
+    }
+
+
+    updateImageDisplay = () => {
+        const{imgInput, preview} = this.state
+
+        while(preview.firstChild) {
+            preview.removeChild(preview.firstChild) //???
+        }
+
+        const curFiles = imgInput.files
+        if(curFiles.length == 0){
+            const para = document.createElement('p')
+            para.textContent = 'No files currently selected'
+            preview.appendChild(para)
+        } else {
+            const list = document.createElement('ol')
+            preview.appendChild(list)
+
+            for(const file of curFiles){
+                const listItem = document.createElement('li')
+                const para = document.createElement('p')
+                if(file){
+                    para.textContent = `File name: ${file.name}`
+
+                    const img  = document.createElement('img')
+                    img.src = URL.createObjectURL(file)
+                    console.log(img.src)
+
+                    listItem.appendChild(img)
+                    listItem.appendChild(para)
+                } else{
+                    para.textContent = `File name: ${file.name}`
+                    listItem.appendChild(para)
+                }
+
+                list.appendChild(listItem)
+            }
+        }
+    }
+
     render(){
         const {urls} = this.state;
+
 
         return(
             <div>
@@ -70,8 +125,27 @@ class TestItemBig extends React.Component{
                         </div>
                     </div>
                 </div>
+
+                <div className="img-test">
+                    <form>
+                        <div>
+                            <label for="img-uploads">Choose images to upload</label>
+                            <input type="file" id="img-uploads"  className="img-uploads" acccept="image/*"/>
+                        </div>
+                        <div className="preview">
+                            <p>No files currently selected for upload</p>
+                        </div>
+                        <div>
+                            <button>Submit</button>
+                        </div>
+                    </form>
+                    
+                </div>
             </div>
         )
+       
+        
+
     }
     
 }

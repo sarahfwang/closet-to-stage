@@ -1,34 +1,25 @@
 .form-container{
-    margin: 1em;
+    margin: 1rem;
     background-color: rgb(247, 232, 242);
 }
-.test-i-b-page [class*="col"] {
+
+.form-container [class*="col"] {
     width: 100%;
 }
 
-.col-img{
-    display: flex;
-    flex-wrap: wrap;
-    
+
+.img-col{
+   display:flex;
+   flex-wrap: wrap;
+   align-content: flex-start; //mystery
 }
 
-.form-container .row{
-    display: flex;
+.info-col{
+    width:100%;
+    box-sizing: border-box;
 }
 
-.col-img{
-    width: 50%;
-}
-
-.col-notes{
-    width: 50%;
-
-    display: flex;
-    flex-direction: column;
-
-}
-
-.test-i-b-page .img-cont{
+.img-cont{
     position: relative;
 
     padding-top: calc(100%/3);
@@ -47,9 +38,63 @@
     }
 }
 
+.add-cont{
+    position: relative;
+}
+
+.file-in-cont{
+    position: absolute;
+    top:50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    
+    margin:0;
+    
+    background-color: white;
+
+    input{
+       border: none;
+       margin: 0;
+    }
+}
+
+@media only screen and (min-width: 768px) { //min-width is smallest width allowed
+    .form-container{
+        display: flex;
+        .img-cont{
+            padding-top: 50%;
+            width: 50%;
+    
+        }
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    .form-container{
+        .img-cont{
+            padding-top: calc(100%/3);
+            width: calc(100%/3);
+    
+        }
+    }
+    
+}
+
+
+
 input{
     padding: 0;
     margin: 1em;
+}
+
+.info-description{
+    textarea{
+        resize: none;
+
+        height: 10rem;
+        overflow: hidden;
+    }
 }
 
 .itemName{

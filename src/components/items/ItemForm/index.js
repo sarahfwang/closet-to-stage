@@ -27,6 +27,8 @@ const INITIAL_STATE={
     imageAsFile:'',
     imageAsUrl:'',
   },
+  imgFiles: [],
+  imgUrls: [],
   error: null,
   progress: 0,
 }
@@ -170,38 +172,52 @@ class Form extends Component {
   render(){
     const {item, images, error, progress} = this.state;
     const colors = ["red", "orange", "yellow", "green", "blue", "purple", "tan", "white", "black"]
-    const urls = ["https://images.unsplash.com/photo-1554080353-a576cf803bda?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cGhvdG98ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80",
-    "https://cdn.britannica.com/67/19367-050-885866B4/Valley-Taurus-Mountains-Turkey.jpg",
-    "https://dqaecz4y0qq82.cloudfront.net/products/mt735.jpg?preset=zoom&404=y"]
+    const urls = []
 
     return(
       <div>
       <form>
         <div className ="form-container">
-          <div className="row">
-
-            <div className="col-img">
-              <div className="img-cont add-cont">
-                  <div className="button-cont">
-                      <button>Add photos</button>
+            <div className="img-col">
+              
+                {urls.map(url => 
+                    <div className="img-cont">
+                        <img src={url}/>
+                    </div>
+                )}
+                <div className="img-cont add-cont">
+                  <div className="file-in-cont">
+                    <input
+                    type="file"
+                    accept="image/*"
+                    onChange ={this.handleImageAsFile}
+                    />
                   </div>
-                </div>
-                  {urls.map(url => 
-                      <div className="img-cont">
-                          <img src={url}/>
-                      </div>
-                  )}
+              </div>
             </div>
 
-            <div className="col-notes">
-              <input
-                className="itemName"
-                value={item.itemName}
-                type="text"
-                onChange={this.onChange}
-                placeholder="Item Name"
-              />
-              <label htmlFor="price">$</label>
+            <div className="info-col">
+              <div className = "info-item-name info-cont">
+                <input
+                  name="itemName"
+                  value={item.itemName}
+                  type="text"
+                  onChange={this.onChange}
+                  placeholder="Item Name"
+                  required
+                />
+              </div>
+              <div className ="info-brand-name info-cont">
+                <input
+                    name="brand"
+                    value={item.brand}
+                    type="text"
+                    onChange={this.onChange}
+                    placeholder="brand"
+                />
+              </div>
+              <div className="info-price info-cont">
+                <label htmlFor="price">$</label>
                 <input
                   name="price"
                   value={item.price}
@@ -209,15 +225,28 @@ class Form extends Component {
                   onChange={this.onChange}
                   placeholder="00.00"
                 />
+              </div>
+              <div className="info-size info-cont">
                 <input
-                  className="description"
+                  name="size"
+                  value={item.size}
+                  type="text"
+                  onChange={this.onChange}
+                  placeholder="size, ex: M, 2"
+                />
+              </div>
+              <div className="info-description info-cont">{/*beware 'notes'*/}
+                <textarea
+                  name="description"
                   value={item.description}
                   type="text"
                   onChange={this.onChange}
                   placeholder="description"
                 />
+              </div>
+              
                 <input
-                  className="type"
+                  name="type"
                   value={item.type}
                   type="text"
                   onChange={this.onChange}
@@ -225,15 +254,7 @@ class Form extends Component {
                 />
           
                 <input
-                  className="brand"
-                  value={item.brand}
-                  type="text"
-                  onChange={this.onChange}
-                  placeholder="brand"
-                />
-            
-                <input
-                  className="quantity" //make this have distinct numbers
+                  name="quantity" //make this have distinct numbers
                   value={item.quantity}
                   type="text"
                   onChange={this.onChange}
@@ -251,34 +272,25 @@ class Form extends Component {
 
                 )}
               </div>
-                <input
-                name="size"
-                value={item.size}
-                type="text"
-                onChange={this.onChange}
-                placeholder="size, ex: M, 2"
-              />
-              for real
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange ={this.handleImageAsFile}
-                />
+                
+                
+
+              <div>
+                <button onClick={this.onSumbit}>
+                  Add
+                </button>
+
+                <button onClick={this.onClear}>
+                  Clear
+                </button>
+              </div>
               </div>
 
-          </div>
-
-          <div className="row">
-            <button onClick={this.onSumbit}>
-              Add
-            </button>
-
-            <button onClick={this.onClear}>
-              Clear
-            </button>
+              
+            
 
             <p>{error && `${error}`}</p>
-          </div>
+          
 
         </div> {/*end of form-container */}
         
