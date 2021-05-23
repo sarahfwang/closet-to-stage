@@ -29,6 +29,7 @@ const INITIAL_STATE={
   },
   imgFiles: [],
   imgUrls: [],
+  fbUrls:[],
   error: null,
   progress: 0,
 }
@@ -46,6 +47,8 @@ class Form extends Component {
 
   componentDidMount () {
     console.log(this.props.firebase.currentUser().uid)
+
+    
   }
 
   onChange = event =>{
@@ -61,17 +64,17 @@ class Form extends Component {
   }
 
   onSumbit = event =>{
-    const { item, userID, images: {imageAsFile} } = this.state
+    const { item, userID, imgFiles } = this.state
     event.preventDefault()
 
     console.log('start of upload')
 
-    if(imageAsFile === ''){
-      this.setState({error:"not an image file"})
-      console.error('not an image file')
+    if(imgFiles.length == 0){
+      this.setState({error:"please select at least one image"})
+      console.error('please select at least one image')
     }
     else{
-      this.props.firebase.doAddItem({...item, imageAsUrl:'', userID, isListed: true})
+      this.props.firebase.doAddItem({...item, userID, isListed: true}) //add images as urls!!!
       .then(doc => {
         this.uploadImage(doc, doc.id)
       })
@@ -80,15 +83,20 @@ class Form extends Component {
   }
 
   uploadImage = (ref, id) =>{
-    const {userID, images: {imageAsFile}} = this.state
+    const {userID, imgUrls, imgFiles, fbUrls} = this.state
 
     console.log("doc.id:",id)
 
-    const imagesRef = this.props.firebase.storageRef().child(`users/${userID}/items/${id}/${imageAsFile.name}`)
+    //loop: going to have to loop thru imgFiles
+    //find imgFile.name
 
-    const uploadTask = imagesRef.put(imageAsFile)
-    
-    //uploadTask.on has three callbacks: next, error, complete
+    imgFiles.map(imgFile => {
+      //file has name prop
+      const imagesRef = this.props.firebase.storageRef().child(`users/${userID}/items/${id}/${imgFile.name}`)
+
+      const uploadTask = imagesRef.put(imgFile)
+
+      //uploadTask.on has three callbacks: next, error, complete
       uploadTask.on('state-changed',
         (snapshot) => {
 
@@ -114,9 +122,18 @@ class Form extends Component {
                 }
               })
 
-              console.log('File available at', this.state.images.imageAsUrl)
+              this.setState(state => {
+                fbUrls.concat(downloadUrl)
+
+                return{
+                  ...state,
+                  fbUrls
+                }
+              })
+
+              console.log('File available at', downloadUrl)
             })
-            .then(()=>{
+            /* .then(()=>{
               const imageAsUrl = this.state.images.imageAsUrl
 
               ref.update({imageAsUrl})
@@ -124,11 +141,21 @@ class Form extends Component {
                   console.log("updated firestore imageAsUrl")
                 })
 
-            })
+            }) */
             .then(this.onClear)
 
         }
       )
+
+
+
+
+      
+    })
+
+    
+    
+    
     
   }
 
@@ -140,21 +167,34 @@ class Form extends Component {
     //uploads image file to state 
       const image = e.target.files[0]
 
-      this.setState({
+      const url = URL.createObjectURL(image)
+
+      /* this.setState({
         images:{
           ...this.state.images,
           imageAsFile: image,
         }
+      }) */
+
+      this.setState(state => {
+        const imgUrls = state.imgUrls.concat(url)
+        const imgFiles = state.imgFiles.concat(image)
+
+        return {
+          ...state,
+          imgFiles,
+          imgUrls,
+        }
       })
 
       //preview image
-      var reader = new FileReader();
+      /* var reader = new FileReader();
       reader.onload = () => {
         var output = document.getElementById('preview_img')
         output.src = reader.result
       }
   
-      reader.readAsDataURL(e.target.files[0])
+      reader.readAsDataURL(e.target.files[0]) */
       
   }
 
@@ -170,9 +210,9 @@ class Form extends Component {
   }
 
   render(){
-    const {item, images, error, progress} = this.state;
+    const {item, images, error, progress, imgUrls} = this.state;
     const colors = ["red", "orange", "yellow", "green", "blue", "purple", "tan", "white", "black"]
-    const urls = []
+    
 
     return(
       <div>
@@ -180,13 +220,13 @@ class Form extends Component {
         <div className ="form-container">
             <div className="img-col">
               
-                {urls.map(url => 
+                {imgUrls.map(url => 
                     <div className="img-cont">
                         <img src={url}/>
                     </div>
                 )}
                 <div className="img-cont add-cont">
-                  <div className="file-in-cont">
+                  <div className="add-file-cont">
                     <input
                     type="file"
                     accept="image/*"
@@ -203,17 +243,18 @@ class Form extends Component {
                   value={item.itemName}
                   type="text"
                   onChange={this.onChange}
-                  placeholder="Item Name"
-                  required
+                  placeholder="Item Name*"
+                  required= "required"
                 />
               </div>
               <div className ="info-brand-name info-cont">
                 <input
-                    name="brand"
-                    value={item.brand}
-                    type="text"
-                    onChange={this.onChange}
-                    placeholder="brand"
+                  name="brand"
+                  value={item.brand}
+                  type="text"
+                  onChange={this.onChange}
+                  placeholder="brand*"
+                  required= "required"
                 />
               </div>
               <div className="info-price info-cont">
@@ -223,7 +264,8 @@ class Form extends Component {
                   value={item.price}
                   type="text"
                   onChange={this.onChange}
-                  placeholder="00.00"
+                  placeholder="00.00*"
+                  required= "required"
                 />
               </div>
               <div className="info-size info-cont">
@@ -232,7 +274,8 @@ class Form extends Component {
                   value={item.size}
                   type="text"
                   onChange={this.onChange}
-                  placeholder="size, ex: M, 2"
+                  placeholder="size, ex: M, 2*"
+                  required= "required"
                 />
               </div>
               <div className="info-description info-cont">{/*beware 'notes'*/}
@@ -241,7 +284,8 @@ class Form extends Component {
                   value={item.description}
                   type="text"
                   onChange={this.onChange}
-                  placeholder="description"
+                  placeholder="description*"
+                  required= "required"
                 />
               </div>
               
@@ -283,14 +327,12 @@ class Form extends Component {
                 <button onClick={this.onClear}>
                   Clear
                 </button>
-              </div>
-              </div>
 
-              
-            
+                <p>{error && `${error}`}</p>
+              </div>
+            </div>
 
-            <p>{error && `${error}`}</p>
-          
+           
 
         </div> {/*end of form-container */}
         
@@ -303,6 +345,11 @@ class Form extends Component {
       preview
       <input type="file" accept="image/*" onChange={this.previewImg}/>
       <img id="preview_img"/>
+
+   
+
+
+
       </div>
       
       )

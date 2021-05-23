@@ -67,7 +67,8 @@ class TestItemBig extends React.Component{
 
     render(){
         const {urls} = this.state;
-
+        const words = ["apple","banana","carrot"]
+        const ranks = [1,9,3]
 
         return(
             <div>
@@ -139,7 +140,12 @@ class TestItemBig extends React.Component{
                             <button>Submit</button>
                         </div>
                     </form>
-                    
+                </div>
+
+                <div>
+                    {words.map((word, index) => (
+                        <p>{word}, {ranks[index]}</p> 
+                    ))}
                 </div>
             </div>
         )
