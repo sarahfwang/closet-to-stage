@@ -36,6 +36,13 @@ const firebaseConfig = {
             )
         }
 
+        updatefbUrls = (value, ref) => {
+            
+            ref.update({
+                fbUrls: firebase.firestore.FieldValue.arrayUnion(value)
+            })
+        }
+
 
       //*** Auth API ***
         doCreateUserWithEmailAndPassword = (email, password) =>
@@ -81,8 +88,10 @@ const firebaseConfig = {
         getAuth = () =>
             this.auth
 
-        db = () =>
+        getDb = () =>(
             this.db
+        )
+            
 
         doAddItem = (item) => (
            this.db.collection('items').add(item)

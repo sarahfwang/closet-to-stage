@@ -1,7 +1,7 @@
 import React, {Component } from 'react';
 import {compose} from 'recompose'
 
-import { withFirebase } from '../../firebase'
+import {withFirebase} from '../../firebase'
 import {withAuthorization} from '../../auth/Session'
 //import * as ROLES from '../../constants/roles'
 import PasswordChangeForm from '../PasswordChange' 

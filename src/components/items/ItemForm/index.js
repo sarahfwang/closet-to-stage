@@ -48,6 +48,8 @@ class Form extends Component {
   componentDidMount () {
     console.log(this.props.firebase.currentUser().uid)
 
+    console.log(this.props.firebase.getDb())
+
     
   }
 
@@ -74,7 +76,7 @@ class Form extends Component {
       console.error('please select at least one image')
     }
     else{
-      this.props.firebase.doAddItem({...item, userID, isListed: true}) //add images as urls!!!
+      this.props.firebase.doAddItem({...item, userID, isListed: true, fbUrls:[]}) //add images as urls!!!
       .then(doc => {
         this.uploadImage(doc, doc.id)
       })
@@ -100,7 +102,7 @@ class Form extends Component {
       uploadTask.on('state-changed',
         (snapshot) => {
 
-          var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100 
+          var progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100) 
           this.setState({progress})
 
           console.log(snapshot)
@@ -114,24 +116,24 @@ class Form extends Component {
 
           uploadTask.snapshot.ref.getDownloadURL()
             .then(downloadUrl => {
-              
-              this.setState({ //fixed mistake: this.state.images
-                images:{
-                  ...this.state.images,
-                  imageAsUrl: downloadUrl,
-                }
-              })
 
-              this.setState(state => {
-                fbUrls.concat(downloadUrl)
+              const itemRef = this.props.firebase.item(id)
+
+              console.log(downloadUrl)
+
+
+              this.props.firebase.updatefbUrls(downloadUrl, itemRef)
+
+
+              /* this.setState(state => {
+                const fbUrls = state.fbUrls.concat(downloadUrl)
 
                 return{
-                  ...state,
                   fbUrls
                 }
-              })
+              }) */
 
-              console.log('File available at', downloadUrl)
+                //console.log('fb urls ', downloadUrl)
             })
             /* .then(()=>{
               const imageAsUrl = this.state.images.imageAsUrl
@@ -141,6 +143,16 @@ class Form extends Component {
                   console.log("updated firestore imageAsUrl")
                 })
 
+            }) */
+            /* .then(()=>{
+              console.log(`fb urls: ${this.state.fbUrls}`)
+
+              const fbUrls = this.state.fbUrls
+
+               ref.update({fbUrls})//will this work???
+                  .then(()=>{
+                    console.log("updated firestore fbUrls")
+                  }) 
             }) */
             .then(this.onClear)
 
@@ -187,14 +199,6 @@ class Form extends Component {
         }
       })
 
-      //preview image
-      /* var reader = new FileReader();
-      reader.onload = () => {
-        var output = document.getElementById('preview_img')
-        output.src = reader.result
-      }
-  
-      reader.readAsDataURL(e.target.files[0]) */
       
   }
 
