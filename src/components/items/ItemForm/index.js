@@ -22,6 +22,9 @@ const INITIAL_STATE={
     price:'',
     isListed: false,  
   },
+  lowerCase:{
+
+  },
   userID: null,
   images: {
     imageAsFile:'',
@@ -59,14 +62,18 @@ class Form extends Component {
         item:{
           ...this.state.item,
           [event.target.name]:event.target.value
-        } 
+        }, 
+        lowerCase:{
+          ...this.state.lowerCase,
+          [event.target.name]: event.target.value.toLowerCase()
+        }
     }) 
     
     console.log(this.state)
   }
 
   onSumbit = event =>{
-    const { item, userID, imgFiles } = this.state
+    const { item, lowerCase, userID, imgFiles } = this.state
     event.preventDefault()
 
     console.log('start of upload')
@@ -76,7 +83,7 @@ class Form extends Component {
       console.error('please select at least one image')
     }
     else{
-      this.props.firebase.doAddItem({...item, userID, isListed: true, fbUrls:[]}) //add images as urls!!!
+      this.props.firebase.doAddItem({...lowerCase, userID, isListed: true, fbUrls:[]}) //add images as urls!!!
       .then(doc => {
         this.uploadImage(doc, doc.id)
       })
@@ -220,7 +227,7 @@ class Form extends Component {
 
     return(
       <div>
-      <form>
+      <form onSubmit={this.onSumbit}>
         <div className ="form-container">
             <div className="img-col">
               
@@ -248,7 +255,7 @@ class Form extends Component {
                   type="text"
                   onChange={this.onChange}
                   placeholder="Item Name*"
-                  required= "required"
+                  required
                 />
               </div>
               <div className ="info-brand-name info-cont">
@@ -258,7 +265,7 @@ class Form extends Component {
                   type="text"
                   onChange={this.onChange}
                   placeholder="brand*"
-                  required= "required"
+                  required
                 />
               </div>
               <div className="info-price info-cont">
@@ -269,7 +276,7 @@ class Form extends Component {
                   type="text"
                   onChange={this.onChange}
                   placeholder="00.00*"
-                  required= "required"
+                  required
                 />
               </div>
               <div className="info-size info-cont">
@@ -279,7 +286,7 @@ class Form extends Component {
                   type="text"
                   onChange={this.onChange}
                   placeholder="size, ex: M, 2*"
-                  required= "required"
+                  required
                 />
               </div>
               <div className="info-description info-cont">{/*beware 'notes'*/}
@@ -289,7 +296,7 @@ class Form extends Component {
                   type="text"
                   onChange={this.onChange}
                   placeholder="description*"
-                  required= "required"
+                  required
                 />
               </div>
               
@@ -320,11 +327,10 @@ class Form extends Component {
 
                 )}
               </div>
-                
-                
-
-              <div>
-                <button onClick={this.onSumbit}>
+            </div>
+        </div> {/*end of form-container */}
+        <div>
+                <button type= "submit" >
                   Add
                 </button>
 
@@ -334,12 +340,6 @@ class Form extends Component {
 
                 <p>{error && `${error}`}</p>
               </div>
-            </div>
-
-           
-
-        </div> {/*end of form-container */}
-        
       </form>
 
       <p>{progress}% uploaded</p>

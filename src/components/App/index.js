@@ -65,8 +65,9 @@ const App = () => (
       <Route exact path="/itemform" component = {Form} />
       <Route exact path="/filter" component = {Filter} />
       <Route exact path="/items/:itemID" component = {Item}/> {/*':' allows Item to access itemID */}
+      <Route exact path="/test/:itemID" component = {Item}/> {/*':' allows Item to access itemID */}
       <Route exact path="/items/:type?/:color?/brand?:" component={NewFilterPage}/>
-      {<Route path ="/test" component = {TestPage} />}
+      {<Route exact path ="/test" component = {TestPage} />}
       <Route exact path="/testbig" component = {TestItemBig}/>
     </div>
   </Router>

@@ -3,6 +3,10 @@ import React from 'react'
 import {withFirebase} from '../../firebase'
 import MessageBox from '../MessageBox'
 
+import './item.scss'
+import 'react-slideshow-image/dist/styles.css'
+
+
 class Item extends React.Component {
     constructor(props){
         super(props)
@@ -11,7 +15,6 @@ class Item extends React.Component {
 
         this.state = {
             id, //sets {id: id}
-         
         }
        
     }
@@ -29,17 +32,45 @@ class Item extends React.Component {
     }
 
     render(){
-        const {id, type, brand, color} = this.state
+        const {id, itemName, price, brand, size, description, type , color} = this.state
 
         return(
             <div>
-                <h1>{id}</h1>
-                <h2>{type}</h2>
-                <h2>{color}</h2>
-                <h2>{brand}</h2>
+                <div className = "item-page">
+                    <div className = "img-col">
+                        <div className = "item-img-cont">
+                            <div className="main-img-cont">
+                                <img/>
+                            </div>
+                            <div className="side-img-cont">
+                                <div>
+                                    <div className = "img-prev"></div>
+                                </div>
+                                <div>
+                                    <div className = "img-prev"></div>
+                                </div>
+                                <div>
+                                    <div className = "img-prev"></div>
+                                </div>
+                                <div>
+                                    <div className = "img-prev"></div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div className="info-col">
+                        <h1>{itemName}</h1>
+                        <h2>${price}</h2>
+                        <p>{brand}</p>
+                        <h3>size: {size}</h3>
+                        <button>Message</button>
+                        <p>notes: {description}</p>
+                    </div>
+                </div>
                 <MessageBox id={id}/>
-
             </div>
+            
         )
     } 
 }

@@ -2,11 +2,18 @@ import React from 'react'
 import { getDisplayName } from 'recompose'
 import './testitembig.scss'
 
+import { Slide } from 'react-slideshow-image'
+import 'react-slideshow-image/dist/styles.css'
+
+import Slideshow from '../items/Slideshow'
+
 class TestItemBig extends React.Component{
     constructor(props){
         super(props)
         this.state = {
             urls: [],
+            testInput:"",
+            optInput:"",
         }
     }
 
@@ -65,11 +72,20 @@ class TestItemBig extends React.Component{
         }
     }
 
+    onChange = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value,
+        })
+    }
+
     render(){
         const {urls} = this.state;
         const words = ["apple","banana","carrot"]
         const ranks = [1,9,3]
 
+        const slideImages = [
+            "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"
+        ]
         return(
             <div>
                 <div className="test-i-b-page">
@@ -92,14 +108,14 @@ class TestItemBig extends React.Component{
                             <input 
                                 type = "text"
                                 placeholder="Enter item name"
-                                autocomplete="off"
+                                autoComplete="off"
                             ></input>
                         </div>
                         <div className="info-brand-name info-cont">
                             <input 
                                 type = "text"
                                 placeholder="Enter brand"
-                                autocomplete="off"
+                                autoComplete="off"
                             ></input>
                         </div>  
                         <div className="info-price info-cont">
@@ -107,21 +123,21 @@ class TestItemBig extends React.Component{
                             <input 
                                 type = "text"
                                 placeholder="Enter price"
-                                autocomplete="off"
+                                autoComplete="off"
                             ></input>
                         </div>
                         <div className="info-size info-cont">
                             <input 
                                 type = "text"
                                 placeholder="Enter size"
-                                autocomplete="off"
+                                autoComplete="off"
                             ></input>
                         </div>
                         <div className="info-notes info-cont">
                             <textarea 
                                 type = "text"
                                 placeholder="Enter notes"
-                                autocomplete="off"
+                                autoComplete="off"
                             ></textarea>
                         </div>
                     </div>
@@ -147,6 +163,35 @@ class TestItemBig extends React.Component{
                         <p>{word}, {ranks[index]}</p> 
                     ))}
                 </div>
+
+                <form>
+                    start of form
+                    <div>
+                        <input
+                            type = "text"
+                            name="testInput"
+                            value = {this.state.testInput}
+                            onChange = {this.onChange}
+                            required = "required"
+                        />
+                    </div>
+                    
+                    <input
+                        type = "text"
+                        name="optInput"
+                        value = {this.state.optInput}
+                        onChange = {this.onChange}
+                        
+                    />
+                <button type="submit">
+                    sumbit
+                </button>
+                </form>
+
+                {/*slideshow */}
+                <Slideshow />
+
+               
             </div>
         )
        
