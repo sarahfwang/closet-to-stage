@@ -2,6 +2,7 @@ import React from 'react'
 
 import {withFirebase} from '../../firebase'
 import MessageBox from '../MessageBox'
+import Slideshow from '../Slideshow'
 
 import './item.scss'
 import 'react-slideshow-image/dist/styles.css'
@@ -14,7 +15,9 @@ class Item extends React.Component {
         //https://stackoverflow.com/questions/48084981/how-can-i-get-a-variable-from-the-path-in-react-router
 
         this.state = {
+            index:0,
             id, //sets {id: id}
+            fbUrls: [],
         }
        
     }
@@ -32,33 +35,31 @@ class Item extends React.Component {
     }
 
     render(){
-        const {id, itemName, price, brand, size, description, type , color} = this.state
+        const {index, id, itemName, price, brand, size, description, fbUrls} = this.state
 
         return(
             <div>
                 <div className = "item-page">
-                    <div className = "img-col">
+                    <Slideshow imgSources = {fbUrls}/>
+                    {/* <div className = "img-col">
                         <div className = "item-img-cont">
                             <div className="main-img-cont">
-                                <img/>
+                                <img src = {fbUrls[index]}/>
                             </div>
+                            
                             <div className="side-img-cont">
-                                <div>
-                                    <div className = "img-prev"></div>
-                                </div>
-                                <div>
-                                    <div className = "img-prev"></div>
-                                </div>
-                                <div>
-                                    <div className = "img-prev"></div>
-                                </div>
-                                <div>
-                                    <div className = "img-prev"></div>
-                                </div>
+                                {
+                                fbUrls.map(url => 
+                                    <div>
+                                        <div className = "img-prev">
+                                            <img src = {url}/>
+                                        </div>
+                                    </div>
+                                )}
                                 
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                     <div className="info-col">
                         <h1>{itemName}</h1>
                         <h2>${price}</h2>

@@ -4,6 +4,14 @@
 //1200
 
 //8, 16, 24, 
+img{
+    position: absolute;
+    top:0;
+
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 
 .item-page [class*="col"]{
     margin: 1em;
@@ -11,6 +19,7 @@
 }
 
 .item-page{
+    
     display:flex;
     flex-direction: column;
 
@@ -28,11 +37,19 @@
         margin: 0;
         border: 1em white solid;
     }
+
+    .item-img-cont{
+        padding: 1em;
+        box-sizing: border-box;
+        background-color: rgb(207, 170, 207);
+    }
     
 }
 
 
 .main-img-cont{
+    position: relative;
+
     width: 512px;
     height:0;
 
@@ -62,10 +79,15 @@
     }
 
     .img-prev{
+        position: relative;
+
         height: 100%;
         width: 100%;
 
+        padding: 0;
+
         background-color: lightyellow;
+
     }
 }
 

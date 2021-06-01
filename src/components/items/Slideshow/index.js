@@ -1,44 +1,104 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import './slideshow.scss'
 
-const Slideshow = () => {
-    const imgSources = ["https://upload.wikimedia.org/wikipedia/commons/c/c3/NGC_4414_%28NASA-med%29.jpg",
-        "https://media.nationalgeographic.org/assets/photos/000/290/29094.jpg",
-        "https://images.ctfassets.net/hrltx12pl8hq/3MbF54EhWUhsXunc5Keueb/60774fbbff86e6bf6776f1e17a8016b4/04-nature_721703848.jpg?fit=fill&w=480&h=270"]
-   
-    const [index, setIndex] = useState(0)
+class Slideshow extends React.Component{
 
-    const plusSlides = (plus) => {
+    constructor(props){
+        super(props)
+
+        this.state = {
+            imgSources: [],
+            index: 0,
+        }
+    }
+   
+    componentDidMount(){
+
+        console.log(this.props)
+        
+        this.setState({
+            imgSources: this.props.imgSources,
+        }, ()=>{console.log(this.state)})
+       
+
+    }
+   
+
+    plusSlides = (plus) => {
         //updates the index of the slideshow
+        const {index, imgSources} = this.state;
+
         let change = index + plus
         
         if(change < 0)
-            setIndex(change + imgSources.length)
+            this.setState({index: change + imgSources.length})
+        else{
+            this.setState({index: change%imgSources.length})
+        }
         
-        setIndex(change%imgSources.length)
+        
     }
 
-    const currentSlide = (curr) => {
-        
-    }
+    render(){
+        const {index, imgSources} = this.state
+
         return(
-        <div className="slideshow">
-            <div className="slide fade">
-                <img src = {imgSources[index]}/>
-                <div class="numbertext"> {index + 1} / {imgSources.length}</div>
+            <div className="slideshow">
+                <div className="slide fade">
+                    <img src = {imgSources[index]} className="fade"/>
+                    <div class="numbertext"> {index + 1} / {imgSources.length}</div>
+                    <a className="prev" onClick = {() => {this.plusSlides(-1)}}>&#10094;</a>
+                    <a className="next" onClick = {() => {this.plusSlides(1)}}>&#10095;</a>
+                </div>
+    
+                
+                <div>
+                    <div className = "preview-bar">
+                        { //dots
+                            imgSources.map((url, index) => 
+                                <div>
+                                    <div className = "preview-img-cont fade" onClick ={()=>{this.setState({index})}}>
+                                        <img src = {url}/>
+                                    </div> 
+                                </div>
+    
+                               
+                            )
+                        }
+                    </div>
+        
+                 </div>
+                 {/* <div className = "img-col">
+                    <div className = "item-img-cont">
+                        <div className="main-img-cont">
+                            <img src = {imgSources[index]}/>
+    
+                            
+                            <div class="numbertext"> {index + 1} / {imgSources.length}</div>
+                            <a className="prev" onClick = {() => {plusSlides(-1)}}>&#10094;</a>
+                            <a className="next" onClick = {() => {plusSlides(1)}}>&#10095;</a>
+                        </div>
+                        
+                        <div className="side-img-cont">
+                            {
+                            imgSources.map(url => 
+                                <div>
+                                    <div className = "img-prev">
+                                        <img src = {url}/>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div> */}
+              
+                 
+                
+    
             </div>
-
-            <a className="prev" onClick = {() => {plusSlides(-1)}}>&#10094;</a>
-            <a className="next" onClick = {() => {plusSlides(1)}}>&#10095;</a>
-
-            
-            { //dots
-                imgSources.map((element, index) =>  <span className="dot" onClick={() => {setIndex(index)}}></span>)
-            }
-         
-
-        </div>
-    )
+        )
+    }
+        
 }
 
 export default Slideshow

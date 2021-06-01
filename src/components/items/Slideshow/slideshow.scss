@@ -1,24 +1,30 @@
+
+
 .slideshow{
     position: relative;
-}
-
-.slide{
     width: 100%;
-    padding-top: 66%;
 
-    position: relative;
-
-    //hidden by default
-    //display: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     img{
         position: absolute;
         top:0;
+        left:0;
     
         width:100%;
         max-height: 100%;
         object-fit: cover;
     }
+
+}
+
+.slide{
+    width: 512px;
+    height: 512px;
+
+    position: relative;
 
 }
 
@@ -52,6 +58,7 @@
 }
 
 .next{
+   
     right: 0;
 }
 
@@ -78,6 +85,47 @@
 .active, .dot:hover {
     background-color: grey;
 }
+
+.preview-bar{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    position: relative;
+
+    height: 126px;
+    width: 512px;
+
+    div{
+        width: 25%;
+        height: 100%;
+
+        box-sizing: border-box;
+        padding: 1em;
+    
+    }
+
+    .preview-img-cont{
+        position: relative;
+
+        height: 100%;
+        width: 100%;
+
+        padding: 0;
+
+        cursor: pointer;
+
+        background-color: lightyellow;
+
+    }
+
+    .preview-img-cont:hover{
+        opacity: 0.8;
+    }
+
+    
+}
+
 
 .fade {
     -webkit-animation-name: fade;
