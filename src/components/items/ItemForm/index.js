@@ -73,12 +73,12 @@ class Form extends Component {
   }
 
   onSumbit = event =>{
-    const { item, lowerCase, userID, imgFiles } = this.state
+    const {lowerCase, userID, imgFiles } = this.state
     event.preventDefault()
 
     console.log('start of upload')
 
-    if(imgFiles.length == 0){
+    if(imgFiles.length === 0){
       this.setState({error:"please select at least one image"})
       console.error('please select at least one image')
     }
@@ -92,7 +92,7 @@ class Form extends Component {
   }
 
   uploadImage = (ref, id) =>{
-    const {userID, imgUrls, imgFiles, fbUrls} = this.state
+    const {userID, imgFiles} = this.state
 
     console.log("doc.id:",id)
 
@@ -130,52 +130,15 @@ class Form extends Component {
 
 
               this.props.firebase.updatefbUrls(downloadUrl, itemRef)
-
-
-              /* this.setState(state => {
-                const fbUrls = state.fbUrls.concat(downloadUrl)
-
-                return{
-                  fbUrls
-                }
-              }) */
-
-                //console.log('fb urls ', downloadUrl)
             })
-            /* .then(()=>{
-              const imageAsUrl = this.state.images.imageAsUrl
-
-              ref.update({imageAsUrl})
-                .then(()=>{
-                  console.log("updated firestore imageAsUrl")
-                })
-
-            }) */
-            /* .then(()=>{
-              console.log(`fb urls: ${this.state.fbUrls}`)
-
-              const fbUrls = this.state.fbUrls
-
-               ref.update({fbUrls})//will this work???
-                  .then(()=>{
-                    console.log("updated firestore fbUrls")
-                  }) 
-            }) */
+            
             .then(this.onClear)
 
         }
       )
 
-
-
-
-      
     })
 
-    
-    
-    
-    
   }
 
   onClear = event =>{

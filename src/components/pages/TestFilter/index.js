@@ -15,12 +15,14 @@ class TestFilter extends React.Component {
 
     }
 
+    
     onClick = (cat) => (e) => {
         const id = e.target.id
         const name = e.target.name
 
         const checkbox = document.getElementById(id)
 
+        //changes to true or false, depending on checkmark
         this.setState({
             [cat]:{
                 ...this.state[cat],

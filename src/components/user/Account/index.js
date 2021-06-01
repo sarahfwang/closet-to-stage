@@ -4,6 +4,11 @@ import {compose} from 'recompose'
 import {withFirebase} from '../../firebase'
 import {withAuthorization} from '../../auth/Session'
 //import * as ROLES from '../../constants/roles'
+
+import ItemPageLayout from '../../layouts/ItemPageLayout'
+import TestFilter from '../../pages/TestFilter'
+import ItemCard from '../../items/ItemCard'
+
 import PasswordChangeForm from '../PasswordChange' 
 import ItemEdit from '../../items/ItemEdit'
 
@@ -18,6 +23,7 @@ class AccountPage extends Component {
       user: {},
       loading: false,
       userItems: [],
+      filtered: [],
     };
   }
  
@@ -42,8 +48,8 @@ class AccountPage extends Component {
             }  
           })
 
-          this.unsubscribeItems = this.props.firebase.items().where('userID','==',cuid)
-            .onSnapshot(querySnapshot => {
+          this.props.firebase.items().where('userID','==',cuid)
+            .get().then(querySnapshot => {
               let userItems = []
               if(querySnapshot.empty){
                 console.log("No Items for this User")
@@ -56,22 +62,25 @@ class AccountPage extends Component {
                 //console.log(userItems)
               })
 
-              this.setState({ //setting all of userItems to state to send to <ItemsList/>
-                userItems
+              this.setState({ //setting all of userItems to state to send   to <ItemsList/>
+                userItems,
+                filtered: userItems,
               })
 
             })
 
     }
   }
- 
+  handleFilterResultsChange = (filtered) =>{
+    this.setState({filtered})
+} 
   componentWillUnmount() {
       this.unsubscribeUser()
       this.unsubscribeItems()
       //this.props.firebase.users().off()//removes the listener??? or user().off()
   }
   render() {
-      const { user, loading, userItems } = this.state //passing userItems as a prop into ItemsList
+      const { user, loading, userItems, filtered } = this.state //passing userItems as a prop into ItemsList
  
     return (
       <div>
@@ -84,7 +93,8 @@ class AccountPage extends Component {
 
         <a href="/itemform"> Add Item</a>
 
-        
+
+            <ItemPageLayout items = {userItems} filtered = {filtered} handleFilterResultsChange={this.handleFilterResultsChange} handleRoute={()=>{}} />
             <ItemsList items = {userItems} /> 
         
         

@@ -12,6 +12,8 @@ class Filter extends Component{
         this.state={
             type:{}, //type: {dress: true, top: false, ...}
             brand:{},
+            userID:{},
+
         }
     }
 
