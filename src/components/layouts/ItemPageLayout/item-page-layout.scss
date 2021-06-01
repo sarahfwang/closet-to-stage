@@ -1,0 +1,59 @@
+
+:root {
+    --lh: 1.2em;
+}
+
+[class*="col-"]{ /*targets col-filter and col-items*/
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.nav{
+    height: 4em;
+    margin: 1em;
+    background-color: lightgoldenrodyellow;
+}
+
+.items{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.t-item-card{
+    width: 50%;
+
+    padding: 1em;
+    margin-bottom: 1em;
+
+    box-sizing: border-box;
+}
+
+
+
+@media only screen and (min-width:768px) {
+    .page {
+        display: flex;
+    }
+    .col-filter{
+        width: 25%;
+        padding: 1em;
+    }
+    .col-items{
+        width: 75%;
+    }
+    .t-item-card{
+        width: 33%;
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    .col-filter{
+        width: 20%;
+    }
+    .col-items{
+        width: 80%;
+    }
+    .t-item-card{
+        width: 25%;
+    }
+}

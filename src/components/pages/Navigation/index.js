@@ -27,7 +27,8 @@ const NavigationAuth = () =>( //use parentheses not bracket dumb b
         {/* <li>
           <Link to={ROUTES.HOME}>Home</Link>
         </li> */}
-       
+
+      
         <li>
           <Link to={ROUTES.ITEM_PAGE}>ItemPage</Link>
         </li>
@@ -37,9 +38,11 @@ const NavigationAuth = () =>( //use parentheses not bracket dumb b
         <li>
           <Link to="/test">Test</Link>
         </li> 
-        <li>
+
+        {/*test page */}
+        {/* <li>
           <Link to="/testbig">Test item</Link>
-        </li> 
+        </li>  */}
         <li>
           <Link to={ROUTES.ADMIN}>Admin</Link>
         </li>

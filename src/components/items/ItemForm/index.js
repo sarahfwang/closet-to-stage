@@ -343,12 +343,10 @@ class Form extends Component {
       </form>
 
       <p>{progress}% uploaded</p>
-      {/*images.imageAsUrl?<img src={images.imageAsUrl} alt="image tag"/> : <h1></h1>*/}
-      <h1>test</h1>
+      
+     
 
-      preview
-      <input type="file" accept="image/*" onChange={this.previewImg}/>
-      <img id="preview_img"/>
+      
 
    
 

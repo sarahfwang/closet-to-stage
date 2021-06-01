@@ -156,7 +156,7 @@ class TestItemBig extends React.Component{
                             <input type="file" id="img-uploads"  className="img-uploads" acccept="image/*"/>
                         </div>
                         <div className="preview">
-                            <p>No files currently selected for upload</p>
+                            <p></p>
                         </div>
                         <div>
                             <button>Submit</button>

@@ -1,0 +1,104 @@
+.filter{
+    background-color: lightgoldenrodyellow;
+    padding: 1em;
+    height: auto;
+    box-sizing: border-box;
+}
+
+.category .category-title{
+    margin:0;
+}
+
+.selector-wrapper{
+    display: flex; 
+    flex-direction: row;
+    margin: .75rem 0;
+}
+
+.selector-wrapper input[type="checkbox"]{
+    width:0;
+    height:0;
+
+    margin:0;
+
+    opacity: 0;
+}
+
+.selector-wrapper:hover > .checkmark::before{
+    content: "\2713 ";
+
+    display: flex;
+    justify-content: center;
+    align-self: center;
+
+    color: lightgrey;
+    font-weight: bold;
+}
+
+.checkmark{
+    margin-right: .5em; /*TODO: make a part of label, not checkmark*/
+    padding-bottom: .125em;
+    display: block;
+    
+
+    width: 1.125em;
+    height: 1em;
+
+    background-color: white;
+}
+
+.selector-wrapper input:checked + .checkmark:before{
+    content: "\2713 ";
+
+    display: flex;
+    justify-content: center;
+    align-self: center;
+
+    color: black;
+    font-weight: bold;
+}
+
+.selector-wrapper:hover > .swatch-wrapper{
+    border: 1px solid grey;
+    border-radius: 50%;
+}
+
+.swatch-wrapper{
+    display: flex;
+    justify-content: center;
+    align-self: center;
+
+    border: 1px solid lightgoldenrodyellow;
+    border-radius: 50%;
+}
+
+.swatch-Red{
+    
+    width: 1.125em;
+    height: 1.125em;
+
+    margin: .125em;
+
+    border-radius: 50%;
+
+    background-color: tomato;
+
+}
+.swatch-Green{
+    
+    width: 1.125em;
+    height: 1.125em;
+
+    margin: .125em;
+
+    border-radius: 50%;
+
+    background-color: yellowgreen;
+
+}
+
+.swatch-label{
+    margin-left:.5em;
+    padding-top: .175em; /*1.125+.125*2 - var(--lh)*/
+}
+

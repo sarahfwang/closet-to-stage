@@ -1,6 +1,7 @@
 import React from 'react'
 
 import {withFirebase} from '../../firebase'
+import './test-filter.scss'
 
 class TestFilter extends React.Component {
     constructor(props){
