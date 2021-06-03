@@ -6,8 +6,6 @@ import {withAuthorization} from '../../auth/Session'
 //import * as ROLES from '../../constants/roles'
 
 import ItemPageLayout from '../../layouts/ItemPageLayout'
-import TestFilter from '../../pages/TestFilter'
-import ItemCard from '../../items/ItemCard'
 
 import PasswordChangeForm from '../PasswordChange' 
 import ItemEdit from '../../items/ItemEdit'
@@ -76,7 +74,7 @@ class AccountPage extends Component {
 } 
   componentWillUnmount() {
       this.unsubscribeUser()
-      this.unsubscribeItems()
+     
       //this.props.firebase.users().off()//removes the listener??? or user().off()
   }
   render() {
@@ -94,11 +92,8 @@ class AccountPage extends Component {
         <a href="/itemform"> Add Item</a>
 
 
-            <ItemPageLayout items = {userItems} filtered = {filtered} handleFilterResultsChange={this.handleFilterResultsChange} handleRoute={()=>{}} />
+            <ItemPageLayout items = {userItems} filtered = {filtered} handleFilterResultsChange={this.handleFilterResultsChange} handleRoute={()=>{}} account = {true} />
             <ItemsList items = {userItems} /> 
-        
-        
-
       </div>
     );
   }

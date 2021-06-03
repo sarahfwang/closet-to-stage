@@ -182,7 +182,17 @@ const firebaseConfig = {
 
         currentUser = () =>(
             this.auth.currentUser
-        )          
+        )  
+        
+        //Message API?
+
+        messages = () => (
+            this.db.collection("messages")
+        )
+
+        affiliated = (id) => (
+            this.db.collection("users").doc(id).collection("affiliated")
+        )
   }
 
   export default Firebase

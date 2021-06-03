@@ -8,6 +8,7 @@ import SignInPage from '../auth/SignIn';
 import PasswordForgetPage from '../user/PasswordForget';
 import HomePage from '../pages/Home';
 import AccountPage from '../user/Account';
+import Messages from '../user/Messages'
 import AdminPage from '../user/Admin';
 import ItemPage from '../pages/ItemPage'
 import Form from '../items/ItemForm'
@@ -59,6 +60,7 @@ const App = () => (
       />
       <Route exact path={ROUTES.HOME} component={HomePage} />
       <Route exact path={ROUTES.ACCOUNT} component={AccountPage} />
+      <Route exact path="/messages" component = {Messages} />
       <Route exact path={ROUTES.ADMIN} component={AdminPage} />
       <Route exact path={ROUTES.ITEM_PAGE} component={ItemPage} />
       {/* <Route exact path={'/item-page2'} component={ItemPage2} /> */}

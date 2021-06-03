@@ -5,7 +5,7 @@ import ItemCard from '../../items/ItemCard'
 
 import './item-page-layout.scss'
 
-const ItemPageLayout = ({items, filtered, handleFilterResultsChange, handleRoute}) => {
+const ItemPageLayout = ({items, filtered, handleFilterResultsChange, handleRoute, ...props}) => {
 
     return (
         <div className="page">
@@ -17,8 +17,10 @@ const ItemPageLayout = ({items, filtered, handleFilterResultsChange, handleRoute
                     <p>path</p>
                 </div>
                 <div className = "items">
-                    {filtered.map(item => (
-                        <ItemCard item = {item} handleRoute = {handleRoute}/>
+                   
+                    {
+                    filtered.map(item => (
+                        <ItemCard item = {item} handleRoute = {handleRoute} {...props}/>
                     ))}
                 </div>
             </div>

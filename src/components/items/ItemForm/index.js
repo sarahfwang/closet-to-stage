@@ -1,5 +1,5 @@
 //don't use this page, everything's on ItemPage I think
-
+//TODO: make images changeable/ editable/ croppable
 import React, {Component} from 'react'
 import {compose} from 'recompose'
 
@@ -199,13 +199,19 @@ class Form extends Component {
                         <img src={url}/>
                     </div>
                 )}
+                {/*TODO: add a title called: cover image */}
                 <div className="img-cont add-cont">
                   <div className="add-file-cont">
-                    <input
-                    type="file"
-                    accept="image/*"
-                    onChange ={this.handleImageAsFile}
-                    />
+                    
+                    <label className = "img-upload">
+                      +
+                      <input
+                      type="file"
+                      accept="image/*"
+                      onChange ={this.handleImageAsFile}
+                      />
+                    </label>
+                    
                   </div>
               </div>
             </div>

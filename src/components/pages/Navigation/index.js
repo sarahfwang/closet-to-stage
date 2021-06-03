@@ -35,9 +35,6 @@ const NavigationAuth = () =>( //use parentheses not bracket dumb b
         <li>
           <Link to="/itemform">ItemForm</Link>
         </li>
-        <li>
-          <Link to="/test">Test</Link>
-        </li> 
 
         {/*test page */}
         {/* <li>
@@ -53,7 +50,10 @@ const NavigationAuth = () =>( //use parentheses not bracket dumb b
         <SignOutButton />
       </li>
       <li>
-        <Link to={ROUTES.ACCOUNT}>Account</Link>
+        <Link to={ROUTES.ACCOUNT}>my items</Link>
+      </li>
+      <li>
+        <Link to={"messages"}>Messages</Link>
       </li>
     </div>
   </div>

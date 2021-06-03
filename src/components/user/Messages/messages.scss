@@ -1,0 +1,102 @@
+:root{
+    --user-profile-dim-big: 3em
+}
+
+.message-page{
+    display: flex;
+    margin: 1em;
+}
+
+.message-display{
+    width: 60%;
+
+    box-sizing: border-box;
+    border: 1px solid lightsteelblue;
+}
+
+.message-shelf{
+    width: 40%;
+    
+    box-sizing: border-box;
+    border: 1px solid lightsteelblue;
+}
+
+.shelf-tab{
+    display: flex;
+    flex-direction: row;
+
+    box-sizing: border-box;
+    border: 1px solid coral;
+    
+}
+
+.potential-buyers{
+    display: flex;
+    flex-direction: row-reverse;
+
+    //offsets the negative margin for icons
+    padding-left: calc(var(--user-profile-dim-big)/3);
+
+}
+
+//last, since flex is row-reverse
+.icon-wrapper:last-child{
+    .icon{
+        margin-right: calc(var(--user-profile-dim-big)/3);
+    }
+}
+
+//when hover over user, bring to the front
+.icon-cont:hover{
+    z-index:1;
+
+   
+    //when hover, make the icon rise
+    .icon{
+        animation-duration: 1s;
+        animation-name: erase;
+
+        position: relative;
+        bottom: 0.625em;
+    }
+
+}
+
+@keyframes erase{
+    from{
+        bottom: 0;
+    }
+    to{
+        bottom: 0.625em;
+    }
+}
+
+
+
+//user-icons may be used throughout the website
+.icon{
+    
+    height: var(--user-profile-dim-big);
+    width: var(--user-profile-dim-big);
+    
+    border-radius: 50%;
+    
+    margin-right: calc(var(--user-profile-dim-big)/-3);
+
+}
+
+//just for testing
+
+.pink{
+    background-color: pink
+}
+
+.blue{ 
+    background-color: lightblue;
+}
+
+//
+
+.message-form{
+    display: flex;
+}

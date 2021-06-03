@@ -50,14 +50,18 @@
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     
-    margin:0;
+    margin: 0;
     
-    background-color: white;
+    
+
+    .img-upload{
+        cursor: pointer;
+        padding: .5em 0.625em;
+        background-color: white;
+    }
 
     input{
-       border: none;
-       margin: 0;
-       
+       display: none;
     }
 }
 
@@ -85,10 +89,17 @@
 
 
 
-input{
-    padding: 0;
-    margin: 1em;
+input, 
+textarea{
+    box-sizing: border-box;
+    width: 100%;
+
 }
+
+.info-price {
+    display: flex;
+}
+
 
 .info-description{
     textarea{

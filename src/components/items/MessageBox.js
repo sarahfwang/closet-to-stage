@@ -21,7 +21,7 @@ class MessageBox extends React.Component{
         const msgRef = this.props.firebase.itemChats().doc(itemID).collection("messages")
 
         
-        msgRef.get().then(snapshot =>{ //either get or on snapshot or set upload
+        const msgUnsubscribe = msgRef.onSnapshot(snapshot =>{ //either get or on snapshot or set upload
             let messages = [] //have to set state outside of forEach function
         
             snapshot.forEach(doc => {
@@ -43,9 +43,10 @@ class MessageBox extends React.Component{
                 messages
             })
         })
+    }
 
-        
-
+    componentWillUnmount(){
+        this.msgUnsubscribe()
     }
 
     onSubmit = (event) => {
@@ -60,8 +61,7 @@ class MessageBox extends React.Component{
         })
         .then(()=>{
             this.setState({msg:""})
-        }
-        )
+        })
        
         event.preventDefault()
     }
