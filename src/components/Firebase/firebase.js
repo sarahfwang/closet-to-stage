@@ -193,6 +193,10 @@ const firebaseConfig = {
         affiliated = (id) => (
             this.db.collection("users").doc(id).collection("affiliated")
         )
+
+        rooms = () => (
+            this.db.collection("rooms")
+        )
   }
 
   export default Firebase

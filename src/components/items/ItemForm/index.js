@@ -105,7 +105,7 @@ class Form extends Component {
 
       const uploadTask = imagesRef.put(imgFile)
 
-      //uploadTask.on has three callbacks: next, error, complete
+      //uploadTask.on has  callbacks: next, error, complete
       uploadTask.on('state-changed',
         (snapshot) => {
 

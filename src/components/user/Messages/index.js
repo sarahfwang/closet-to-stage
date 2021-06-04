@@ -15,6 +15,8 @@ class Messages extends React.Component{
             messages:[],
             selectedID:"",
             message:"",
+
+            error:"",
         }
 
     }
@@ -43,6 +45,8 @@ class Messages extends React.Component{
 
         const cuid = this.props.firebase.currentUser().uid
 
+        let promises = []
+
         //need to choose selectedID
         //also need to add, create a timestamp
         /* this.props.firebase.user(cuid).collection("test").doc(selectedID).set({
@@ -54,44 +58,59 @@ class Messages extends React.Component{
         }) */
 
         //affiliated is an OBJECT
-        if(this.props.firebase.affiliated(cuid)== null|| !Object.keys(this.props.firebase.affiliated(cuid)).includes(selectedID)){
+        //affiliated() goes to affiliated collection on user doc
+        
+        if(!this.props.firebase.affiliated().doc(selectedID).exists){
             
             //push creates a new space, then you can set it
            
-            
-            this.props.firebase.rooms().add({
-                from: cuid,
-                message: message,
-                timestamp: Date.now(),
-            })
+            const promise = this.props.firebase.rooms().add({})
             .then(doc => {
                 //doc.id is the room id
-                this.props.firebase.affiliated(cuid).add({
-                    [selectedID]: doc.id
+                this.props.firebase.affiliated(cuid).doc(selectedID).set({
+                    roomKey: doc.id
+                })
+
+                this.props.firebase.rooms().doc(doc.id).collection("messages").add({
+                    from: cuid,
+                    message: message,
+                    timestamp: Date.now(),
                 })
             })
+
+            promises.push(promise)
 
         }
         else{
             //finds the room key to the itemID in affiliated
             //adds the message to the room key
             //can you do .get(selectedID)?
-            this.props.firebase.affiliated(cuid).get()
+
+            //returns the collection
+            const promise = this.props.firebase.affiliated(cuid).doc(selectedID).get()
             .then(doc => {
                 //selectedID is the itemID
                 //doc[selectedID] is the room key
-                this.props.firebase.messages().doc(doc[selectedID]).add({
+
+                this.props.firebase.rooms().doc(doc.roomKey).collection("messages").add({
                     from: cuid,
                     message: message,
                     timestamp: Date.now(),
                 })
             })
+
+            promises.push(promise)
         }
-        console.log("Hi")
+
+        Promise.all(promises).then(() => {
+            this.setState({message:"",})  
+        });
+
         event.preventDefault()
+       
     }
     render(){
-        const {itemIDs, selectedID, message} = this.state
+        const {itemIDs, selectedID, message, error} = this.state
 
         return(
             <div className = "message-page">
@@ -143,6 +162,7 @@ class Messages extends React.Component{
                     </form>
                     
                 </div>
+                <p>{error}</p>
             </div>
         )
     }
