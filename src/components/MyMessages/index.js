@@ -2,107 +2,59 @@ import React, {useEffect, useState} from 'react'
 
 import MessageBox from '../items/MessageBox'
 import {withAuthorization} from '../auth/Session'
-import {compose} from 'recompose'
+import {compose, mapPropsStream} from 'recompose'
 import { withFirebase } from '../firebase'
 
 //messageBox takes in an itemID as id
 //and a buyerID 
+const want = ["54jN9tGFtNVHzsqu0Cuq", "YxEeJTPbulsvHRn50qeV"]
+const give = ["LQGHpu0YNiHfarqZqfQJ"]
 
+
+//user, sarah, wants u's item
 const MyMessages = (props) => {
-    const [sellIDs, setSell] = useState([])
-    const [buyIDs, setBuy] = useState([])
-    const [itemID, setItem] = useState("")
+    const uid = props.firebase.currentUser().uid
+    const [buyerIDs, setBuyers] = useState([])
 
-    const[prospBuyers, setBuyers] = useState([])
-
-    let messageBox = null
-
-    if(itemID){
-         messageBox = <MessageBox id={itemID} buyerID = {props.firebase.currentUser().uid}/>
-    }
-    else{
-         messageBox = <div></div>
-    }
+    useEffect(() => {
 
 
-    useEffect(()=>{
-
-        const cuid = props.firebase.currentUser().uid
-
-        const userItemsList = ["54jN9tGFtNVHzsqu0Cuq", "YxEeJTPbulsvHRn50qeV"]
-
-        userItemsList.map(itemID => {
-            if(props.firebase.itemChats().doc(itemID).exists)
+        give.map(itemID => {
+    
+            //props.firebase.itemChats().doc("54jN9tGFtNVHzsqu0Cuq").get().then(doc => console.log(doc.data()))
             
-        })
-
-        //TODO: don't...do this. Just make it part of users
-        const itemsRef = props.firebase.items()
-        const userItems = itemsRef.where('userID', '==', cuid).get()
-        .then(snapshot => {
-            if(snapshot.empty)
-                {console.log('user no items')
-                return}
+            //doesn't work like this!: console.log(props.firebase.itemChats().doc("54jN9tGFtNVHzsqu0Cuq").exists)
             
-            //for each item the user owns
-            snapshot.forEach(doc => {
-                console.log(doc.id)
-
-                props.firebase.itemChats().doc(doc.id).get().then(doc => {
-                    if(doc.buyers)
-                        console.log(doc.buyers)
-                })
-                
+            props.firebase.itemChats().doc(itemID).get()
+            .then(doc => {
+                if(doc){
+                    const buyerIDs = doc.data().buyers       
+                    setBuyers(buyerIDs)              
+                }                        
             })
+        
         })
-        .then(()=>{
-            //only part where you would actually need firestore
-            sellIDs.map(id => {
-
-            })
-        })
-        .then(()=> {
-            console.log(sellIDs)
-
-            //TODO: change to user's buying items
-            setBuy(["54jN9tGFtNVHzsqu0Cuq"])
-        } 
-        )
-
-        //get all the user's owned items
-        // returned function will be called on unMount
     }, [])
 
     return(
         <div>
-            <div>
-               sell:
-               <ul>
-                    {sellIDs.map(id => (
-                        <li>
-                            <p>{id}</p>
-                        </li>
-                    ))}
-               </ul>
-               
-            </div>
-            <div>
-                buy
-                <ul>
-                {buyIDs.map(id => (
-                    <li>
-                        <p style = {{cursor : "pointer"}}onClick = {()=>{setItem(id)}}>{id}</p>
-                    </li>     
+            want
+            <ul>
+                {want.map(itemID => (
+                    <div>
+                        {itemID}
+                        <MessageBox id = {itemID} buyerID = {uid}/>
+                        <br/>
+                    </div>
                 ))}
-                </ul>
-                
-            </div>
-            <div>
-                messages for: {itemID}
-                {messageBox}
-                
-            </div>
+            </ul>
 
+            give
+            <ul>
+                {buyerIDs.map(buyerID => (
+                    <MessageBox id = {"LQGHpu0YNiHfarqZqfQJ"} buyerID = {buyerID}/>
+                ))}
+            </ul>
         </div>
     )
 }

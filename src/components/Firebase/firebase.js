@@ -197,6 +197,8 @@ const firebaseConfig = {
         rooms = () => (
             this.db.collection("rooms")
         )
+
+        
   }
 
   export default Firebase
