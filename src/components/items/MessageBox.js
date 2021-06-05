@@ -16,21 +16,23 @@ class MessageBox extends React.Component{
 
     componentDidMount (){
         const itemID = this.props.id
+        const buyerID = this.props.buyerID
         console.log(this.state.messages)
 
-        const msgRef = this.props.firebase.itemChats().doc(itemID).collection("messages")
+        const msgRef = this.props.firebase.itemChats().doc(itemID).collection(buyerID)
 
         
-        const msgUnsubscribe = msgRef.onSnapshot(snapshot =>{ //either get or on snapshot or set upload
+        this.msgUnsubscribe = msgRef.onSnapshot(snapshot =>{ //either get or on snapshot or set upload
             let messages = [] //have to set state outside of forEach function
         
             snapshot.forEach(doc => {
                 //console.log(doc.id, " => " , doc.data())
                 
-                messages.push({...doc.data()})
+                messages.push(doc.data())
                 
             })
             //sorts by time
+            //TODO: do some sort of FieldValue
             messages.sort((a,b)=>{
                 var keyA = a.created,
                 keyB = b.created;
@@ -52,12 +54,23 @@ class MessageBox extends React.Component{
     onSubmit = (event) => {
         const {msg} = this.state
         const itemID = this.props.id
+        const buyerID = this.props.buyerID
         const uid = this.props.firebase.currentUser().uid
 
-        this.props.firebase.itemChats().doc(itemID).collection("messages").add({
-            msg,
-            from: uid,
-            created: Date.now(),
+        const itemRef = this.props.firebase.itemChats().doc(itemID)
+        
+        const path = 'buyers.' + buyerID
+
+        itemRef.set({})
+        .then(()=>{
+            itemRef.update({[path]: true})
+        }) 
+        .then(()=>{
+            itemRef.collection(buyerID).add({
+                msg,
+                from: uid,
+                created: Date.now(),
+            })
         })
         .then(()=>{
             this.setState({msg:""})
@@ -90,7 +103,7 @@ class MessageBox extends React.Component{
                 <form autoComplete="off" onSubmit = {this.onSubmit}>
 
                 <input type="text" placeholder="talk here" onChange ={this.onChange} name ="msg" value={msg}/>
-                <button>send</button>
+                <button type="subnit">send</button>
                 </form>
                
             </div>
