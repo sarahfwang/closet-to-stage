@@ -12,10 +12,11 @@ class PopupMessage extends React.Component{
     constructor(props){
         super(props)
 
+        //TIP: do not initialize state with props!!!
         this.state ={
             msg:"",
-            cuid: props.firebase.cuid(),
-            itemID: props.id,
+            cuid: "",
+            itemID: "",
 
             messages:[],
         }
@@ -24,27 +25,35 @@ class PopupMessage extends React.Component{
     }
 
     componentDidMount (){
-        const {itemID, cuid} = this.state
-        console.log("cuid", cuid)
-
-
-       //get all of the messages, in time order
-       this.props.firebase.itemChats().doc(itemID).collection(cuid).orderBy('created').onSnapshot(snapshot => {
-           let messages = [] //have to set state outside of forEach function
-        
-            snapshot.forEach(doc => {
-                //console.log(doc.id, " => " , doc.data())
-                
-                messages.push({msg: doc.data().msg, id: doc.id})
-                
-            })
-
-            this.setState({
-                messages
-            })
-       })
-
+       
+       this.setState({
+           cuid: this.props.userID,
+           itemID: this.props.itemID,
+       },()=> {this.setMessages()})
     }
+
+    setMessages = () => {
+        const {cuid, itemID} = this.state
+        console.log("HI")
+
+        //get all of the messages, in time order
+        if(cuid)
+            this.props.firebase.itemChats().doc(itemID).collection(cuid).orderBy('created').onSnapshot(snapshot => {
+                let messages = [] //have to set state outside of forEach function
+            
+                snapshot.forEach(doc => {
+                    //console.log(doc.id, " => " , doc.data())
+                    
+                    messages.push({...doc.data(), id: doc.id})
+                    
+                })
+    
+                this.setState({
+                    messages
+                })
+            })
+    }
+    
 
     componentWillUnmount(){
 

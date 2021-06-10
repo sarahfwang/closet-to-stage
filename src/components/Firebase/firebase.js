@@ -43,7 +43,6 @@ const firebaseConfig = {
         }
 
         updatefbUrls = (value, ref) => {
-            
             ref.update({
                 fbUrls: firebase.firestore.FieldValue.arrayUnion(value)
             })
@@ -214,15 +213,17 @@ const firebaseConfig = {
             this.firestore.FieldValue.arrayUnion(add)
             
         updateItemBuyers = (value, ref) => {
-            //ref is null if there are no fields
-            if(!ref){
-                ref.set({buyers: [value]})
-            }
-            else
-            ref.update({
-                buyers: firebase.firestore.FieldValue.arrayUnion(value)
-            })
+            //ref set ARRAY UNION
+            //creates an array if there is none
+            //set creates if there is nothing
+            
+            
+            ref.set({buyers: firebase.firestore.FieldValue.arrayUnion(value)})
+
         }
+
+        docPath = () =>
+            firebase.firestore.FieldPath.documentId()
             
         
   }

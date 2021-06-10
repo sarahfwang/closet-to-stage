@@ -19,6 +19,7 @@ class Item extends React.Component {
             index:0,
             id, //sets {id: id}
             fbUrls: [],
+            userID: props.firebase.cuid()
         }
        
     }
@@ -37,7 +38,7 @@ class Item extends React.Component {
 
 
     render(){
-        const {index, id, itemName, price, brand, size, description, fbUrls} = this.state
+        const {index, id, itemName, price, brand, size, description, fbUrls, userID} = this.state
 
         return(
             <div>
@@ -72,7 +73,7 @@ class Item extends React.Component {
                     </div>
                 </div>
                {/*  <MessageBox id={id}/> */}
-               <PopupMessage id = {id}/>
+               <PopupMessage itemID = {id} userID = {userID}/>
             </div>
             
         )
