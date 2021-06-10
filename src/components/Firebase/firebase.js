@@ -4,6 +4,8 @@ import 'firebase/firestore'
 import 'firebase/storage'
 
 
+
+
 //console.log(process.env.REACT_APP_API_KEY) //restart local program to see env changes
 
 const firebaseConfig = {
@@ -20,9 +22,13 @@ const firebaseConfig = {
       constructor(){
         firebase.initializeApp(firebaseConfig) //app.init
         
+        
         this.auth = firebase.auth() //app.auth()
         this.db = firebase.firestore() //app.database
         this.storage = firebase.storage()
+
+        
+        
       
        
       }
@@ -71,6 +77,9 @@ const firebaseConfig = {
         currentUser = () =>
             this.auth.currentUser;
 
+        cuid = () =>
+            this.auth.currentUser.uid
+
         userItems = (uid) => 
             this.db.collection('users').doc(uid).collection('items')
         //*Item API 
@@ -92,6 +101,8 @@ const firebaseConfig = {
             this.db
         )
             
+        serverTimestamp = () => 
+            firebase.firestore.FieldValue.serverTimestamp()
 
         doAddItem = (item) => (
            this.db.collection('items').add(item)
@@ -113,6 +124,7 @@ const firebaseConfig = {
 
         doDeleteItem = (itemID) => {
             this.db.collection('items').doc(itemID).delete()
+
         }
 
         doChangeListing = (itemID) => {
@@ -198,6 +210,20 @@ const firebaseConfig = {
             this.db.collection("rooms")
         )
 
+        arrayUnion = (add) =>
+            this.firestore.FieldValue.arrayUnion(add)
+            
+        updateItemBuyers = (value, ref) => {
+            //ref is null if there are no fields
+            if(!ref){
+                ref.set({buyers: [value]})
+            }
+            else
+            ref.update({
+                buyers: firebase.firestore.FieldValue.arrayUnion(value)
+            })
+        }
+            
         
   }
 

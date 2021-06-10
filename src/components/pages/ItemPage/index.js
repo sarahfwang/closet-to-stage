@@ -3,11 +3,8 @@ import React from 'react'
 import {withFirebase} from '../../firebase' 
 import ItemPageLayout from '../../layouts/ItemPageLayout'
 
-import ItemCard from '../../items/ItemCard'
-import { mapProps, renderComponent } from 'recompose'
-
 import "./item-page.scss"
-import TestFilter from '../TestFilter'
+
 
 
 

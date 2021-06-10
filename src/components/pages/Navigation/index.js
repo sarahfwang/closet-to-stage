@@ -53,7 +53,7 @@ const NavigationAuth = () =>( //use parentheses not bracket dumb b
         <Link to={ROUTES.ACCOUNT}>my items</Link>
       </li>
       <li>
-        <Link to={"messages"}>Messages</Link>
+        <Link to="/messages">Messages</Link>
       </li>
     </div>
   </div>

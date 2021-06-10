@@ -25,7 +25,6 @@ const INITIAL_STATE={
   lowerCase:{
 
   },
-  userID: null,
   images: {
     imageAsFile:'',
     imageAsUrl:'',
@@ -78,15 +77,46 @@ class Form extends Component {
 
     console.log('start of upload')
 
+    //add to items
     if(imgFiles.length === 0){
       this.setState({error:"please select at least one image"})
       console.error('please select at least one image')
     }
+    else if(userID == null){
+      this.setState({error:"user is null"})
+    }
     else{
       this.props.firebase.doAddItem({...lowerCase, userID, isListed: true, fbUrls:[]}) //add images as urls!!!
       .then(doc => {
+        //doc is the items
         this.uploadImage(doc, doc.id)
-      })
+
+        const cuid = this.props.firebase.cuid()
+
+        //add to user
+        this.props.firebase.user(cuid).get()
+        .then(user=>{
+          if(!user.data().userItems)
+            this.props.firebase.user(cuid).update({
+              //add the item id to the userItems list
+              userItems: [doc.id]
+            })
+          else{
+            let userItems = user.data().userItems.concat(doc.id)
+            console.log("userItems", userItems)
+            
+            this.props.firebase.user(cuid).update({
+              userItems,
+            })
+          }
+
+        })
+      
+
+    })
+
+    //add to user
+      
     }
     
   }
@@ -141,7 +171,7 @@ class Form extends Component {
 
   }
 
-  onClear = event =>{
+  onClear = () =>{
     this.setState({...INITIAL_STATE})
   }
 
@@ -234,7 +264,7 @@ class Form extends Component {
                   type="text"
                   onChange={this.onChange}
                   placeholder="brand*"
-                  required
+                  
                 />
               </div>
               <div className="info-price info-cont">
@@ -245,7 +275,7 @@ class Form extends Component {
                   type="text"
                   onChange={this.onChange}
                   placeholder="00.00*"
-                  required
+                 
                 />
               </div>
               <div className="info-size info-cont">
@@ -255,7 +285,7 @@ class Form extends Component {
                   type="text"
                   onChange={this.onChange}
                   placeholder="size, ex: M, 2*"
-                  required
+             
                 />
               </div>
               <div className="info-description info-cont">{/*beware 'notes'*/}
@@ -265,7 +295,7 @@ class Form extends Component {
                   type="text"
                   onChange={this.onChange}
                   placeholder="description*"
-                  required
+      
                 />
               </div>
               

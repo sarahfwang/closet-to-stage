@@ -3,6 +3,7 @@ import React from 'react'
 import {withFirebase} from '../../firebase'
 import MessageBox from '../MessageBox'
 import Slideshow from '../Slideshow'
+import PopupMessage from '../PopupMessage'
 
 import './item.scss'
 import 'react-slideshow-image/dist/styles.css'
@@ -33,6 +34,7 @@ class Item extends React.Component {
                 console.log(this.state)
             })
     }
+
 
     render(){
         const {index, id, itemName, price, brand, size, description, fbUrls} = this.state
@@ -65,11 +67,12 @@ class Item extends React.Component {
                         <h2>${price}</h2>
                         <p>{brand}</p>
                         <h3>size: {size}</h3>
-                        <button>Message</button>
+                        <button onClick = {this.openMessages}>Message</button>
                         <p>notes: {description}</p>
                     </div>
                 </div>
-                <MessageBox id={id}/>
+               {/*  <MessageBox id={id}/> */}
+               <PopupMessage id = {id}/>
             </div>
             
         )

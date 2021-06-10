@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 
 import MessageBox from '../items/MessageBox'
 import {withAuthorization} from '../auth/Session'
-import {compose, mapPropsStream} from 'recompose'
+import {compose} from 'recompose'
 import { withFirebase } from '../firebase'
 
 //messageBox takes in an itemID as id
@@ -14,12 +14,20 @@ const give = ["LQGHpu0YNiHfarqZqfQJ"]
 //user, sarah, wants u's item
 const MyMessages = (props) => {
     const uid = props.firebase.currentUser().uid
+    console.log("uid",uid)
     const [buyerIDs, setBuyers] = useState([])
+    const [giveList, setGive] = useState([])
+    
+    
+    
+
 
     useEffect(() => {
 
 
-        give.map(itemID => {
+        let promises = []
+
+        const promise = give.map(itemID => {
     
             //props.firebase.itemChats().doc("54jN9tGFtNVHzsqu0Cuq").get().then(doc => console.log(doc.data()))
             
@@ -27,13 +35,27 @@ const MyMessages = (props) => {
             
             props.firebase.itemChats().doc(itemID).get()
             .then(doc => {
-                if(doc){
-                    const buyerIDs = doc.data().buyers       
-                    setBuyers(buyerIDs)              
+                if(doc){   
+                    setBuyers(doc.data().buyers) 
+                    console.log("buyers", doc.data().buyers)             
                 }                        
             })
+            
         
         })
+        promises.push(promise)
+
+        Promise.all(promises).then(()=>{
+            const giveList = give.map(itemID => {
+                buyerIDs.map(buyerID => (
+                    <MessageBox id = {itemID} buyerID = {buyerID}/>
+                ))
+            })
+           
+            console.log(giveList)
+            setGive(giveList)
+        })
+
     }, [])
 
     return(
@@ -51,9 +73,7 @@ const MyMessages = (props) => {
 
             give
             <ul>
-                {buyerIDs.map(buyerID => (
-                    <MessageBox id = {"LQGHpu0YNiHfarqZqfQJ"} buyerID = {buyerID}/>
-                ))}
+               
             </ul>
         </div>
     )

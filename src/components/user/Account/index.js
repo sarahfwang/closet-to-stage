@@ -30,6 +30,7 @@ class AccountPage extends Component {
 
     var cuser = this.props.firebase.currentUser()
     console.log(cuser)
+    
 
     if(cuser != null){ //but do you really need this? because account can only be accessed by auth users
         var cuid = cuser.uid;

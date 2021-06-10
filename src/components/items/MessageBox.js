@@ -15,14 +15,14 @@ class MessageBox extends React.Component{
     }
 
     componentDidMount (){
-        const itemID = this.props.id
+       /*  const itemID = this.props.id
         const buyerID = this.props.buyerID
-        console.log(this.state.messages)
-
-        const msgRef = this.props.firebase.itemChats().doc(itemID).collection(buyerID)
+        console.log(this.state.messages) */
 
         
-        this.msgUnsubscribe = msgRef.onSnapshot(snapshot =>{ //either get or on snapshot or set upload
+        /* const msgRef = this.props.firebase.itemChats().doc(itemID).collection(buyerID)
+
+        this.msgUnsubscribe = msgRef.onSnapshot(snapshot => { //either get or on snapshot or set upload
             let messages = [] //have to set state outside of forEach function
         
             snapshot.forEach(doc => {
@@ -44,7 +44,7 @@ class MessageBox extends React.Component{
             this.setState({
                 messages
             })
-        })
+        }) */
     }
 
     componentWillUnmount(){
@@ -59,18 +59,23 @@ class MessageBox extends React.Component{
 
         const itemRef = this.props.firebase.itemChats().doc(itemID)
         
-        const path = 'buyers.' + buyerID
+        itemRef.get()
+        .then(doc =>{
+            let buyerList = doc.data().buyers
 
-        itemRef.set({})
-        .then(()=>{
-            itemRef.update({[path]: true})
-        }) 
-        .then(()=>{
-            itemRef.collection(buyerID).add({
-                msg,
-                from: uid,
-                created: Date.now(),
-            })
+            if(!buyerList)
+                itemRef.update({buyers:[buyerID]})
+            else{
+                buyerList.concat(buyerID)
+                itemRef.update({buyers: buyerList})
+            }
+                
+        })
+
+        itemRef.collection(buyerID).add({
+            msg,
+            from: uid,
+            created: Date.now(),
         })
         .then(()=>{
             this.setState({msg:""})

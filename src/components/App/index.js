@@ -8,7 +8,7 @@ import SignInPage from '../auth/SignIn';
 import PasswordForgetPage from '../user/PasswordForget';
 import HomePage from '../pages/Home';
 import AccountPage from '../user/Account';
-import Messages from '../user/Messages'
+//import Messages from '../user/Messages'
 import AdminPage from '../user/Admin';
 import ItemPage from '../pages/ItemPage'
 import Form from '../items/ItemForm'
@@ -17,7 +17,8 @@ import Item from '../items/Item'
 import NewFilterPage from '../z-Test'
 //import TestPage from '../pages/TestPage'
 //import TestItemBig from '../TestItemBig'
-import MyMessages from '../MyMessages'
+//import MyMessages from '../MyMessages'
+import MessageConsole from '../user/MessageConsole'
 
 import * as ROUTES from '../../constants/routes';
 import { withAuthentication } from '../auth/Session';
@@ -61,7 +62,7 @@ const App = () => (
       />
       <Route exact path={ROUTES.HOME} component={HomePage} />
       <Route exact path={ROUTES.ACCOUNT} component={AccountPage} />
-      <Route exact path="/messages" component = {Messages} />
+      {/* <Route exact path="/messages" component = {Messages} /> */}
       <Route exact path={ROUTES.ADMIN} component={AdminPage} />
       <Route exact path={ROUTES.ITEM_PAGE} component={ItemPage} />
       {/* <Route exact path={'/item-page2'} component={ItemPage2} /> */}
@@ -70,7 +71,8 @@ const App = () => (
       <Route exact path="/items/:itemID" component = {Item}/> {/*':' allows Item to access itemID */}
       <Route exact path="/item-page/:itemID" component = {Item}/> {/*':' allows Item to access itemID */}
       <Route exact path="/items/:type?/:color?/brand?:" component={NewFilterPage}/>
-      <Route exact path="/mymessages" component={MyMessages}/>
+      <Route exact path="/messages" component = {MessageConsole} />
+      {/* <Route exact path="/mymessages" component={MyMessages}/> */}
       
       
     </div>

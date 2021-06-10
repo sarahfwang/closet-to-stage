@@ -110,7 +110,7 @@ class Messages extends React.Component{
        
     }
     render(){
-        const {itemIDs, selectedID, message, error} = this.state
+        const {itemIDs, message, error} = this.state
 
         return(
             <div className = "message-page">
