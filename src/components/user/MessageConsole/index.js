@@ -82,13 +82,16 @@ class MessageConsole extends React.Component{
             selectedBuyer,
         }, ()=>console.log("state",this.state))
 
+        this.setState({
+            random:"hi"
+        })
+
     }
     
 
     render(){
         const {userItems, selectedItem, selectedBuyer, buyers} = this.state
-
-        if(selectedBuyer)
+        
             return(
                 <div>
                     {Object.entries(buyers).map(([item, buyerList]) => 
@@ -102,27 +105,13 @@ class MessageConsole extends React.Component{
                         </div>
                     )}
                     <div>
-                        <PopupMessage itemID = {selectedItem} userID = {selectedBuyer} />
+                        {selectedBuyer? <PopupMessage itemID = {this.state.selectedItem} userID = {this.state.selectedBuyer} /> : null}
                     </div>
                 </div>
                 
             )
            
-        else
-            return(
-                <div>
-                    {Object.entries(buyers).map(([item, buyerList]) => 
-                        <div> 
-                            <p>item: {item}</p>
-                            <ul>buyers: 
-                                {buyerList.map(id => 
-                                    <li key={id} onClick = {() => this.setItem(item, id)} style = {{cursor: "pointer"}}>{id}</li>
-                                )}
-                            </ul>
-                        </div>
-                    )}
-                </div>
-        )
+        
     }
 }
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 
 import './popup-message.scss'
 
@@ -8,130 +8,82 @@ import {compose} from 'recompose'
 
 //TODO: pass authuser to everything
 
-class PopupMessage extends React.Component{
-    constructor(props){
-        super(props)
+const PopupMessage = props => {
+    const [msg, setMsg] = useState("")
+    const [messages, setMessages] = useState([])
 
-        //TIP: do not initialize state with props!!!
-        this.state ={
-            msg:"",
-            cuid: "",
-            itemID: "",
+    const [userID, setUserID] = useState(props.userID)
+    const [itemID, setItemID] = useState(props.itemID)
 
-            messages:[],
-        }
-
-
-    }
-
-    componentDidMount (){
-       
-       this.setState({
-           cuid: this.props.userID,
-           itemID: this.props.itemID,
-       },()=> {this.setMessages()})
-    }
-
-    setMessages = () => {
-        const {cuid, itemID} = this.state
-        console.log("HI")
-
-        //get all of the messages, in time order
-        if(cuid)
-            this.props.firebase.itemChats().doc(itemID).collection(cuid).orderBy('created').onSnapshot(snapshot => {
-                let messages = [] //have to set state outside of forEach function
-            
-                snapshot.forEach(doc => {
-                    //console.log(doc.id, " => " , doc.data())
-                    
-                    messages.push({...doc.data(), id: doc.id})
-                    
-                })
     
-                this.setState({
-                    messages
-                })
+    useEffect(()=>{
+        setUserID(props.userID)
+        setItemID(props.itemID)
+
+        props.firebase.itemChats().doc(itemID).collection(userID).orderBy('created').onSnapshot(snapshot => {
+            let messages = [] //have to set state outside of forEach function
+        
+            snapshot.forEach(doc => {
+                //console.log(doc.id, " => " , doc.data())
+                
+                messages.push({...doc.data(), id: doc.id})
+                
             })
-    }
-    
-
-    componentWillUnmount(){
-
-    }
-
-    onSubmit = (event) => {
-        const {msg, itemID, cuid} = this.state
-
-        const itemRef = this.props.firebase.itemChats().doc(itemID)
-
-
-        //TODO: inefficient
-       /*  itemRef.add({
-            buyers:[]
+            setMessages(messages)
         })
-        .then(doc => {
-            if(doc.data().)
-                this.props.firebase.itemChats().doc(itemID).update({
-                    buyers: [cuid]
-                })
-            else{
-                let buyers = doc.data().buyers.concat(cuid)
 
-                this.props.firebase.itemChats().doc(itemID).update({
-                    buyers,
-                })
-            }
-            
-        }) */
+    },[props.userID, userID, props.itemID, itemID])
 
-        this.props.firebase.updateItemBuyers(cuid, itemRef)
+   
+    const onSubmit = (event) => {
+
+        const itemRef = props.firebase.itemChats().doc(itemID)
+
+        //array union--firebase.js
+        props.firebase.updateItemBuyers(userID, itemRef)
 
         //add the message within the user within the item 
-        itemRef.collection(cuid).add({
+        itemRef.collection(userID).add({
             msg,
-            from: cuid,
-            created: this.props.firebase.serverTimestamp(),
+            from: userID,
+            created: props.firebase.serverTimestamp(),
         })
         .then(()=>{
-            this.setState({msg:""})
+            setMsg("")
         })
        
         event.preventDefault()
     }
 
-    onChange = (event) => {
-        this.setState({
-            [event.target.name]: event.target.value
-        })
-        console.log(this.state)
+    const onChange = (event) => {
+        setMsg(event.target.value)
+       
     }
 
-    render(){
-        const {msg, messages} = this.state
 
-        return(
-            <div className="popup-message">
-                <h3>send messages</h3>
-               
-                <form autoComplete="off" onSubmit = {this.onSubmit}>
-                <div className="see-message">
-                    <ul>
-                        {messages.map(msg => (
-                            <li key = {msg.id}>{msg.msg}</li>
-                        ))}
-                    </ul>  
-                </div>
-
-                <div className = "type-message">
-                    <input  type="text" placeholder="talk here" onChange ={this.onChange} name ="msg" value={msg}/>
-                    <button type="submit">send</button>
-                </div>
-                
-                </form>
-               
+    return(
+        <div className="popup-message" >
+            <h3>send messages</h3>
+            
+            <form autoComplete="off" onSubmit = {onSubmit}>
+            <div className="see-message">
+                <ul>
+                    {messages.map(msg => (
+                        <li key = {msg.id}>{msg.msg}</li>
+                    ))}
+                </ul>  
             </div>
-        )
-    } 
+
+            <div className = "type-message">
+                <input  type="text" placeholder="talk here" onChange ={onChange} name ="msg" value={msg}/>
+                <button type="submit">send</button>
+            </div>
+            
+            </form>
+            
+        </div>
+    )
+    
 }
 
 
