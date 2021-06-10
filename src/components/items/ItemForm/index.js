@@ -91,7 +91,7 @@ class Form extends Component {
         //doc is the items
         this.uploadImage(doc, doc.id)
 
-        const cuid = this.props.firebase.cuid()
+        const cuid = this.props.authUser.uid
 
         //add to user
         this.props.firebase.user(cuid).get()

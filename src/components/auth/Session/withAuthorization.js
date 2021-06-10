@@ -25,6 +25,7 @@ const withAuthorization = condition => Component => { //withAuthorization(condit
 
         componentWillUnmount(){
             //this.props.firebase.user().off(); //!!! needs a fixing
+            //this.listener()
         }
 
         render(){
@@ -32,7 +33,7 @@ const withAuthorization = condition => Component => { //withAuthorization(condit
             return (
             <AuthUserContext.Consumer>
                 {authUser => 
-                    condition(authUser)? <Component {...this.props} />:null}
+                    condition(authUser)? <Component {...this.props} authUser = {authUser}/>:null}
             </AuthUserContext.Consumer> )
             //ya always need this.props, i think, unless it's a class
         }

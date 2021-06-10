@@ -9,8 +9,9 @@ class MessageConsole extends React.Component{
     constructor(props){
         super(props)
 
+        console.log("mc props", props)
+
         this.state = {
-            userItems: [],
             buyers:{},
 
             selectedItem:"",
@@ -21,42 +22,39 @@ class MessageConsole extends React.Component{
     }
 
     componentDidMount(){
-        const cuid = this.props.firebase.cuid()
 
-        //gets all the items owned by the user
-        this.props.firebase.user(cuid).get()
-        .then(doc => {
-            const userItems = doc.data().userItems
-            this.setState({userItems})
-        })
+        //get all the items owned by the user
         //from there, get the items' potential buyers
-        //.then() after setState
-        .then(()=>{
-            const userItems = this.state.userItems
-            //for each userItem in itemChats
-            //ones that have doc.data(), or buyers
-            //add the userItem like {item:[user1, user2]}
+       
+        const userItems = this.props.authUser.userItems
 
+        //for each userItem in itemChats
+        //ones that have doc.data(), or buyers
+        //add the userItem like {item:[user1, user2]}
+        if(userItems) 
             this.props.firebase.itemChats().where(this.props.firebase.docPath(), "in", userItems).get()
             .then(snapshot => {
-                snapshot.forEach(doc => {
-                    //doc is item, doc.id==item.id
-                    console.log(doc.id,"->",doc.data())
+                if(snapshot.empty)
+                    console.log("No chats")
+                else
+                    snapshot.forEach(doc => {
+                        //doc is item, doc.id==item.id
+                        console.log(doc.id,"->",doc.data())
 
-                    this.setState(state => {
-                        //state.buyers is an object with key value-array pairs 
+                        this.setState(state => {
+                            //state.buyers is an object with key value-array pairs 
 
-                        return {
-                            buyers:{
-                                [doc.id]: doc.data().buyers,
-                                ...state.buyers
+                            return {
+                                buyers:{
+                                    [doc.id]: doc.data().buyers,
+                                    ...state.buyers
+                                }
                             }
-                        }
+                        })
+                    
                     })
-                   
-                })
             })
-        })
+        
     }
 
     setItem = (id) => {
@@ -91,19 +89,24 @@ class MessageConsole extends React.Component{
 
     render(){
         const {userItems, selectedItem, selectedBuyer, buyers} = this.state
+        console.log("mc state", this.state)
         
             return(
                 <div>
-                    {Object.entries(buyers).map(([item, buyerList]) => 
-                        <div key={item}> 
-                            <p>item: {item}</p>
-                            <ul>buyers: 
-                                {buyerList.map(id => 
-                                    <li key={id} onClick = {() => this.setItem(item, id)} style = {{cursor: "pointer"}}>{id}</li>
-                                )}
-                            </ul>
-                        </div>
-                    )}
+                    message console
+                    <div>
+                        {Object.entries(buyers).map(([item, buyerList]) => 
+                            <div key={item}> 
+                                <p>item: {item}</p>
+                                <ul>buyers: 
+                                    {buyerList.map(id => 
+                                        <li key={id} onClick = {() => this.setItem(item, id)} style = {{cursor: "pointer"}}>{id}</li>
+                                    )}
+                                </ul>
+                            </div>
+                        )}
+                    </div>
+                    
                     <div>
                         {selectedBuyer? <PopupMessage itemID = {this.state.selectedItem} userID = {this.state.selectedBuyer} /> : null}
                     </div>

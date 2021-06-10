@@ -19,22 +19,47 @@ class AccountPage extends Component {
  
     this.state = {
       user: {},
-      loading: false,
+      loading: true,
       userItems: [],
       filtered: [],
     };
   }
  
   componentDidMount() {
-    this.setState({ loading: true });
+   
+    const userItems = this.props.authUser.userItems
+ 
+    const user = this.props.authUser
 
-    var cuser = this.props.firebase.currentUser()
-    console.log(cuser)
+    let newUserItems = []
+
+    if(userItems){
+
+      userItems.forEach(id => {
+        const uiRef =  this.props.firebase.items().doc(id)
+        uiRef.get().then(doc => {
+       
+          newUserItems.push({id: doc.id, ...doc.data()})
+        })
+        .then(()=>{ //inefficient !!! but do not know how to call one after the other
+          this.setState({
+            userItems: newUserItems,
+            filtered: newUserItems,
+          })
+        })
+      })
+    }
+
+    this.setState({user})
+    
     
 
-    if(cuser != null){ //but do you really need this? because account can only be accessed by auth users
+    /* if(cuser != null){ //but do you really need this? because account can only be accessed by auth users
         var cuid = cuser.uid;
-        //console.log(cuid)
+
+        this.setState({
+          user: this
+        })
         
         this.unsubscribeUser = this.props.firebase.user(cuid)
           .onSnapshot(snapshot => { //or change back to .get
@@ -68,13 +93,13 @@ class AccountPage extends Component {
 
             })
 
-    }
+    } */
   }
   handleFilterResultsChange = (filtered) =>{
     this.setState({filtered})
 } 
   componentWillUnmount() {
-      this.unsubscribeUser()
+      //this.unsubscribeUser()
      
       //this.props.firebase.users().off()//removes the listener??? or user().off()
   }
@@ -92,9 +117,8 @@ class AccountPage extends Component {
 
         <a href="/itemform"> Add Item</a>
 
-
-            <ItemPageLayout items = {userItems} filtered = {filtered} handleFilterResultsChange={this.handleFilterResultsChange} handleRoute={()=>{}} account = {true} />
-            <ItemsList items = {userItems} /> 
+        <ItemPageLayout items = {userItems} filtered = {filtered} handleFilterResultsChange={this.handleFilterResultsChange} handleRoute={()=>{}} account = {true} />
+           
       </div>
     );
   }

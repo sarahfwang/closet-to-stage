@@ -43,6 +43,7 @@ const firebaseConfig = {
         }
 
         updatefbUrls = (value, ref) => {
+
             ref.update({
                 fbUrls: firebase.firestore.FieldValue.arrayUnion(value)
             })
