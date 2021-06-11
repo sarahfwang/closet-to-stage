@@ -78,11 +78,7 @@ class MessageConsole extends React.Component{
         this.setState({
             selectedItem,
             selectedBuyer,
-        }, ()=>console.log("state",this.state))
-
-        this.setState({
-            random:"hi"
-        })
+        }, ()=>console.log("selected",this.state.selectedBuyer))
 
     }
     
@@ -94,6 +90,7 @@ class MessageConsole extends React.Component{
             return(
                 <div>
                     message console
+                    <p>me: {this.props.authUser.uid}</p>
                     <div>
                         {Object.entries(buyers).map(([item, buyerList]) => 
                             <div key={item}> 
@@ -108,7 +105,7 @@ class MessageConsole extends React.Component{
                     </div>
                     
                     <div>
-                        {selectedBuyer? <PopupMessage itemID = {this.state.selectedItem} userID = {this.state.selectedBuyer} /> : null}
+                        {selectedBuyer? <PopupMessage itemID = {this.state.selectedItem} fromUser = {this.props.authUser.uid} toUser = {this.state.selectedBuyer} /> : null}
                     </div>
                 </div>
                 

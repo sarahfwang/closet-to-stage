@@ -12,15 +12,24 @@ const PopupMessage = props => {
     const [msg, setMsg] = useState("")
     const [messages, setMessages] = useState([])
 
-    const [userID, setUserID] = useState(props.userID)
-    const [itemID, setItemID] = useState(props.itemID)
+    //since these don't change, don't use useState
+    //const [userID, setUserID] = useState(props.authUser.uid)
+    //const [itemID, setItemID] = useState(props.itemID) 
 
     
+    
+    //userID is the user in the firestore database
     useEffect(()=>{
-        setUserID(props.userID)
-        setItemID(props.itemID)
 
-        props.firebase.itemChats().doc(itemID).collection(userID).orderBy('created').onSnapshot(snapshot => {
+        console.log(props.authUser)
+
+        const toUser = props.toUser
+        const fromUser = props.fromUser
+        const itemID = props.itemID
+
+        console.log("itemID", itemID, "to", toUser, "from", fromUser)
+
+        props.firebase.itemChats().doc(itemID).collection(toUser).orderBy('created').onSnapshot(snapshot => {
             let messages = [] //have to set state outside of forEach function
         
             snapshot.forEach(doc => {
@@ -32,20 +41,23 @@ const PopupMessage = props => {
             setMessages(messages)
         })
 
-    },[props.userID, userID, props.itemID, itemID])
+    },[props.toUser,props.fromUser, props.itemID])
 
-   
+   //when a message sends
     const onSubmit = (event) => {
+        const toUser = props.toUser
+        const fromUser = props.fromUser
+        const itemID = props.itemID
 
         const itemRef = props.firebase.itemChats().doc(itemID)
 
         //array union--firebase.js
-        props.firebase.updateItemBuyers(userID, itemRef)
+        props.firebase.updateItemBuyers(toUser, itemRef)
 
         //add the message within the user within the item 
-        itemRef.collection(userID).add({
+        itemRef.collection(toUser).add({
             msg,
-            from: userID,
+            from: fromUser,
             created: props.firebase.serverTimestamp(),
         })
         .then(()=>{
@@ -69,7 +81,11 @@ const PopupMessage = props => {
             <div className="see-message">
                 <ul>
                     {messages.map(msg => (
-                        <li key = {msg.id}>{msg.msg}</li>
+                        //this alright??? TODO
+                        msg.from==props.authUser.uid?
+                        <li key = {msg.id} style ={{textAlign: "right", listStylePosition: "inside"}}>{msg.msg}, {msg.from} </li> :
+                        <li key = {msg.id} style ={{textAlign: "left", listStylePosition: "inside"}}>{msg.msg}, {msg.from} </li> 
+                        
                     ))}
                 </ul>  
             </div>

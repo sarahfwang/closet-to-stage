@@ -12,33 +12,34 @@ import 'react-slideshow-image/dist/styles.css'
 class Item extends React.Component {
     constructor(props){
         super(props)
-        const id = this.props.match.params.itemID //takes itemID from the Route in App
+        const itemID = this.props.match.params.itemID //takes itemID from the Route in App
         //https://stackoverflow.com/questions/48084981/how-can-i-get-a-variable-from-the-path-in-react-router
 
         this.state = {
             index:0,
-            id, //sets {id: id}
+            itemID, //sets {id: id}
             fbUrls: [],
-            userID: props.firebase.cuid()
+           
         }
        
     }
 
     componentDidMount () {
-        const {id} = this.state //gets id value from state
+        const {itemID} = this.state //gets id value from state
 
-        const itemRef = this.props.firebase.item(id) //gets reference for item with an id of {id}
+        const itemRef = this.props.firebase.item(itemID) //gets reference for item with an id of {id}
 
         itemRef.get()
             .then(doc=>{
                 this.setState({...doc.data()}) //destructures the object returened by doc.data(), ids merge to one 
                 console.log(this.state)
             })
+   
     }
 
 
     render(){
-        const {index, id, itemName, price, brand, size, description, fbUrls, userID} = this.state
+        const {index, id, itemName, price, brand, size, description, fbUrls} = this.state
 
         return(
             <div>
@@ -73,7 +74,9 @@ class Item extends React.Component {
                     </div>
                 </div>
                {/*  <MessageBox id={id}/> */}
-               <PopupMessage itemID = {id} userID = {userID}/>
+               {/*redirect to sign in page TODO */}
+               {this.props.authUser.uid? <PopupMessage itemID = {id} fromUser = {this.props.authUser.uid} toUser = {this.props.authUser.uid}/> : <div></div>}
+               
             </div>
             
         )

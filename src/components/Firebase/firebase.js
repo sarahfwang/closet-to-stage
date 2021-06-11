@@ -49,6 +49,22 @@ const firebaseConfig = {
             })
         }
 
+        updateItemBuyers = (value, ref) => {
+            //ref update only works if the doc exists
+
+            console.log("in firebase.js value", value, "ref", ref)
+            ref.get().then(doc=>{
+                if(doc.exists) {
+                    ref.update({buyers: firebase.firestore.FieldValue.arrayUnion(value)})
+                }
+                else{
+                    ref.set({buyers: [value]})
+                }
+            })
+            
+            
+
+        }
 
       //*** Auth API ***
         doCreateUserWithEmailAndPassword = (email, password) =>
@@ -162,7 +178,7 @@ const firebaseConfig = {
                     
                     promise.then(snapshot => { //could also get rid of 'promise' and go directly to '.then'
                         const dbUser = snapshot.data()
-                        console.log(dbUser.roles)
+                        console.log("roles", dbUser.roles)
 
 
                         //console.log({roles})
@@ -213,15 +229,7 @@ const firebaseConfig = {
         arrayUnion = (add) =>
             this.firestore.FieldValue.arrayUnion(add)
             
-        updateItemBuyers = (value, ref) => {
-            //ref set ARRAY UNION
-            //creates an array if there is none
-            //set creates if there is nothing
-            
-            
-            ref.set({buyers: firebase.firestore.FieldValue.arrayUnion(value)})
-
-        }
+        
 
         docPath = () =>
             firebase.firestore.FieldPath.documentId()
