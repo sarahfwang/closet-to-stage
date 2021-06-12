@@ -95,10 +95,10 @@ class TestFilter extends React.Component {
                         <h4 className="filter-cat-title">Type</h4>
     
                         {Object.keys(type).map(prop => 
-                            <div>
+                            <div key={prop}>
                                 <label className="selector-wrapper"> {/*label allows full click */}
                                     <input id={prop} name={prop} type="checkbox" onClick={this.onClick("type")}/>
-                                    <span class="checkmark"></span>
+                                    <span className="checkmark"></span>
                                     {prop}
                                 </label>
                             </div>
@@ -111,10 +111,10 @@ class TestFilter extends React.Component {
                         <h4 className="filter-cat-title">Style</h4>
     
                         {Object.keys(style).map(prop => 
-                            <div>
+                            <div key={prop}>
                                 <label className="selector-wrapper"> {/*label allows full click */}
                                 <input id={prop} name={prop} type="checkbox" onClick={this.onClick("type")}/>
-                                    <span class="checkmark"></span>
+                                    <span className="checkmark"></span>
                                     {prop}
                                 </label>
                             </div>
@@ -125,7 +125,7 @@ class TestFilter extends React.Component {
                     <div className="filter-cat"> 
                         <h4 className="filter-cat-title">Color</h4>
                         {Object.keys(color).map(prop =>
-                            <div>
+                            <div key={prop}>
                                 <label className="selector-wrapper">
                                     <input type="checkbox" />
                                     <div className="swatch-wrapper">

@@ -80,7 +80,6 @@ class Form extends Component {
     //add to items
     if(imgFiles.length === 0){
       this.setState({error:"please select at least one image"})
-      console.error('please select at least one image')
     }
     else if(userID == null){
       this.setState({error:"user is null"})
@@ -93,7 +92,11 @@ class Form extends Component {
 
         const cuid = this.props.authUser.uid
 
-        //add to user
+        const userRef = this.props.firebase.user(cuid)
+
+        this.props.firebase.updateUserItems(userRef, doc.id)
+
+        /* //add to user
         this.props.firebase.user(cuid).get()
         .then(user=>{
           if(!user.data().userItems)
@@ -111,11 +114,9 @@ class Form extends Component {
           }
 
         })
-      
+       */
 
     })
-
-    //add to user
       
     }
     
@@ -129,7 +130,7 @@ class Form extends Component {
     //loop: going to have to loop thru imgFiles
     //find imgFile.name
 
-    imgFiles.map(imgFile => {
+    imgFiles.forEach(imgFile => {
       //file has name prop
       const imagesRef = this.props.firebase.storageRef().child(`users/${userID}/items/${id}/${imgFile.name}`)
 
@@ -158,7 +159,6 @@ class Form extends Component {
 
               console.log(downloadUrl)
 
-
               this.props.firebase.updatefbUrls(downloadUrl, itemRef)
             })
             
@@ -180,6 +180,8 @@ class Form extends Component {
       const image = e.target.files[0]
 
       const url = URL.createObjectURL(image)
+
+      console.log("url", url)
 
       /* this.setState({
         images:{
@@ -225,7 +227,7 @@ class Form extends Component {
             <div className="img-col">
               
                 {imgUrls.map(url => 
-                    <div className="img-cont">
+                    <div className="img-cont" key={url}>
                         <img src={url}/>
                     </div>
                 )}
@@ -316,8 +318,8 @@ class Form extends Component {
                 />
                 <div className="color-selector">
               
-                  {colors.map(color => 
-                    <div>
+                  {colors.map((color, index) => 
+                    <div key={index}>
                       <label htmlFor={color}>
                         <input type="radio" id={color} name="color" value={color} onChange={this.onChange}/>
                         <span className={`${color}-select`}></span>
@@ -342,15 +344,7 @@ class Form extends Component {
       </form>
 
       <p>{progress}% uploaded</p>
-      
-     
-
-      
-
-   
-
-
-
+    
       </div>
       
       )

@@ -1,172 +1,158 @@
-import React, {Component } from 'react';
+/* import React, {useState} from 'react'
+
 import {compose} from 'recompose'
 
 import {withFirebase} from '../../firebase'
 import {withAuthorization} from '../../auth/Session'
-//import * as ROLES from '../../constants/roles'
+import AvatarEditor from 'react-avatar-editor'
 
-import ItemPageLayout from '../../layouts/ItemPageLayout'
+const Account = (props) => {
+    const [avatarFile, setAvatarFile] = useState()
+    const [avatarUrl, setAvatarUrl] = useState()
+    const [scale, setScale] = useState(1)
+    const [rotate, setRotate] = useState(0)
 
-import PasswordChangeForm from '../PasswordChange' 
-import ItemEdit from '../../items/ItemEdit'
+    
 
-import './account.css'
-
-//TODO: Delete item
-class AccountPage extends Component {
-  constructor(props) {
-    super(props);
- 
-    this.state = {
-      user: {},
-      loading: true,
-      userItems: [],
-      filtered: [],
-    };
-  }
- 
-  componentDidMount() {
-   
-    const userItems = this.props.authUser.userItems
- 
-    const user = this.props.authUser
-
-    let newUserItems = []
-
-    if(userItems){
-
-      userItems.forEach(id => {
-        const uiRef =  this.props.firebase.items().doc(id)
-        uiRef.get().then(doc => {
+    const onClickSave = (event) => {
        
-          newUserItems.push({id: doc.id, ...doc.data()})
-        })
-        .then(()=>{ //inefficient !!! but do not know how to call one after the other
-          this.setState({
-            userItems: newUserItems,
-            filtered: newUserItems,
-          })
-        })
-      })
+        const canvas = this.getImage()
+        
+        const url = URL.createObjectURL(canvas)
+
+        console.log("img", canvas)
+        console.log("url",url)
+
+       
     }
 
-    this.setState({user})
-    
-    
-
-    /* if(cuser != null){ //but do you really need this? because account can only be accessed by auth users
-        var cuid = cuser.uid;
-
-        this.setState({
-          user: this
-        })
-        
-        this.unsubscribeUser = this.props.firebase.user(cuid)
-          .onSnapshot(snapshot => { //or change back to .get
-            if(snapshot){//need???
-              this.setState({
-                user: snapshot.data(),
-                loading: false
-              })
-              //console.log(this.state.user)
-            }  
-          })
-
-          this.props.firebase.items().where('userID','==',cuid)
-            .get().then(querySnapshot => {
-              let userItems = []
-              if(querySnapshot.empty){
-                console.log("No Items for this User")
-                return;
-              }
-
-              querySnapshot.forEach(doc => {
-                //doc.data() returns an object-- the full item
-                userItems.push({id: doc.id, ...doc.data()})
-                //console.log(userItems)
-              })
-
-              this.setState({ //setting all of userItems to state to send   to <ItemsList/>
-                userItems,
-                filtered: userItems,
-              })
-
-            })
-
-    } */
-  }
-  handleFilterResultsChange = (filtered) =>{
-    this.setState({filtered})
-} 
-  componentWillUnmount() {
-      //this.unsubscribeUser()
-     
-      //this.props.firebase.users().off()//removes the listener??? or user().off()
-  }
-  render() {
-      const { user, loading, userItems, filtered } = this.state //passing userItems as a prop into ItemsList
- 
-    return (
-      <div>
-        <h1>Account</h1>
-        <p>Account details</p>
-        
-        {loading && <p>Loading...</p>}
-        <PasswordChangeForm/>
-        <User user={user} />
-
-        <a href="/itemform"> Add Item</a>
-
-        <ItemPageLayout items = {userItems} filtered = {filtered} handleFilterResultsChange={this.handleFilterResultsChange} handleRoute={()=>{}} account = {true} />
-           
-      </div>
-    );
-  }
-}
-
-const User = ({user}) => ( 
-    <div>
-      <ul>   
-          <li >
-              <span>
-                  <p>Email: {user.email}</p>
-              </span>
-              <span>
-                  <p> username: {user.username}</p>
-              </span>
-          </li>     
-      </ul>
-
-    </div>
-)
-
-const ItemsList = (props) => { //props: {items: [{item1}, {item2}, ...]}
   
-  return (
-    <div className="itemslist">
-      <ul>
-        {props.items.map(item=> <li key={item.id}> <ItemEdit item={item}/> </li>)} 
-      </ul>
-    </div>
-  )
+
+    return (
+        <div>
+            <div>
+                <p>username: {props.authUser.username}</p>
+                <p>email: {props.authUser.email}</p>
+            </div>
+            <div>
+                upload avatar:
+                <input 
+                    id="avatar"
+                    type="file"
+                    accept="image/*"
+                    onChange = {(e)=> {
+                        const image = e.target.files[0]
+                        const url = URL.createObjectURL(image)
+                        
+                        //setAvatarFile(image)
+                        setAvatarUrl(url)
+
+                        //console.log(image)
+                    }}
+                />
+            </div>  
+            <AvatarEditor 
+                image = {avatarUrl}
+                borderRadius = {100}
+                width = {200}
+                height = {200}
+                scale = {scale}
+                rotate = {rotate}
+            />
+            <input type="range" name="scale" step="0.01" min="1" max="2" defaultValue = {scale} onChange = {e=>setScale(parseFloat(e.target.value))}style={{width: "8em"}}/>
+            <label htmlFor="scale">zoom</label>
+
+            <button onClick ={()=>setRotate(rotate+90)}>rotate</button>
+            <button onClick = {onClickSave}>Save </button>
+        </div>
+    )
 }
-
-
- const Item =  (props) =>{ //or use ({item}) instead of (props) and change accoridngly
-  //console.log(props.item)
-return(
-    <div className="item">
-      <strong>itemName: {props.item.item.itemName}, color: {props.item.item.color} </strong>
-    </div>
-  )
-} 
- 
-
 
 const condition = authUser => !! authUser
 
 export default compose(
   withFirebase,
-  withAuthorization(condition), //somehow this fixed my staying logged in error???
-)(AccountPage) //need to study compose
+  withAuthorization(condition),
+)(Account) 
 
+
+/* import {compose} from 'recompose'
+
+import {withFirebase} from '../../firebase'
+import {withAuthorization} from '../../auth/Session'
+
+export default compose(
+  withFirebase,
+  withAuthorization(condition),
+)(Account)  */
+
+import React from 'react'
+import AvatarEditor from 'react-avatar-editor'
+
+import {withFirebase} from '../../firebase'
+
+class MyEditor extends React.Component {
+
+    constructor(props){
+        super(props)
+
+        this.state = {
+            url:"",
+            scale: 1,
+        }
+    }
+    
+  onClickSave = () => {
+    if (this.editor) {
+      // This returns a HTMLCanvasElement, it can be made into a data URL or a blob,
+      // drawn on another canvas, or added to the DOM.
+      const imgBlob = this.editor.getImage().toBlob(blob => {
+        this.props.firebase.storageRef().child('test').put(blob)
+      })
+      
+      
+    }
+  }
+
+
+  setEditorRef = (editor) => this.editor = editor
+
+  render () {
+    const {scale} = this.state
+
+    return (
+        <div>
+            <AvatarEditor
+          ref={this.setEditorRef}
+          image={this.state.url}
+          width={250}
+          height={250}
+          border={50}
+          scale={scale}
+          borderRadius = {175}
+            />
+        <input 
+            id="avatar"
+            type="file"
+            accept="image/*"
+            onChange = {(e)=> {
+                const image = e.target.files[0]
+                const url = URL.createObjectURL(image)
+                
+                //setAvatarFile(image)
+                this.setState({url}, ()=>console.log(this.state.url))
+            }}
+        />
+        <input type="range" name="scale" step="0.01" min="1" max="2" defaultValue = {scale} onChange = {e=> this.setState({scale: parseFloat(e.target.value)})}style={{width: "8em"}}/>
+        <label htmlFor="scale">zoom</label>
+
+        <button onClick = {this.onClickSave}>try me</button>
+           
+
+        </div>
+        
+    )
+  }
+}
+
+export default withFirebase(MyEditor)

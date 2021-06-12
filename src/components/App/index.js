@@ -7,7 +7,8 @@ import SignUpPage from '../auth/SignUp';
 import SignInPage from '../auth/SignIn';
 import PasswordForgetPage from '../user/PasswordForget';
 import HomePage from '../pages/Home';
-import AccountPage from '../user/Account';
+import MyCloset from '../user/MyCloset';
+import Account from '../user/Account'
 //import Messages from '../user/Messages'
 import AdminPage from '../user/Admin';
 import ItemPage from '../pages/ItemPage'
@@ -61,7 +62,7 @@ const App = () => (
         component={PasswordForgetPage}
       />
       <Route exact path={ROUTES.HOME} component={HomePage} />
-      <Route exact path={ROUTES.ACCOUNT} component={AccountPage} />
+      
       {/* <Route exact path="/messages" component = {Messages} /> */}
       <Route exact path={ROUTES.ADMIN} component={AdminPage} />
       <Route exact path={ROUTES.ITEM_PAGE} component={ItemPage} />
@@ -70,8 +71,11 @@ const App = () => (
       <Route exact path="/filter" component = {Filter} />
       <Route exact path="/items/:itemID" component = {Item}/> {/*':' allows Item to access itemID */}
       <Route exact path="/item-page/:itemID" component = {Item}/> {/*':' allows Item to access itemID */}
-      <Route exact path="/items/:type?/:color?/brand?:" component={NewFilterPage}/>
+      {/* <Route exact path="/items/:type?/:color?/brand?:" component={NewFilterPage}/> */}
+
+      <Route exact path="/my-closet" component={MyCloset} />
       <Route exact path="/messages" component = {MessageConsole} />
+      <Route exact path="/account" component = {Account} />
       {/* <Route exact path="/mymessages" component={MyMessages}/> */}
       
       

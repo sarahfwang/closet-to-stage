@@ -32,6 +32,7 @@ const firebaseConfig = {
       
        
       }
+        //Images in storage
         storageRef = () => (
             this.storage.ref()
         )
@@ -41,6 +42,8 @@ const firebaseConfig = {
                 this.storage.ref(`/images/${name}`).put(file)
             )
         }
+
+        //array union functions
 
         updatefbUrls = (value, ref) => {
 
@@ -61,9 +64,12 @@ const firebaseConfig = {
                     ref.set({buyers: [value]})
                 }
             })
-            
-            
+        }
 
+        updateUserItems = (ref, value) => {
+            ref.update({
+                userItems: firebase.firestore.FieldValue.arrayUnion(value)
+            })
         }
 
       //*** Auth API ***

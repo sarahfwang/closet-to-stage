@@ -50,10 +50,13 @@ const NavigationAuth = () =>( //use parentheses not bracket dumb b
         <SignOutButton />
       </li>
       <li>
-        <Link to={ROUTES.ACCOUNT}>my items</Link>
+        <Link to={"my-closet"}>my closet</Link>
       </li>
       <li>
         <Link to="/messages">Messages</Link>
+      </li>
+      <li>
+        <Link to = "/account"> Account</Link>
       </li>
     </div>
   </div>

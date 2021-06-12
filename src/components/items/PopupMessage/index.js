@@ -21,7 +21,7 @@ const PopupMessage = props => {
     //userID is the user in the firestore database
     useEffect(()=>{
 
-        console.log(props.authUser)
+        console.log("auth", props.authUser)
 
         const toUser = props.toUser
         const fromUser = props.fromUser
@@ -29,17 +29,17 @@ const PopupMessage = props => {
 
         console.log("itemID", itemID, "to", toUser, "from", fromUser)
 
-        props.firebase.itemChats().doc(itemID).collection(toUser).orderBy('created').onSnapshot(snapshot => {
-            let messages = [] //have to set state outside of forEach function
-        
-            snapshot.forEach(doc => {
-                //console.log(doc.id, " => " , doc.data())
-                
-                messages.push({...doc.data(), id: doc.id})
-                
+        if(toUser && itemID)
+            props.firebase.itemChats().doc(itemID).collection(toUser).orderBy('created').onSnapshot(snapshot => {
+                let messages = [] //have to set state outside of forEach function
+            
+                snapshot.forEach(doc => {
+                    //console.log(doc.id, " => " , doc.data())
+                    messages.push({...doc.data(), id: doc.id})
+                    
+                })
+                setMessages(messages)
             })
-            setMessages(messages)
-        })
 
     },[props.toUser,props.fromUser, props.itemID])
 

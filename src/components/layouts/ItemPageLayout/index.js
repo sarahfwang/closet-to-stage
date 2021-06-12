@@ -20,7 +20,7 @@ const ItemPageLayout = ({items, filtered, handleFilterResultsChange, handleRoute
                    
                     {
                     filtered.map(item => (
-                        <ItemCard item = {item} handleRoute = {handleRoute} {...props}/>
+                        <ItemCard item = {item} handleRoute = {handleRoute} {...props} key={item.id}/>
                     ))}
                 </div>
             </div>

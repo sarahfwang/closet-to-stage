@@ -1,6 +1,8 @@
 import React from 'react'
 
 import {withFirebase} from '../../firebase'
+import {withAuthorization} from '../../auth/Session'
+import {compose} from 'recompose'
 import MessageBox from '../MessageBox'
 import Slideshow from '../Slideshow'
 import PopupMessage from '../PopupMessage'
@@ -39,8 +41,9 @@ class Item extends React.Component {
 
 
     render(){
-        const {index, id, itemName, price, brand, size, description, fbUrls} = this.state
+        const {index, itemID, itemName, price, brand, size, description, fbUrls} = this.state
 
+        console.log("props", this.props)
         return(
             <div>
                 <div className = "item-page">
@@ -67,15 +70,14 @@ class Item extends React.Component {
                     <div className="info-col">
                         <h1>{itemName}</h1>
                         <h2>${price}</h2>
-                        <p>{brand}</p>
-                        <h3>size: {size}</h3>
-                        <button onClick = {this.openMessages}>Message</button>
+                        {brand? <p>{brand}</p>: <p>no brand</p>}
+                        <button>Message</button>
+                        {size? <h3>size: {size}</h3>: <h3>no size</h3>}
                         <p>notes: {description}</p>
                     </div>
                 </div>
-               {/*  <MessageBox id={id}/> */}
                {/*redirect to sign in page TODO */}
-               {this.props.authUser.uid? <PopupMessage itemID = {id} fromUser = {this.props.authUser.uid} toUser = {this.props.authUser.uid}/> : <div></div>}
+               {this.props.authUser? <PopupMessage itemID = {itemID} fromUser = {this.props.authUser.uid} toUser = {this.props.authUser.uid}/> : <div></div>}
                
             </div>
             
@@ -83,5 +85,9 @@ class Item extends React.Component {
     } 
 }
 
+const condition = authUser => !! authUser
 
-export default withFirebase(Item)
+export default compose(
+    withFirebase,
+    withAuthorization(condition), //somehow this fixed my staying logged in error???
+  )(Item) //need to study compose

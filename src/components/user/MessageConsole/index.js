@@ -15,7 +15,11 @@ class MessageConsole extends React.Component{
             buyers:{},
 
             selectedItem:"",
-            selectedBuyer:"",
+            toUser:"",
+            //give: toUser is the person wanting it
+            //want: toUser is authUser
+
+            wantItems:[],
 
             messages:[],
         }
@@ -31,7 +35,7 @@ class MessageConsole extends React.Component{
         //for each userItem in itemChats
         //ones that have doc.data(), or buyers
         //add the userItem like {item:[user1, user2]}
-        if(userItems) 
+        /* if(userItems) 
             this.props.firebase.itemChats().where(this.props.firebase.docPath(), "in", userItems).get()
             .then(snapshot => {
                 if(snapshot.empty)
@@ -53,59 +57,94 @@ class MessageConsole extends React.Component{
                         })
                     
                     })
-            })
-        
-    }
+            }) */
+        if(userItems)
+            userItems.forEach(userItem => {
 
-    setItem = (id) => {
-       
-        this.setState({selectedItem: id})
+                //get doc ref in chats
+                this.props.firebase.itemChats().doc(userItem).get()
+                .then(doc => {
+                    if (doc.exists) {
 
-
-        this.props.firebase.itemChats().doc(id).get()
-        .then(doc => {
-            if(doc.data())
-                this.setState({
-                    buyers: {[id]:doc.data().buyers, ...this.state.buyers}
+                        //add the buyer to buyers
+                        this.setState({
+                            buyers:{
+                                [doc.id]: doc.data().buyers,
+                                ...this.state.buyers
+                            }
+                        })
+                    }
+                    else {
+                        console.log("no chats for", userItem)
+                    }
                 })
-            else
-                this.setState({buyers: []})
-        })
+            })
 
+        this.getWants()
     }
 
-    setItem = (selectedItem, selectedBuyer) => {
+    getWants = () => {
+        //hmmm could make this a part of itemform TODO
+        let wantItems = []
+
+        this.props.firebase.itemChats().where("buyers", "array-contains", this.props.authUser.uid).get()
+        .then(querySnapshot => {
+            querySnapshot.forEach(doc => {
+                wantItems.push(doc.id)
+            })
+        })
+        .then(()=>{
+            this.setState({wantItems}, console.log("wantItems", wantItems))
+        })
+    }
+
+
+    setItem = (selectedItem, toUser) => {
         this.setState({
             selectedItem,
-            selectedBuyer,
-        }, ()=>console.log("selected",this.state.selectedBuyer))
+            toUser,
+        }, ()=>console.log("to user:",this.state.toUser))
 
     }
     
 
     render(){
-        const {userItems, selectedItem, selectedBuyer, buyers} = this.state
+        const {selectedItem, toUser, buyers, wantItems} = this.state
         console.log("mc state", this.state)
         
             return(
-                <div>
-                    message console
-                    <p>me: {this.props.authUser.uid}</p>
+                <div style = {{display:"flex"}}>
                     <div>
-                        {Object.entries(buyers).map(([item, buyerList]) => 
-                            <div key={item}> 
-                                <p>item: {item}</p>
-                                <ul>buyers: 
-                                    {buyerList.map(id => 
-                                        <li key={id} onClick = {() => this.setItem(item, id)} style = {{cursor: "pointer"}}>{id}</li>
-                                    )}
-                                </ul>
-                            </div>
-                        )}
+                    <p>me: {this.props.authUser.uid}</p>
+                        <div>
+                            give:
+                            {Object.entries(buyers).map(([item, buyerList]) => 
+                                <div key={item}> 
+                                    <p>item: {item}</p>
+                                    <ul>
+                                        {buyerList.map(id => 
+                                            <li key={id} onClick = {() => this.setItem(item, id)} style = {{cursor: "pointer"}}>{id}</li>
+                                        )}
+                                    </ul>
+                                </div>
+                            )}
+                        </div>
+                        <div>
+                            want:
+                            <ul>
+                                {wantItems.map(item => 
+                                    <li key={item} onClick = {()=> this.setItem(item, this.props.authUser.uid)} style={{cursor: "pointer"}}>{item}</li>
+                                )}
+                            </ul>
+                            
+
+                        </div>
+
                     </div>
                     
+                    
                     <div>
-                        {selectedBuyer? <PopupMessage itemID = {this.state.selectedItem} fromUser = {this.props.authUser.uid} toUser = {this.state.selectedBuyer} /> : null}
+                        {toUser? <PopupMessage itemID = {selectedItem} fromUser = {this.props.authUser.uid} toUser = {toUser} /> : null}
                     </div>
                 </div>
                 
