@@ -1,12 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {} from '@fortawesome/free-solid-svg-icons'
+import { far, faUser, faComments } from '@fortawesome/free-regular-svg-icons'
  
 import SignOutButton from '../../auth/SignOut'
 import * as ROUTES from '../../../constants/routes';
 
 import {AuthUserContext} from '../../auth/Session'
 
-import './navigation.css'
+import './navigation.scss'
+
 
 const Navigation = () => (
     <AuthUserContext.Consumer>
@@ -15,50 +19,58 @@ const Navigation = () => (
       }
     </AuthUserContext.Consumer>
 );
-
+//TODO: HOME is an example of a logged in user
 //splits up the old navigation component into auth and non-auth, then uses a ternary oper above
 const NavigationAuth = () =>( //use parentheses not bracket dumb b
   <div className="header-nav">
     <div className="page-links">
       <ul>
-        <li>
+        {/* <li>
           <Link to={ROUTES.LANDING}>Landing</Link>
-        </li>
+        </li> */}
         {/* <li>
           <Link to={ROUTES.HOME}>Home</Link>
         </li> */}
-
-      
         <li>
-          <Link to={ROUTES.ITEM_PAGE}>ItemPage</Link>
+          <Link to={ROUTES.WOMEN}>Women</Link>
         </li>
         <li>
-          <Link to="/itemform">ItemForm</Link>
+          <Link to={ROUTES.GIRL}>Girl</Link>
         </li>
-
-        {/*test page */}
-        {/* <li>
-          <Link to="/testbig">Test item</Link>
-        </li>  */}
         <li>
+          <Link to={ROUTES.MEN}>Men</Link>
+        </li>
+        <li className="sell-button">
+          <Link to="/itemform">Sell</Link>
+        </li>
+       {/*  <li>
           <Link to={ROUTES.ADMIN}>Admin</Link>
-        </li>
+        </li> */}
       </ul>
     </div>
     <div className="account-links">
-      <li className="sign-out">
-        <SignOutButton />
-      </li>
-      <li>
-        <Link to={"my-closet"}>my closet</Link>
-      </li>
-      <li>
-        <Link to="/messages">Messages</Link>
-      </li>
-      <li>
-        <Link to = "/account"> Account</Link>
-      </li>
-    </div>
+      <ul>
+       {/*  TODO: add this <li>
+          <Link to="/account">edit account</Link>
+        </li> */}
+        <li >
+          <Link to="/messages"> <FontAwesomeIcon icon={faComments}/> </Link>
+        </li>
+        <li >
+          <Link to = "/my-closet"> <FontAwesomeIcon icon={faUser}/></Link>
+        </li>
+        <li className="break">
+          |
+        </li>
+        <li className="sign-out">
+          <SignOutButton />
+        </li>
+        <li className="search">
+          <input type="search"/>
+        </li>
+
+      </ul>
+   </div>
   </div>
   
 )
@@ -68,18 +80,36 @@ const NavigationNonAuth = () =>(
     <div className="page-links">
       <ul>
         <li>
-          <Link to={ROUTES.LANDING}>Landing</Link>
+          <Link to={ROUTES.WOMEN}>Women</Link>
         </li>
         <li>
-          <Link to={ROUTES.ITEM_PAGE}>ItemPage</Link>
+          <Link to={ROUTES.GIRL}>Girl</Link>
         </li>
-        
+        <li>
+          <Link to={ROUTES.MEN}>Men</Link>
+        </li>
+        <li className="sell-button">
+          <Link to="/itemform">Sell</Link>
+        </li>
       </ul>
     </div>
     <div className="account-links">
+      <ul>
         <li>
-          <Link to={ROUTES.SIGN_IN}>Sign In</Link>
+          <Link to={ROUTES.SIGN_UP}>Sign up</Link>
         </li>
+        <li className="break">
+          |
+        </li>
+        <li>
+          <Link to={ROUTES.SIGN_IN}>Log In</Link>
+        </li>
+        
+        <li>
+          <input type="search"/>
+        </li>
+      </ul>
+        
     </div>
   </div>
 )

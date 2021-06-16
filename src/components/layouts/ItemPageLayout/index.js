@@ -5,16 +5,16 @@ import ItemCard from '../../items/ItemCard'
 
 import './item-page-layout.scss'
 
-const ItemPageLayout = ({items, filtered, handleFilterResultsChange, handleRoute, ...props}) => {
-
+const ItemPageLayout = ({items, filtered, handleFilterResultsChange, handleRoute, loc, ...props}) => {
+    
     return (
         <div className="page">
             <div className="col-filter">
-                <TestFilter items = {items} handleSearchResultsChange={handleFilterResultsChange}/>
+                <TestFilter items = {items} handleSearchResultsChange={handleFilterResultsChange} loc={loc}/>
             </div>
             <div className="col-items">
-                <div className="nav">
-                    <p>path</p>
+                <div className="path">
+                    {/* <p>{loc.pathname}</p> */}
                 </div>
                 <div className = "items">
                    

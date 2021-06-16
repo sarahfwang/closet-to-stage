@@ -17,6 +17,8 @@ class ItemPage extends React.Component{
            filtered:[],
            loading:"false",
         }
+
+        console.log("itempage", this.state)
     }
 
     handleFilterResultsChange = (filtered) =>{
@@ -45,8 +47,7 @@ class ItemPage extends React.Component{
                     items: tempList,
                     filtered: tempList,
                 })
-
-            })  
+        })  
             
     }
 
@@ -55,7 +56,7 @@ class ItemPage extends React.Component{
     render(){
         const {items, filtered} = this.state
         return(
-            <ItemPageLayout items = {items} filtered = {filtered} handleFilterResultsChange = {this.handleFilterResultsChange} handleRoute = {this.handleRoute}/>
+            <ItemPageLayout items = {items} filtered = {filtered} handleFilterResultsChange = {this.handleFilterResultsChange} handleRoute = {this.handleRoute} loc={this.props.location}/>
             
         )
     }

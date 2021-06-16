@@ -1,7 +1,9 @@
 import React from 'react'
+import {useLocation, withRouter} from 'react-router-dom'
 
 import {withFirebase} from '../../firebase'
 import './test-filter.scss'
+
 
 class TestFilter extends React.Component {
     constructor(props){
@@ -12,6 +14,8 @@ class TestFilter extends React.Component {
             style:{Ballet:false, Jazz:false },
             color:{Red:false, Green:false},
         }
+        
+        console.log(this.props.loc)
 
     }
 
@@ -22,6 +26,7 @@ class TestFilter extends React.Component {
 
         const checkbox = document.getElementById(id)
 
+        console.log("location",this.props.location)
         //changes to true or false, depending on checkmark
         this.setState({
             [cat]:{
@@ -85,7 +90,7 @@ class TestFilter extends React.Component {
         return(
             <div className="filter">
                 <div className="category">
-                    <h3 className="category-title">Women's Costumes</h3>
+                    <h3 className="category-title">Women</h3>
                 </div>
     
                 <div className="filter-wrapper">
@@ -99,7 +104,7 @@ class TestFilter extends React.Component {
                                 <label className="selector-wrapper"> {/*label allows full click */}
                                     <input id={prop} name={prop} type="checkbox" onClick={this.onClick("type")}/>
                                     <span className="checkmark"></span>
-                                    {prop}
+                                    <span className="smol">{prop}</span>
                                 </label>
                             </div>
                             )}
@@ -113,9 +118,9 @@ class TestFilter extends React.Component {
                         {Object.keys(style).map(prop => 
                             <div key={prop}>
                                 <label className="selector-wrapper"> {/*label allows full click */}
-                                <input id={prop} name={prop} type="checkbox" onClick={this.onClick("type")}/>
+                                <input id={prop} name={prop} type="checkbox" onClick={this.onClick("style")}/>
                                     <span className="checkmark"></span>
-                                    {prop}
+                                    <span className="smol">{prop}</span>
                                 </label>
                             </div>
                             )}
@@ -132,7 +137,7 @@ class TestFilter extends React.Component {
                                         <div className={`swatch-${prop}`}></div>
                                     </div>
                                     <div className="swatch-label">
-                                        {prop}
+                                    <span className="smol">{prop}</span>
                                     </div>
                                 </label>
                             </div>

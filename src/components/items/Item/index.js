@@ -21,6 +21,8 @@ class Item extends React.Component {
             index:0,
             itemID, //sets {id: id}
             fbUrls: [],
+
+            show: true,
            
         }
        

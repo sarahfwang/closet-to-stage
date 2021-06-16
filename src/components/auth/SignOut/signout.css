@@ -2,7 +2,8 @@
     background-color: transparent;
     border: none;
     text-decoration: none;
-    display: inline-block;
+    font-family: 'Helvetica Neue';
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 500;
+    color: whitesmoke;
 }

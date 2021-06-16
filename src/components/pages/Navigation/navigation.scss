@@ -1,0 +1,66 @@
+.header-nav {
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(30, 30, 30); 
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.header-nav ul:first-child {
+    margin-left: 1em;
+}
+.header-nav ul {
+    display: flex;
+    
+    align-items: center;
+    margin: 0; /*ul have preset margins as well*/
+    padding: 0;
+}
+
+.header-nav li {
+     /* inline-block lets you set margin and padding, but inline doesn't */
+    list-style-type: none;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.header-nav a{
+    display: block; /*blocks take up full width*/
+    color: whitesmoke;
+    font-weight: 500;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    text-transform: lowercase;
+}
+
+.header-nav button {
+    padding:0;
+    margin:0;
+}
+
+.account-links .break{
+    color: whitesmoke;
+    font-weight: 500;
+    padding: 1em 0;
+}
+
+.header-nav .sell-button {
+    background-color: rgb(97, 150, 230);
+    border-radius: 0.125rem;
+    display: inline-block;
+    margin-left: 1em;
+    padding: 0.25rem;
+    
+
+    a{
+        color:white;
+
+    }
+}
+
+input[type="search"]{
+    padding:0;
+    margin:0;
+}
+

@@ -1,5 +1,5 @@
 .filter{
-    background-color: lightgoldenrodyellow;
+    background-color: rgb(252, 249, 244);
     padding: 1em;
     height: auto;
     box-sizing: border-box;
@@ -16,6 +16,7 @@
 }
 
 .selector-wrapper input[type="checkbox"]{
+    position: relative;
     width:0;
     height:0;
 
@@ -25,11 +26,14 @@
 }
 
 .selector-wrapper:hover > .checkmark::before{
-    content: "\2713 ";
+    content: "\2714 ";
 
     display: flex;
     justify-content: center;
     align-self: center;
+
+    position: relative;
+    bottom: 0.125rem;
 
     color: lightgrey;
     font-weight: bold;
@@ -37,24 +41,29 @@
 
 .checkmark{
     margin-right: .5em; /*TODO: make a part of label, not checkmark*/
-    padding-bottom: .125em;
     display: block;
     
+    border: 1px solid rgb(30,30,30);
 
-    width: 1.125em;
+    width: 1em;
     height: 1em;
+
+    text-decoration: none;
 
     background-color: white;
 }
 
 .selector-wrapper input:checked + .checkmark:before{
-    content: "\2713 ";
+    content: "\2714 ";
 
     display: flex;
     justify-content: center;
     align-self: center;
 
-    color: black;
+    position: relative;
+    bottom: 0.125rem;
+
+    color: rgb(30,30,30);
     font-weight: bold;
 }
 

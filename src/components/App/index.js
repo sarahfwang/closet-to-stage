@@ -65,7 +65,7 @@ const App = () => (
       
       {/* <Route exact path="/messages" component = {Messages} /> */}
       <Route exact path={ROUTES.ADMIN} component={AdminPage} />
-      <Route exact path={ROUTES.ITEM_PAGE} component={ItemPage} />
+      <Route exact path={ROUTES.WOMEN} component={ItemPage} />
       {/* <Route exact path={'/item-page2'} component={ItemPage2} /> */}
       <Route exact path="/itemform" component = {Form} />
       <Route exact path="/filter" component = {Filter} />

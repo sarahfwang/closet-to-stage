@@ -50,7 +50,7 @@ class MyCloset extends Component {
       })
     }
 
-    this.setState({user})
+    this.setState({user, loading: false})
     
     
 
@@ -108,13 +108,11 @@ class MyCloset extends Component {
  
     return (
       <div>
-        <h1>Account</h1>
-        <p>Account details</p>
+        <h1>My Closet</h1>
+     
         
         {loading && <p>Loading...</p>}
-        <PasswordChangeForm/>
-
-        <a href="/itemform"> Add Item</a>
+        {/*  <PasswordChangeForm/> */}
 
         <ItemPageLayout items = {userItems} filtered = {filtered} handleFilterResultsChange={this.handleFilterResultsChange} handleRoute={()=>{}} account = {true} />
            

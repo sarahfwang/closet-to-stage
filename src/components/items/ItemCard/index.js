@@ -14,8 +14,8 @@ const ItemCard = ({item, handleRoute, ...props}) => {
             <button>Edit</button>
             <div className="t-info-snipp">
                 <h4 className="t-item-name">{item.itemName}</h4>
-                <p className="t-item-price">{item.price}</p>
-                <p className="t-item-brand">{item.brand} | {item.size}</p>
+                <p className="t-item-price">{item.price? item.price : "--"}</p>
+                <p className="t-item-brand smol">{item.brand?item.brand: "--"} | {item.size? item.size: "--"}</p>
                 
             </div>
             </div>
@@ -27,9 +27,9 @@ const ItemCard = ({item, handleRoute, ...props}) => {
                 <img src = {item.fbUrls[0]}/>
             </div>
             <div className="t-info-snipp">
-                <h4 className="t-item-name">{item.itemName}</h4>
-                <p className="t-item-price">{item.price}</p>
-                <p className="t-item-brand">{item.brand} | {item.size}</p>
+            <h4 className="t-item-name">{item.itemName}</h4>
+                <p className="t-item-price">{item.price? item.price : "--"}</p>
+                <p className="t-item-brand smol">{item.brand?item.brand: "--"} | {item.size? item.size: "--"}</p>
                 
             </div>
         </div>

@@ -88,8 +88,10 @@ export default compose(
 
 import React from 'react'
 import AvatarEditor from 'react-avatar-editor'
+import { compose } from 'recompose'
 
 import {withFirebase} from '../../firebase'
+import {withAuthorization} from '../../auth/Session'
 
 class MyEditor extends React.Component {
 
@@ -98,19 +100,23 @@ class MyEditor extends React.Component {
 
         this.state = {
             url:"",
+            imgName:"",
             scale: 1,
         }
+
     }
     
   onClickSave = () => {
+    const {imgName} = this.state
+
     if (this.editor) {
       // This returns a HTMLCanvasElement, it can be made into a data URL or a blob,
       // drawn on another canvas, or added to the DOM.
       const imgBlob = this.editor.getImage().toBlob(blob => {
-        this.props.firebase.storageRef().child('test').put(blob)
+          const cuid = this.props.authUser.uid
+
+          this.props.firebase.storageRef().child(`users/${cuid}/profile`).put(blob)
       })
-      
-      
     }
   }
 
@@ -138,21 +144,27 @@ class MyEditor extends React.Component {
             onChange = {(e)=> {
                 const image = e.target.files[0]
                 const url = URL.createObjectURL(image)
+
+                const imgName = image.name
                 
                 //setAvatarFile(image)
-                this.setState({url}, ()=>console.log(this.state.url))
+                this.setState({url, imgName}, ()=>console.log(this.state.url))
             }}
         />
         <input type="range" name="scale" step="0.01" min="1" max="2" defaultValue = {scale} onChange = {e=> this.setState({scale: parseFloat(e.target.value)})}style={{width: "8em"}}/>
         <label htmlFor="scale">zoom</label>
 
         <button onClick = {this.onClickSave}>try me</button>
-           
-
-        </div>
+       </div>
         
     )
   }
 }
 
-export default withFirebase(MyEditor)
+
+const condition = authUser => !!authUser
+
+export default compose(
+    withFirebase,
+    withAuthorization(condition),
+) (MyEditor)
