@@ -144,7 +144,7 @@ class MessageConsole extends React.Component{
                     
                     
                     <div>
-                        {toUser? <PopupMessage itemID = {selectedItem} fromUser = {this.props.authUser.uid} toUser = {toUser} /> : null}
+                        {toUser? <PopupMessage itemID = {selectedItem}  toUser = {toUser} /> : null}
                     </div>
                 </div>
                 

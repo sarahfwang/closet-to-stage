@@ -50,36 +50,18 @@ class Item extends React.Component {
             <div>
                 <div className = "item-page">
                     <Slideshow imgSources = {fbUrls}/>
-                    {/* <div className = "img-col">
-                        <div className = "item-img-cont">
-                            <div className="main-img-cont">
-                                <img src = {fbUrls[index]}/>
-                            </div>
-                            
-                            <div className="side-img-cont">
-                                {
-                                fbUrls.map(url => 
-                                    <div>
-                                        <div className = "img-prev">
-                                            <img src = {url}/>
-                                        </div>
-                                    </div>
-                                )}
-                                
-                            </div>
-                        </div>
-                    </div> */}
+                    
                     <div className="info-col">
                         <h1>{itemName}</h1>
                         <h2>${price}</h2>
                         {brand? <p>{brand}</p>: <p>no brand</p>}
-                        <button>Message</button>
+                        <button onClick = {this.handlePopUp}>Message</button>
                         {size? <h3>size: {size}</h3>: <h3>no size</h3>}
                         <p>notes: {description}</p>
                     </div>
                 </div>
                {/*redirect to sign in page TODO */}
-               {this.props.authUser? <PopupMessage itemID = {itemID} fromUser = {this.props.authUser.uid} toUser = {this.props.authUser.uid}/> : <div></div>}
+               {this.props.authUser? <PopupMessage itemID = {itemID} toUser = {this.props.authUser.uid}/> : <div></div>}
                
             </div>
             

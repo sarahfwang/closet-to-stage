@@ -15,7 +15,7 @@ const PopupMessage = props => {
     //since these don't change, don't use useState
     //const [userID, setUserID] = useState(props.authUser.uid)
     //const [itemID, setItemID] = useState(props.itemID) 
-
+    const fromUser  = props.authUser.uid
     
     
     //userID is the user in the firestore database
@@ -24,7 +24,6 @@ const PopupMessage = props => {
         console.log("auth", props.authUser)
 
         const toUser = props.toUser
-        const fromUser = props.fromUser
         const itemID = props.itemID
 
         console.log("itemID", itemID, "to", toUser, "from", fromUser)
@@ -41,12 +40,11 @@ const PopupMessage = props => {
                 setMessages(messages)
             })
 
-    },[props.toUser,props.fromUser, props.itemID])
+    },[props.toUser, props.itemID])
 
    //when a message sends
     const onSubmit = (event) => {
         const toUser = props.toUser
-        const fromUser = props.fromUser
         const itemID = props.itemID
 
         const itemRef = props.firebase.itemChats().doc(itemID)
