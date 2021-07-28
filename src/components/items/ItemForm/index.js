@@ -4,7 +4,7 @@ import React, {Component} from 'react'
 import {compose} from 'recompose'
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faCommentsDollar, faPlus } from '@fortawesome/free-solid-svg-icons'
 import {  } from '@fortawesome/free-regular-svg-icons'
 
 import { withFirebase } from '../../firebase';
@@ -26,6 +26,8 @@ const INITIAL_STATE={
     price:'',
     isListed: false,  
   },
+  indicies:[0,1,2,3,4,5], //purely for mapping purposes
+
   lowerCase:{
 
   },
@@ -222,26 +224,61 @@ class Form extends Component {
   }
 
   render(){
-    const {item, images, error, progress, imgUrls} = this.state;
+    const {item, images, error, progress, imgUrls, indicies} = this.state;
     const colors = ["red", "orange", "yellow", "green", "blue", "purple", "tan", "white", "black"]
-    
+  
 
     return(
       <div>
       <form onSubmit={this.onSumbit}>
         <div className ="form-container">
             <div className="img-col">
-              
-                {imgUrls.map(url => 
+                {indicies.map(i => (
+                  imgUrls[i]?
+                  //if there is an imgUrl for an index 0-5, then show the img
+                  <div className="img-cont" key={imgUrls[i]}>
+                    <div className="inner-cont">
+                       <img src={imgUrls[i]}/>
+                      </div>
+                    </div>
+                  :(
+                    //if not, put a placeholder
+                    i == imgUrls.length?
+                    //if the placeholder comes after the last shown image
+                    //put add image icon
+                    <div className="img-cont" key={i}>
+                      <div className="inner-cont">
+                        <div className="add-img-cont">
+                          <label className = "img-upload">
+                            <FontAwesomeIcon icon={faPlus}/>
+                            <input
+                            type="file"
+                            accept="image/*"
+                            onChange ={this.handleImageAsFile}
+                            />
+                          </label>
+                        </div>
+                      </div>
+                    </div>:
+                    //otherwise leave it blank
+                    <div className="img-cont" key={i}>
+                    <div className="inner-cont">
+                      <div className="img-placeholder"></div>
+                    </div>
+                  </div>)
+                ))}
+                {/* {imgUrls.map(url => 
                     <div className="img-cont" key={url}>
                       <div className="inner-cont">
                        <img src={url}/>
                       </div>
                     </div>
-                )}
+                )} */}
 
-                {/*TODO: add a title called: cover image */}
-                {imgUrls.length < 6 ? 
+                {/*TODO: add a title called: cover image
+                    this places a plus box if there are still images able to be added
+                */}
+                {/* {imgUrls.length < 6 ? 
                   <div className="img-cont">
                     <div className="inner-cont add-file-cont">
                       
@@ -257,12 +294,10 @@ class Form extends Component {
 
                       </div>
 
-                      
-                      
                     </div>
                   </div> :
                   <div></div>
-                    }
+                    } */}
                 
 
               

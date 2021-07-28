@@ -45,16 +45,16 @@
     padding: 1em 0;
 }
 
-.header-nav .sell-button {
-    background-color: var(--highlight-color);
-    border-radius: 0.125rem;
-    display: inline-block;
-    margin-left: 1em;
-    padding: 0.25rem;
+.header-nav .list-button {
+    // background-color: var(--highlight-color);
+    // border-radius: 0.125rem;
+    // display: inline-block;
+    // margin-left: 1em;
+    // padding: 0.25rem;
     
 
     a{
-        color:white;
+        color:var(--highlight-color);
 
     }
 }
