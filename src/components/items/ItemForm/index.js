@@ -229,147 +229,164 @@ class Form extends Component {
   
 
     return(
-      <div>
+      <div className="list-page">
+      <h2> create listing </h2>
       <form onSubmit={this.onSumbit}>
         <div className ="form-container">
-            <div className="img-col">
-                {indicies.map(i => (
-                  imgUrls[i]?
-                  //if there is an imgUrl for an index 0-5, then show the img
-                  <div className="img-cont" key={imgUrls[i]}>
-                    <div className="inner-cont">
-                       <img src={imgUrls[i]}/>
-                      </div>
-                    </div>
-                  :(
-                    //if not, put a placeholder
-                    i == imgUrls.length?
-                    //if the placeholder comes after the last shown image
-                    //put add image icon
-                    <div className="img-cont" key={i}>
+          <div className="img-col">
+            <div className="subheader-desc">
+              images
+            </div>
+            <div className="img-gallery">
+                  {indicies.map(i => (
+                    imgUrls[i]?
+                    //if there is an imgUrl for an index 0-5, then show the img
+                    <div className="img-cont" key={imgUrls[i]}>
                       <div className="inner-cont">
-                        <div className="add-img-cont">
-                          <label className = "img-upload">
-                            <FontAwesomeIcon icon={faPlus}/>
-                            <input
-                            type="file"
-                            accept="image/*"
-                            onChange ={this.handleImageAsFile}
-                            />
-                          </label>
+                        <img src={imgUrls[i]}/>
                         </div>
                       </div>
-                    </div>:
-                    //otherwise leave it blank
-                    <div className="img-cont" key={i}>
-                    <div className="inner-cont">
-                      <div className="img-placeholder"></div>
-                    </div>
-                  </div>)
-                ))}
-                {/* {imgUrls.map(url => 
-                    <div className="img-cont" key={url}>
+                    :(
+                      //if not, put a placeholder
+                      i == imgUrls.length?
+                      //if the placeholder comes after the last shown image
+                      //put add image icon
+                      <div className="img-cont" key={i}>
+                        <div className="inner-cont">
+                          <div className="add-img-cont">
+                            <label className = "img-upload">
+                              <FontAwesomeIcon icon={faPlus}/>
+                              <input
+                              type="file"
+                              accept="image/*"
+                              onChange ={this.handleImageAsFile}
+                              />
+                            </label>
+                          </div>
+                        </div>
+                      </div>:
+                      //otherwise leave it blank
+                      <div className="img-cont" key={i}>
                       <div className="inner-cont">
-                       <img src={url}/>
+                        <div className="img-placeholder"></div>
                       </div>
-                    </div>
-                )} */}
+                    </div>)
+                  ))}
 
-                {/*TODO: add a title called: cover image
-                    this places a plus box if there are still images able to be added
-                */}
-                {/* {imgUrls.length < 6 ? 
-                  <div className="img-cont">
-                    <div className="inner-cont add-file-cont">
-                      
-                      <div className="placeholder">
-                        <label className = "img-upload">
-                          <FontAwesomeIcon icon={faPlus}/>
-                          <input
-                          type="file"
-                          accept="image/*"
-                          onChange ={this.handleImageAsFile}
-                          />
-                        </label>
+              </div>
 
-                      </div>
-
-                    </div>
-                  </div> :
-                  <div></div>
-                    } */}
-                
-
-              
-             
-
-
-
-            </div>
+          </div>
+            
 
             <div className="info-col">
-              <div >
+              <div className="subheader-desc">
+                details
+              </div>
+
+              <div className="info-cont">
+                <div className="info-cont-desc">
+                  <div className="magnus">
+                      title
+                  </div>
+                  <div className="mini">
+                      include words others would search for
+                  </div>
+                </div>
                 <input
-                  className = "in-item-name h1"
+                  className = "in-item-name max"
                   name="itemName"
                   value={item.itemName}
                   type="text"
                   onChange={this.onChange}
-                  placeholder="item name"
+                  placeholder="*"
                   maxLength="30"
                   required
                 />
               </div>
               
-              <div className="price-cont">
-                <label htmlFor="price" className="in-price-label h2">$</label>
+              <div className="info-cont">
+              <div className="info-cont-desc">
+                  <div className="magnus">
+                      price
+                  </div>
+                </div>
+                
+                  <label htmlFor="price" className="in-price-label maior">$</label>
+                  <input
+                    className="in-price maior"
+                    name="price"
+                    value={item.price}
+                    type="number"
+                    min ="0.00"
+                    max="10000.00"
+                    step="1"
+                    onChange={this.onChange}
+                    placeholder="*00.00"
+                  
+                  />
+                </div>
+              
+              
+              <div className="info-cont">
+                <div className="info-cont-desc">
+                  <div className="magnus">
+                      brand
+                  </div>
+                </div>
                 <input
-                  className="in-price h2"
-                  name="price"
-                  value={item.price}
-                  type="number"
-                  min ="0.00"
-                  max="10000.00"
-                  step="1"
-                  onChange={this.onChange}
-                  placeholder="00.00"
-                 
-                />
-              </div>
-              <div >
-                <input
-                  className="in-brand smol"
+                  className="in-brand parvus"
                   name="brand"
                   value={item.brand}
                   type="text"
                   onChange={this.onChange}
                   placeholder="brand"
-                  
                 />
               </div>
-              <div>
+
+              <div className="info-cont">
+                <div className="info-cont-desc">
+                  <div className="magnus">
+                      size
+                  </div>
+                  <div className="mini">
+                      if NA, give your street clothing size
+                  </div>
+                </div>
                 <input
-                  className="in-size h3"
+                  className="in-size maior"
                   name="size"
                   value={item.size}
                   type="text"
                   onChange={this.onChange}
-                  placeholder="size, ex: M, 2"
+                  placeholder="*"
              
                 />
               </div>
-              <div >{/*beware 'notes'*/}
+
+              <div className="info-cont">{/*beware 'notes'*/}
+                <div className="info-cont-desc">
+                  <div className="magnus">
+                      description
+                  </div>
+                </div>
                 <textarea
-                  className="in-description"
+                  className="in-description parvus"
                   name="description"
                   value={item.description}
                   type="text"
                   onChange={this.onChange}
-                  placeholder="description"
+                  placeholder="add notes here..."
       
                 />
               </div>
-              
+
+
+              <div className="subheader-desc">
+                  add info
+                  
+               </div>
+               <span className="minor">(helps others find your listing)</span>
+
                 <input
                   name="type"
                   value={item.type}

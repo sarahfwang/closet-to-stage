@@ -20,6 +20,31 @@ body {
 
 }
 
+.mini{
+    font-size: 0.64rem;
+}
+
+.minor{
+    font-size: 0.8rem;
+}
+
+.parvus {
+    font-size: 1rem;
+}
+
+.magnus {
+    font-size: 1.25rem;
+}
+
+.maior{
+    font-size: 1.563rem;
+}
+
+.max{
+    font-size: 1.953rem;
+}
+
+
 .h1 {
     display: block;
     font-size: 2em;
