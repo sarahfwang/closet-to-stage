@@ -11,6 +11,7 @@ const ItemCard = ({item, handleRoute}) => {
             <div className="t-img" onClick= {()=>{handleRoute(item.id)}}>
                 <img src = {item.fbUrls[0]}/>
                 <button>Edit</button>
+                
             </div>
             <div className="t-info-snipp">
                 <h4 className="t-item-name">{item.itemName}</h4>

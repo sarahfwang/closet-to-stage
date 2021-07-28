@@ -72,8 +72,7 @@ const PopupMessage = props => {
 
 
     return(
-        <div className="popup-message" >
-            <h3>send messages</h3>
+        <div className="popup-message">
             
             <form autoComplete="off" onSubmit = {onSubmit}>
             <div className="see-message">
@@ -81,8 +80,8 @@ const PopupMessage = props => {
                     {messages.map(msg => (
                         //this alright??? TODO
                         msg.from==props.authUser.uid?
-                        <li key = {msg.id} style ={{textAlign: "right", listStylePosition: "inside"}}>{msg.msg}, {msg.from} </li> :
-                        <li key = {msg.id} style ={{textAlign: "left", listStylePosition: "inside"}}>{msg.msg}, {msg.from} </li> 
+                        <li key = {msg.id} className="right"><div className="txt-bubble-right" >{msg.msg}</div></li> :
+                        <li key = {msg.id} className = "left"><div className="txt-bubble-left" >{msg.msg}</div></li>
                         
                     ))}
                 </ul>  

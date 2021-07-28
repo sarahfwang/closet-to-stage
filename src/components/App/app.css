@@ -1,4 +1,8 @@
 /*each rem is 16px (rem is for root directory font)*/
+:root{
+    --highlight-color: rgb(97, 150, 230);
+    --mid-color: rgb(252, 249, 244);
+}
 body {
     background-color: white;
 }
@@ -12,7 +16,40 @@ body {
     font-size: 1rem;
     font-weight: 350;
     text-transform: lowercase;
+    margin:0;
+
 }
+
+.h1 {
+    display: block;
+    font-size: 2em;
+    margin-block-start: 0.67em;
+    margin-block-end: 0.67em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+}
+
+.h2 {
+    display: block;
+    font-size: 1.5em;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+}
+
+.h3 {
+    display: block;
+    font-size: 1.17em;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+}
+
 /* .measurements {
     display: flex;
     margin: 1.8rem 0rem;

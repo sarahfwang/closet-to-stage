@@ -1,11 +1,84 @@
 .popup-message{
     position: relative;
-    width: 18em;
-    height: 18em;
+    width: 100%;
 }
 
 .type-message{
-    position: absolute;
+    
     display: flex;
-    bottom:0;
+  
+    width: 100%;
+}
+
+.see-message {
+    ul{
+        position: relative;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    li{
+        
+        list-style-type: none;
+        margin: 0.25rem 0;
+
+    }
+    .right{
+        position: relative;
+        right: 0.5rem;
+    }
+    .left::before{
+        content: "";
+        width:0;
+        height:0;
+        position: relative;
+        top: 0.25rem;
+
+
+        border-top: 0.5em solid var(--highlight-color);
+        border-bottom: 0.5em solid transparent;
+        border-right: 0.5em solid transparent;
+        border-left: 0.5em solid transparent;
+    }
+
+    [class*="txt-bubble"]{
+        width: auto;
+        padding: 0.5rem;
+
+        display: inline-block;
+
+        border-radius: 1rem;
+
+        background-color: var(--highlight-color);
+        color: white;
+
+       
+    }
+
+    .txt-bubble-right{
+        float: right;
+    }
+
+    .txt-bubble-left{
+        position: relative;
+        right: 0.50rem;
+    }
+
+    .txt-bubble-right::after{
+        content: "";
+        width:0;
+        height:0;
+
+        position: absolute;
+
+        border-top: 0.5em solid var(--highlight-color);
+        border-bottom: 0.5em solid transparent;
+        border-right: 0.5em solid transparent;
+        border-left: 0.5em solid transparent;
+    }
+
+    
+    
 }

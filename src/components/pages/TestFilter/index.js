@@ -4,6 +4,9 @@ import {useLocation, withRouter} from 'react-router-dom'
 import {withFirebase} from '../../firebase'
 import './test-filter.scss'
 
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import { fas, faUser } from '@fortawesome/free-regular-svg-icons'
+import { faCheck } from '@fortawesome/free-solid-svg-icons'
 
 class TestFilter extends React.Component {
     constructor(props){
@@ -26,7 +29,8 @@ class TestFilter extends React.Component {
 
         const checkbox = document.getElementById(id)
 
-        console.log("location",this.props.location)
+        console.log("location", this.props.location)
+
         //changes to true or false, depending on checkmark
         this.setState({
             [cat]:{
@@ -95,7 +99,8 @@ class TestFilter extends React.Component {
     
                 <div className="filter-wrapper">
                     {/* with more categories, map keys of state */}
-                    {/* type */}
+
+                    {/* type, prop is type of article of clothing*/}
                     <div className="filter-cat">
                         <h4 className="filter-cat-title">Type</h4>
     
@@ -103,8 +108,9 @@ class TestFilter extends React.Component {
                             <div key={prop}>
                                 <label className="selector-wrapper"> {/*label allows full click */}
                                     <input id={prop} name={prop} type="checkbox" onClick={this.onClick("type")}/>
-                                    <span className="checkmark"></span>
+                                    <span className="checkmark"><FontAwesomeIcon className = "newcheckmark" icon = {faCheck}/></span>
                                     <span className="smol">{prop}</span>
+                                    
                                 </label>
                             </div>
                             )}
@@ -119,7 +125,7 @@ class TestFilter extends React.Component {
                             <div key={prop}>
                                 <label className="selector-wrapper"> {/*label allows full click */}
                                 <input id={prop} name={prop} type="checkbox" onClick={this.onClick("style")}/>
-                                    <span className="checkmark"></span>
+                                    <span className="checkmark"><FontAwesomeIcon className = "newcheckmark" icon = {faCheck}/></span>
                                     <span className="smol">{prop}</span>
                                 </label>
                             </div>

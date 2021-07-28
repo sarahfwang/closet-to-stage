@@ -1,9 +1,18 @@
 import React from 'react'
 
 import './itemCard.scss'
+import {withFirebase} from '../../firebase'
 
 const ItemCard = ({item, handleRoute, ...props}) => {
-    console.log("itemcard",props)
+    console.log("itemcard",props.auID)
+
+    const onDelete = event => {//should they be allowed to delete?
+        const itemID = item.id
+        
+        props.firebase.doDeleteItem(itemID, props.auID)
+
+        event.preventDefault();
+    }
 
     if(props.account){
         return(
@@ -12,6 +21,8 @@ const ItemCard = ({item, handleRoute, ...props}) => {
                 <img src = {item.fbUrls[0]}/>
             </div>
             <button>Edit</button>
+            <button onClick={onDelete}>Delete</button>
+
             <div className="t-info-snipp">
                 <h4 className="t-item-name">{item.itemName}</h4>
                 <p className="t-item-price">{item.price? item.price : "--"}</p>
@@ -36,4 +47,4 @@ const ItemCard = ({item, handleRoute, ...props}) => {
     )
 }
 
-export default ItemCard
+export default withFirebase(ItemCard)

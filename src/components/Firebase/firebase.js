@@ -144,8 +144,15 @@ const firebaseConfig = {
                 .set(editItem, {merge: true})
         }
 
-        doDeleteItem = (itemID) => {
+        doDeleteItem = (itemID, userID) => {
+            
             this.db.collection('items').doc(itemID).delete()
+            this.db.collection('itemChats').doc(itemID).delete()
+            this.storage.ref().child(`users/${userID}/items/${itemID}`).delete().then(() => {
+                console.log("storage delete success")
+              }).catch((error) => {
+                console.log("storage delete fail", error)
+              });
 
         }
 

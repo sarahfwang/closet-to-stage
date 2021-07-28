@@ -1,5 +1,5 @@
 .filter{
-    background-color: rgb(252, 249, 244);
+    background-color: var(--mid-color);
     padding: 1em;
     height: auto;
     box-sizing: border-box;
@@ -12,11 +12,13 @@
 .selector-wrapper{
     display: flex; 
     flex-direction: row;
+
+    position: relative;
+
     margin: .75rem 0;
 }
 
 .selector-wrapper input[type="checkbox"]{
-    position: relative;
     width:0;
     height:0;
 
@@ -25,23 +27,29 @@
     opacity: 0;
 }
 
-.selector-wrapper:hover > .checkmark::before{
-    content: "\2714 ";
+// > selector selects all checkmarks whose parent is a selector-wrapper
+/* .selector-wrapper:hover > .checkmark::before{
+    content: "\2705 ";
 
     display: flex;
     justify-content: center;
     align-self: center;
 
-    position: relative;
-    bottom: 0.125rem;
+    // position: relative;
+    // bottom: 0.125rem;
+    position: absolute;
+    left: 0;
 
     color: lightgrey;
     font-weight: bold;
 }
+*/
 
 .checkmark{
-    margin-right: .5em; /*TODO: make a part of label, not checkmark*/
-    display: block;
+    margin-right: .5em; //adds space between checkbox and words
+    display: flex;
+    justify-content: center;
+    align-items: center;
     
     border: 1px solid rgb(30,30,30);
 
@@ -53,6 +61,33 @@
     background-color: white;
 }
 
+.newcheckmark{
+//    position: absolute;
+//    left:0;
+
+   font-size: 0.75em;
+
+   opacity:0;
+
+//    width: 1em;
+//    height: 1em;
+
+//    border: 1px solid rgb(30,30,30);
+
+}
+
+//checkmark grey when hovered
+.newcheckmark:hover {
+    opacity: 0.5;
+}
+
+//checkmark icon stays when checked
+//+: element immediately after
+//> child of previous parent
+.selector-wrapper input:checked + .checkmark > .newcheckmark{
+    opacity: 1;
+}
+/*
 .selector-wrapper input:checked + .checkmark:before{
     content: "\2714 ";
 
@@ -65,7 +100,7 @@
 
     color: rgb(30,30,30);
     font-weight: bold;
-}
+} */
 
 .selector-wrapper:hover > .swatch-wrapper{
     border: 1px solid grey;

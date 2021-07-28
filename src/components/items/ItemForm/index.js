@@ -3,6 +3,10 @@
 import React, {Component} from 'react'
 import {compose} from 'recompose'
 
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import {  } from '@fortawesome/free-regular-svg-icons'
+
 import { withFirebase } from '../../firebase';
 import {withAuthorization} from '../../auth/Session'
 
@@ -35,6 +39,8 @@ const INITIAL_STATE={
   error: null,
   progress: 0,
 }
+
+const loop = [1,2,3,4,5,6]
 
 class Form extends Component {
   constructor(props){
@@ -228,75 +234,103 @@ class Form extends Component {
               
                 {imgUrls.map(url => 
                     <div className="img-cont" key={url}>
-                        <img src={url}/>
+                      <div className="inner-cont">
+                       <img src={url}/>
+                      </div>
                     </div>
                 )}
+
                 {/*TODO: add a title called: cover image */}
-                <div className="img-cont add-cont">
-                  <div className="add-file-cont">
-                    
-                    <label className = "img-upload">
-                      +
-                      <input
-                      type="file"
-                      accept="image/*"
-                      onChange ={this.handleImageAsFile}
-                      />
-                    </label>
-                    
-                  </div>
-              </div>
+                {imgUrls.length < 6 ? 
+                  <div className="img-cont">
+                    <div className="inner-cont add-file-cont">
+                      
+                      <div className="placeholder">
+                        <label className = "img-upload">
+                          <FontAwesomeIcon icon={faPlus}/>
+                          <input
+                          type="file"
+                          accept="image/*"
+                          onChange ={this.handleImageAsFile}
+                          />
+                        </label>
+
+                      </div>
+
+                      
+                      
+                    </div>
+                  </div> :
+                  <div></div>
+                    }
+                
+
+              
+             
+
+
+
             </div>
 
             <div className="info-col">
-              <div className = "info-item-name info-cont">
+              <div >
                 <input
+                  className = "in-item-name h1"
                   name="itemName"
                   value={item.itemName}
                   type="text"
                   onChange={this.onChange}
-                  placeholder="Item Name*"
+                  placeholder="item name"
+                  maxLength="30"
                   required
                 />
               </div>
-              <div className ="info-brand-name info-cont">
+              
+              <div className="price-cont">
+                <label htmlFor="price" className="in-price-label h2">$</label>
                 <input
+                  className="in-price h2"
+                  name="price"
+                  value={item.price}
+                  type="number"
+                  min ="0.00"
+                  max="10000.00"
+                  step="1"
+                  onChange={this.onChange}
+                  placeholder="00.00"
+                 
+                />
+              </div>
+              <div >
+                <input
+                  className="in-brand smol"
                   name="brand"
                   value={item.brand}
                   type="text"
                   onChange={this.onChange}
-                  placeholder="brand*"
+                  placeholder="brand"
                   
                 />
               </div>
-              <div className="info-price info-cont">
-                <label htmlFor="price">$</label>
+              <div>
                 <input
-                  name="price"
-                  value={item.price}
-                  type="text"
-                  onChange={this.onChange}
-                  placeholder="00.00*"
-                 
-                />
-              </div>
-              <div className="info-size info-cont">
-                <input
+                  className="in-size h3"
                   name="size"
                   value={item.size}
                   type="text"
                   onChange={this.onChange}
-                  placeholder="size, ex: M, 2*"
+                  placeholder="size, ex: M, 2"
              
                 />
               </div>
-              <div className="info-description info-cont">{/*beware 'notes'*/}
+              <div >{/*beware 'notes'*/}
                 <textarea
+                  className="in-description"
                   name="description"
                   value={item.description}
                   type="text"
                   onChange={this.onChange}
-                  placeholder="description*"
+                  placeholder="description"
       
                 />
               </div>
@@ -316,17 +350,16 @@ class Form extends Component {
                   onChange={this.onChange}
                   placeholder="quantity"
                 />
+                
                 <div className="color-selector">
-              
+                  <label htmlFor="colors">colors</label>
+
                   {colors.map((color, index) => 
                     <div key={index}>
-                      <label htmlFor={color}>
-                        <input type="radio" id={color} name="color" value={color} onChange={this.onChange}/>
-                        <span className={`${color}-select`}></span>
-                      </label>
-                </div>
-
-                )}
+                      <input type="radio" id={color} name="color" value={color} onChange={this.onChange}/>
+                      <span className={`${color}-select`}></span>
+                    </div>
+                    )}
               </div>
             </div>
         </div> {/*end of form-container */}

@@ -114,7 +114,7 @@ class MyCloset extends Component {
         {loading && <p>Loading...</p>}
         {/*  <PasswordChangeForm/> */}
 
-        <ItemPageLayout items = {userItems} filtered = {filtered} handleFilterResultsChange={this.handleFilterResultsChange} handleRoute={()=>{}} account = {true} />
+        <ItemPageLayout items = {userItems} filtered = {filtered} handleFilterResultsChange={this.handleFilterResultsChange} handleRoute={()=>{}} account = {true} auID = {this.props.authUser.uid}/>
            
       </div>
     );

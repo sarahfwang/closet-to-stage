@@ -7,6 +7,8 @@ import MessageBox from '../MessageBox'
 import Slideshow from '../Slideshow'
 import PopupMessage from '../PopupMessage'
 
+
+
 import './item.scss'
 import 'react-slideshow-image/dist/styles.css'
 
@@ -22,7 +24,7 @@ class Item extends React.Component {
             itemID, //sets {id: id}
             fbUrls: [],
 
-            show: true,
+            show: false,
            
         }
        
@@ -41,9 +43,14 @@ class Item extends React.Component {
    
     }
 
+    handlePopUp = () => {
+        this.setState({
+            show: !this.state.show //TODO: FIX
+        })
+    }
 
     render(){
-        const {index, itemID, itemName, price, brand, size, description, fbUrls} = this.state
+        const {index, itemID, itemName, price, brand, size, description, fbUrls, show} = this.state
 
         console.log("props", this.props)
         return(
@@ -54,14 +61,16 @@ class Item extends React.Component {
                     <div className="info-col">
                         <h1>{itemName}</h1>
                         <h2>${price}</h2>
-                        {brand? <p>{brand}</p>: <p>no brand</p>}
-                        <button onClick = {this.handlePopUp}>Message</button>
+                        {brand? <p className="smol">{brand}</p>: <p className="smol">no brand</p>}
                         {size? <h3>size: {size}</h3>: <h3>no size</h3>}
+                        <button onClick = {this.handlePopUp}>Message</button>
+                        {show ? <PopupMessage itemID = {itemID} toUser = {this.props.authUser.uid}/> : <div></div>}
                         <p>notes: {description}</p>
                     </div>
                 </div>
                {/*redirect to sign in page TODO */}
-               {this.props.authUser? <PopupMessage itemID = {itemID} toUser = {this.props.authUser.uid}/> : <div></div>}
+               
+               
                
             </div>
             

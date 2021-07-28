@@ -5,6 +5,8 @@ import { withFirebase } from '../../firebase'
 import {withAuthorization} from '../../auth/Session'
 import {compose} from 'recompose'
 
+import "./message-console.scss"
+
 class MessageConsole extends React.Component{
     constructor(props){
         super(props)
@@ -113,8 +115,8 @@ class MessageConsole extends React.Component{
         console.log("mc state", this.state)
         
             return(
-                <div style = {{display:"flex"}}>
-                    <div>
+                <div className="mc-cont">
+                    <div className="mc-shelf">
                     <p>me: {this.props.authUser.uid}</p>
                         <div>
                             give:
@@ -143,7 +145,7 @@ class MessageConsole extends React.Component{
                     </div>
                     
                     
-                    <div>
+                    <div className="pm-cont">
                         {toUser? <PopupMessage itemID = {selectedItem}  toUser = {toUser} /> : null}
                     </div>
                 </div>
