@@ -110,7 +110,6 @@ class TestFilter extends React.Component {
                                     <input id={prop} name={prop} type="checkbox" onClick={this.onClick("type")}/>
                                     <span className="checkmark"><FontAwesomeIcon className = "newcheckmark" icon = {faCheck}/></span>
                                     <span className="smol">{prop}</span>
-                                    
                                 </label>
                             </div>
                             )}

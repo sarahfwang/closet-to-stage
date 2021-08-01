@@ -4,9 +4,19 @@
 }
 
 .mc-shelf{
-    width: 50%;
+    width: 40%;
+    box-sizing: border-box;
+    border: 1px var(--highlight-color) dashed;
+
+    overflow-wrap: break-word;
 }
 
+.item-on-shelf{
+    border: 1px var(--highlight-color) dashed;
+}
+.mc-shelf ul{
+    list-style-type: none;
+}
 .pm-cont{
-    width: 50%;
+    width: 60%;
 }

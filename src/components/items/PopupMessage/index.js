@@ -9,24 +9,20 @@ import {compose} from 'recompose'
 //TODO: pass authuser to everything
 
 const PopupMessage = props => {
+    // props: toUser, itemID
+    // takes in fromUser from authUser props
     const [msg, setMsg] = useState("")
     const [messages, setMessages] = useState([])
 
-    //since these don't change, don't use useState
-    //const [userID, setUserID] = useState(props.authUser.uid)
-    //const [itemID, setItemID] = useState(props.itemID) 
     const fromUser  = props.authUser.uid
-    
-    
-    //userID is the user in the firestore database
     useEffect(()=>{
 
-        console.log("auth", props.authUser)
+        //console.log("auth", props.authUser)
 
         const toUser = props.toUser
         const itemID = props.itemID
 
-        console.log("itemID", itemID, "to", toUser, "from", fromUser)
+        //console.log("itemID", itemID, "to", toUser, "from", fromUser)
 
         if(toUser && itemID)
             props.firebase.itemChats().doc(itemID).collection(toUser).orderBy('created').onSnapshot(snapshot => {
@@ -38,8 +34,9 @@ const PopupMessage = props => {
                     
                 })
                 setMessages(messages)
+                console.log(messages,"mess")
             })
-
+        
     },[props.toUser, props.itemID])
 
    //when a message sends
@@ -59,6 +56,7 @@ const PopupMessage = props => {
             created: props.firebase.serverTimestamp(),
         })
         .then(()=>{
+            //clears for next message
             setMsg("")
         })
        
@@ -66,14 +64,13 @@ const PopupMessage = props => {
     }
 
     const onChange = (event) => {
+        //updates value of message in functional state
         setMsg(event.target.value)
-       
     }
 
 
     return(
         <div className="popup-message">
-            
             <form autoComplete="off" onSubmit = {onSubmit}>
             <div className="see-message">
                 <ul>
@@ -88,7 +85,7 @@ const PopupMessage = props => {
             </div>
 
             <div className = "type-message">
-                <input  type="text" placeholder="talk here" onChange ={onChange} name ="msg" value={msg}/>
+                <input type="text" placeholder="talk here" onChange ={onChange} name ="msg" value={msg}/>
                 <button type="submit">send</button>
             </div>
             

@@ -31,7 +31,7 @@ class MessageConsole extends React.Component{
 
         //get all the items owned by the user
         //from there, get the items' potential buyers
-       
+        //userItems is a list of all items that have at least one message
         const userItems = this.props.authUser.userItems
 
         //for each userItem in itemChats
@@ -60,6 +60,8 @@ class MessageConsole extends React.Component{
                     
                     })
             }) */
+        //if the current User has any items that other people messaged for
+        //then go into the chats database and find the chats
         if(userItems)
             userItems.forEach(userItem => {
 
@@ -68,7 +70,7 @@ class MessageConsole extends React.Component{
                 .then(doc => {
                     if (doc.exists) {
 
-                        //add the buyer to buyers
+                        //add the buyer to lits of buyers
                         this.setState({
                             buyers:{
                                 [doc.id]: doc.data().buyers,
@@ -87,6 +89,7 @@ class MessageConsole extends React.Component{
 
     getWants = () => {
         //hmmm could make this a part of itemform TODO
+        //hmmm why??
         let wantItems = []
 
         this.props.firebase.itemChats().where("buyers", "array-contains", this.props.authUser.uid).get()
@@ -100,7 +103,7 @@ class MessageConsole extends React.Component{
         })
     }
 
-
+    //when the user clicks on an item name from their message shelf
     setItem = (selectedItem, toUser) => {
         this.setState({
             selectedItem,
@@ -108,22 +111,35 @@ class MessageConsole extends React.Component{
         }, ()=>console.log("to user:",this.state.toUser))
 
     }
+
+    //user clicks itemname on the shelf
+    //toggles showing the list of potential buyers
+    show = (itemID) => {
+        const f = document.getElementById(`give-${itemID}`)
+        
+        if (f.style.display == "none")
+            f.style.display = "block"
+        else
+            f.style.display = "none"
+
+    }
     
 
     render(){
         const {selectedItem, toUser, buyers, wantItems} = this.state
-        console.log("mc state", this.state)
-        
+        // console.log("mc state", this.state)
+        let showStyle = {display: "none"}
+
             return(
                 <div className="mc-cont">
                     <div className="mc-shelf">
-                    <p>me: {this.props.authUser.uid}</p>
+                    <h2>messages for {this.props.authUser.uid}</h2>
                         <div>
-                            give:
-                            {Object.entries(buyers).map(([item, buyerList]) => 
-                                <div key={item}> 
-                                    <p>item: {item}</p>
-                                    <ul>
+                            <div className="magnus">give:</div>
+                            {Object.entries(buyers).map(([item, buyerList]) =>
+                                <div key={item} className = "item-on-shelf"> 
+                                    <div className="parvus" onClick={() => this.show(item)}>item: {item}</div>
+                                    <ul id={`give-${item}`} style = {showStyle}>
                                         {buyerList.map(id => 
                                             <li key={id} onClick = {() => this.setItem(item, id)} style = {{cursor: "pointer"}}>{id}</li>
                                         )}
@@ -132,20 +148,21 @@ class MessageConsole extends React.Component{
                             )}
                         </div>
                         <div>
-                            want:
-                            <ul>
-                                {wantItems.map(item => 
-                                    <li key={item} onClick = {()=> this.setItem(item, this.props.authUser.uid)} style={{cursor: "pointer"}}>{item}</li>
-                                )}
-                            </ul>
-                            
-
+                            <div className="magnus">want:</div>
+                                <ul>
+                                    {wantItems.map(item => 
+                                        <li key={item} onClick = {()=> this.setItem(item, this.props.authUser.uid)} style={{cursor: "pointer"}}>{item}</li>
+                                    )}
+                                </ul>
+                            </div>
                         </div>
-
-                    </div>
                     
+                    {/*renders message box on right side if an item has the user, honestly don't need conditional
                     
-                    <div className="pm-cont">
+                    toUser always refers to the potential buyer (in database)
+                    - in the "want", the toUser is the current user
+                    */}
+                    <div className="pm-cont"> 
                         {toUser? <PopupMessage itemID = {selectedItem}  toUser = {toUser} /> : null}
                     </div>
                 </div>
@@ -156,7 +173,8 @@ class MessageConsole extends React.Component{
     }
 }
 
-//prob w Auth too
+//user needs to be auth first
+//then can get user's cuid whenever on this page
 
 const condition = authUser => !! authUser
 

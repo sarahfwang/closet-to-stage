@@ -24,6 +24,7 @@ const INITIAL_STATE={
     quantity:'',
     brand:'',
     price:'',
+    style:'',
     isListed: false,  
   },
   indicies:[0,1,2,3,4,5], //purely for mapping purposes
@@ -74,9 +75,9 @@ class Form extends Component {
           ...this.state.lowerCase,
           [event.target.name]: event.target.value.toLowerCase()
         }
-    }) 
+    }, () => console.log("onChange", this.state)) 
     
-    console.log(this.state)
+    
   }
 
   onSumbit = event =>{
@@ -87,7 +88,7 @@ class Form extends Component {
 
     //add to items
     if(imgFiles.length === 0){
-      this.setState({error:"please select at least one image"})
+      this.setState({error:"please upload at least one image"})
     }
     else if(userID == null){
       this.setState({error:"user is null"})
@@ -226,7 +227,9 @@ class Form extends Component {
   render(){
     const {item, images, error, progress, imgUrls, indicies} = this.state;
     const colors = ["red", "orange", "yellow", "green", "blue", "purple", "tan", "white", "black"]
-  
+    
+
+    const types = ["leotard", "dress", "pant"] //TODO: add something that will write a new type if it is not listed
 
     return(
       <div className="list-page">
@@ -283,8 +286,8 @@ class Form extends Component {
                 details
               </div>
 
-              <div className="info-cont">
-                <div className="info-cont-desc">
+              <div className="info-cont"> {/* info container */}
+                <div className="info-cont-desc">{/* left description for info cont*/}
                   <div className="magnus">
                       title
                   </div>
@@ -358,8 +361,41 @@ class Form extends Component {
                   value={item.size}
                   type="text"
                   onChange={this.onChange}
-                  placeholder="*"
-             
+                  placeholder="*e.g. 'm' or '4'"
+                  list="sizes"
+                />
+
+                <datalist id="sizes">
+                  <option>xxs</option>
+                  <option>xs</option>
+                  <option>s</option>
+                  <option>m</option>
+                  <option>l</option>
+                  <option>xl</option>
+                  <option>xxl</option>
+                  <option>0</option>
+                  <option>2</option>
+                  <option>4</option>
+                  <option>6</option>
+                  <option>8</option>
+                  <option>10</option>
+                  <option>12</option>
+                  <option>14</option>
+                </datalist>
+              </div>
+
+              <div className="info-cont">{/*beware 'notes'*/}
+                <div className="info-cont-desc">
+                  <div className="magnus">
+                      quantity
+                  </div>
+                </div>
+                <input
+                  name="quantity" //make this have distinct numbers
+                  value={item.quantity}
+                  type="number"
+                  onChange={this.onChange}
+                  placeholder="quantity"
                 />
               </div>
 
@@ -376,43 +412,76 @@ class Form extends Component {
                   type="text"
                   onChange={this.onChange}
                   placeholder="add notes here..."
-      
                 />
               </div>
 
 
-              <div className="subheader-desc">
-                  add info
-                  
-               </div>
-               <span className="minor">(helps others find your listing)</span>
+              <div className="subheader-desc"> add info </div>
+              <span className="minor">(helps others find your listing)</span>
 
+              <div className="info-cont">{/*beware 'notes'*/}
+                <div className="info-cont-desc">
+                  <div className="magnus">
+                      type
+                  </div>
+                </div>
                 <input
-                  name="type"
+                  name="type" //make this have distinct numbers
                   value={item.type}
                   type="text"
                   onChange={this.onChange}
                   placeholder="type"
+                  list="types"
                 />
-          
+                <datalist id="types">
+                  {types.map(type => 
+                    <option>{type}</option>)}
+                </datalist>
+              </div>
+
+              <div className="info-cont">{/*beware 'notes'*/}
+                <div className="info-cont-desc">
+                  <div className="magnus">
+                      style
+                  </div>
+                </div>
                 <input
-                  name="quantity" //make this have distinct numbers
-                  value={item.quantity}
+                  name="style" //make this have distinct numbers
+                  value={item.style}
                   type="text"
                   onChange={this.onChange}
-                  placeholder="quantity"
+                  placeholder="style"
+                  list="styles"
                 />
-                
-                <div className="color-selector">
-                  <label htmlFor="colors">colors</label>
-
-                  {colors.map((color, index) => 
-                    <div key={index}>
-                      <input type="radio" id={color} name="color" value={color} onChange={this.onChange}/>
-                      <span className={`${color}-select`}></span>
-                    </div>
-                    )}
+                <datalist id="styles">
+                    <option>contemporary</option>
+                    <option>ballet</option>
+                    <option>jazz</option>
+                    <option>hip-hop</option>
+                    <option>tap</option>
+                </datalist>
               </div>
+          
+                
+              <div className="info-cont">
+                <div className="info-cont-desc">
+                  <div className="magnus"> color</div>
+                </div>
+                <div className="color-selector">
+                  {colors.map((color, index) => //loops through color array
+                      <div key={index}>
+                        <label className="color-select" for={color}>
+                          <input type="radio" id={color} name="color" value={color} onChange={this.onChange}/>
+                          <span className={`${color}-select`}></span> {/*square of color */}
+                        </label> 
+                      </div>
+                    )}
+                </div>
+              </div>
+
+      
+              
+
             </div>
         </div> {/*end of form-container */}
         <div>
