@@ -1,0 +1,26 @@
+.avatar-cont{
+    display: flex;
+    flex-direction: column;
+
+    button{
+        width: 8rem;
+    }
+}
+
+.profile-cont{
+    display: flex;
+}
+.profile-circle{
+    width: 512px;
+    height: 512px;
+    margin: 4rem;
+    border-radius: 50%;
+}
+
+.empty-profile{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+
+    background-color: grey;
+}

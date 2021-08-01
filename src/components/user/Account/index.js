@@ -92,31 +92,42 @@ import { compose } from 'recompose'
 
 import {withFirebase} from '../../firebase'
 import {withAuthorization} from '../../auth/Session'
+import './account.scss'
 
 class MyEditor extends React.Component {
 
     constructor(props){
         super(props)
+        //props.authUser should contain a url to the profile picture
+        console.log("authuser", props.authUser)
+        console.log("profile", props.authUser.profile)
 
         this.state = {
             url:"",
             imgName:"",
             scale: 1,
+
+            authUser: props.authUser
         }
 
     }
+
+    componentDidMount(){
+       
+    }
     
-  onClickSave = () => {
-    const {imgName} = this.state
+    onSubmit = () => {
+        const {imgName} = this.state
 
-    if (this.editor) {
-      // This returns a HTMLCanvasElement, it can be made into a data URL or a blob,
-      // drawn on another canvas, or added to the DOM.
-      const imgBlob = this.editor.getImage().toBlob(blob => {
-          const cuid = this.props.authUser.uid
+        if (this.editor) {
+        // This returns a HTMLCanvasElement, it can be made into a data URL or a blob,
+        // drawn on another canvas, or added to the DOM.
+        const imgBlob = this.editor.getImage().toBlob(blob => {
+            const cuid = this.props.authUser.uid
 
-          this.props.firebase.storageRef().child(`users/${cuid}/profile`).put(blob)
-      })
+            this.props.firebase.storageRef().child(`users/${cuid}/profile`).put(blob)
+            .then(()=>this.setState({url:"", imgName:"",}))
+        })
     }
   }
 
@@ -124,38 +135,69 @@ class MyEditor extends React.Component {
   setEditorRef = (editor) => this.editor = editor
 
   render () {
-    const {scale} = this.state
+    const {scale, authUser} = this.state
 
+    //[252, 249, 244, 0.6]
     return (
-        <div>
-            <AvatarEditor
-          ref={this.setEditorRef}
-          image={this.state.url}
-          width={250}
-          height={250}
-          border={50}
-          scale={scale}
-          borderRadius = {175}
-            />
-        <input 
-            id="avatar"
-            type="file"
-            accept="image/*"
-            onChange = {(e)=> {
-                const image = e.target.files[0]
-                const url = URL.createObjectURL(image)
+        <div className="page">
+            <div className="profile-cont">
+                <div>
+                    {authUser.profile? 
+                        <div className="profile-circle">
 
-                const imgName = image.name
-                
-                //setAvatarFile(image)
-                this.setState({url, imgName}, ()=>console.log(this.state.url))
-            }}
-        />
-        <input type="range" name="scale" step="0.01" min="1" max="2" defaultValue = {scale} onChange = {e=> this.setState({scale: parseFloat(e.target.value)})}style={{width: "8em"}}/>
-        <label htmlFor="scale">zoom</label>
+                        </div>: 
+                        <div className="profile-circle">
+                            <div className="empty-profile"></div>
+                        </div>
+                    }
+                </div>
+                <div className="info-col">
+                    <div className="info-cont">
+                        <div className="info-cont-desc magnus">username:</div>
+                        <input 
+                            className="max"
+                            value = {authUser.username}
+                        />
+                    </div>
+                    <div className="info-cont">
+                        <div className="info-cont-desc magnus">email:</div>
+                        <input 
+                            className="max"
+                            value = {authUser.email}
+                        />
+                    </div>
+                </div>
+            </div>
+            
+            <div className="avatar-cont">
+                <AvatarEditor
+                    ref={this.setEditorRef}
+                    image={this.state.url}
+                    width={250}
+                    height={250}
+                    border={50}
+                    color={[30, 30, 30, 0.7]}
+                    scale={scale}
+                    borderRadius = {175}
+                />
+                <input 
+                    id="avatar"
+                    type="file"
+                    accept="image/*"
+                    onChange = {(e)=> {
+                        const image = e.target.files[0]
+                        const url = URL.createObjectURL(image)
+                        const imgName = image.name
+            
+                        this.setState({url, imgName}, ()=>console.log(this.state.url))
+                    }}
+                />
+                <input type="range" name="scale" step="0.01" min="1" max="2" defaultValue = {scale} onChange = {e=> this.setState({scale: parseFloat(e.target.value)})}style={{width: "8em"}}/>
+                <label htmlFor="scale">zoom</label>
 
-        <button onClick = {this.onClickSave}>try me</button>
-       </div>
+                <button onClick = {this.onSubmit}>try me</button>
+            </div>
+        </div>
         
     )
   }

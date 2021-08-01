@@ -1,3 +1,4 @@
+//import { firestore } from 'firebase-admin';
 import firebase from 'firebase/app'; //what's the diff btwn this and 'app'
 import 'firebase/auth' //is this right? they used this.auth instead
 import 'firebase/firestore'
@@ -27,10 +28,6 @@ const firebaseConfig = {
         this.db = firebase.firestore() //app.database
         this.storage = firebase.storage()
 
-        
-        
-      
-       
       }
         //Images in storage
         storageRef = () => (
@@ -55,6 +52,7 @@ const firebaseConfig = {
         updateItemBuyers = (value, ref) => {
             //ref update only works if the doc exists
 
+            //message database
             console.log("in firebase.js value", value, "ref", ref)
             ref.get().then(doc=>{
                 if(doc.exists) {
@@ -72,6 +70,13 @@ const firebaseConfig = {
             })
         }
 
+        updateArray = (ref, keyName, value) => {
+            ref.update({
+                [keyName]: firebase.firestore.FieldValue.arrayUnion(value)
+            })
+        }
+
+        
       //*** Auth API ***
         doCreateUserWithEmailAndPassword = (email, password) =>
           this.auth.createUserWithEmailAndPassword(email, password)

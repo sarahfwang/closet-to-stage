@@ -9,12 +9,12 @@
 
 }
 .col-filter{
-    margin: 1em 0 1em 1em;
+    margin: 0;
 }
 
 .path{
     height: 4em;
-    margin: 1em;
+    margin: 0 1em;
     background-color: rgb(252, 249, 244);
 }
 
@@ -35,12 +35,12 @@
 
 
 @media only screen and (min-width:768px) {
-    .page {
+    .item-layout-cont {
         display: flex;
     }
     .col-filter{
         width: 25%;
-        padding-right: 1em;
+        //padding-right: 1em;
     }
     .col-items{
         width: 75%;

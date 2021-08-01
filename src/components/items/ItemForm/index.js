@@ -71,6 +71,7 @@ class Form extends Component {
           ...this.state.item,
           [event.target.name]:event.target.value
         }, 
+        //lowerCase is just for database purposes
         lowerCase:{
           ...this.state.lowerCase,
           [event.target.name]: event.target.value.toLowerCase()
@@ -94,61 +95,39 @@ class Form extends Component {
       this.setState({error:"user is null"})
     }
     else{
-      this.props.firebase.doAddItem({...lowerCase, userID, isListed: true, fbUrls:[]}) //add images as urls!!!
+      this.props.firebase.doAddItem({...lowerCase, userID, isListed: true, fbUrls:[]})
       .then(doc => {
-        //doc is the items
+        //doc holds the item's info (no image urls yet)
+        //uploadImage uploads imgs into firebase storage
+        //and then updates img urls in firestore database 
         this.uploadImage(doc, doc.id)
 
         const cuid = this.props.authUser.uid
-
         const userRef = this.props.firebase.user(cuid)
 
+        //this.props.firebase.updateArray(userRef, "userItems", doc.id)
         this.props.firebase.updateUserItems(userRef, doc.id)
 
-        /* //add to user
-        this.props.firebase.user(cuid).get()
-        .then(user=>{
-          if(!user.data().userItems)
-            this.props.firebase.user(cuid).update({
-              //add the item id to the userItems list
-              userItems: [doc.id]
-            })
-          else{
-            let userItems = user.data().userItems.concat(doc.id)
-            console.log("userItems", userItems)
-            
-            this.props.firebase.user(cuid).update({
-              userItems,
-            })
-          }
-
-        })
-       */
-
-    })
-      
-    }
-    
+      })
+    } 
   }
 
   uploadImage = (ref, id) =>{
+    //need id for storing
     const {userID, imgFiles} = this.state
 
     console.log("doc.id:",id)
 
-    //loop: going to have to loop thru imgFiles
-    //find imgFile.name
-
+    //loop: loop thru all imgFiles
+    //find imgFile.name => stoarge location
     imgFiles.forEach(imgFile => {
-      //file has name prop
-      const imagesRef = this.props.firebase.storageRef().child(`users/${userID}/items/${id}/${imgFile.name}`)
-
+      //creates reference in storage for new photo
+      const imagesRef = this.props.firebase.storageRef().child(`users/${userID}/items/${id}/${imgFile.name}`)//file has name prop
       const uploadTask = imagesRef.put(imgFile)
 
       //uploadTask.on has  callbacks: next, error, complete
       uploadTask.on('state-changed',
         (snapshot) => {
-
           var progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100) 
           this.setState({progress})
 
@@ -158,26 +137,21 @@ class Form extends Component {
           //handle errors
           this.setState({error})
           console.log(error)
+
         }, () => {
           //once complete
-
+          //urls of img in storage ==> in items in firestore database
           uploadTask.snapshot.ref.getDownloadURL()
             .then(downloadUrl => {
 
               const itemRef = this.props.firebase.item(id)
-
-              console.log(downloadUrl)
-
               this.props.firebase.updatefbUrls(downloadUrl, itemRef)
+              console.log(downloadUrl)
             })
-            
             .then(this.onClear)
-
         }
       )
-
     })
-
   }
 
   onClear = () =>{
@@ -188,16 +162,10 @@ class Form extends Component {
     //uploads image file to state 
       const image = e.target.files[0]
 
+      //creates temporary URL to store in state
       const url = URL.createObjectURL(image)
 
       console.log("url", url)
-
-      /* this.setState({
-        images:{
-          ...this.state.images,
-          imageAsFile: image,
-        }
-      }) */
 
       this.setState(state => {
         const imgUrls = state.imgUrls.concat(url)
