@@ -14,6 +14,11 @@ class MessageConsole extends React.Component{
         console.log("mc props", props)
 
         this.state = {
+            /* buyers: {
+                [itemID]: {
+                    list of potential buyers: [], 
+                    coverImgURL: "",
+            } */
             buyers:{},
 
             selectedItem:"",
@@ -62,8 +67,17 @@ class MessageConsole extends React.Component{
             }) */
         //if the current User has any items that other people messaged for
         //then go into the chats database and find the chats
+
+        //TODO: each item should have a list of buyers... so don't have to go through messages every time. eh honestly this is the same. Saves one step when u want to get img urls, whcih is in items db
         if(userItems)
             userItems.forEach(userItem => {
+                let coverImgURL = ""
+
+                this.props.firebase.item(userItem).get()
+                .then(doc => {
+                    coverImgURL = doc.data().fbUrls[0]
+                })
+
 
                 //get doc ref in chats
                 this.props.firebase.itemChats().doc(userItem).get()
@@ -73,7 +87,10 @@ class MessageConsole extends React.Component{
                         //add the buyer to lits of buyers
                         this.setState({
                             buyers:{
-                                [doc.id]: doc.data().buyers,
+                                [doc.id]: {
+                                    buyerList: doc.data().buyers,
+                                    coverImgURL
+                                },
                                 ...this.state.buyers
                             }
                         })
@@ -136,12 +153,17 @@ class MessageConsole extends React.Component{
                     <h2>messages for {this.props.authUser.uid}</h2>
                         <div>
                             <div className="magnus">give:</div>
-                            {Object.entries(buyers).map(([item, buyerList]) =>
+                            {Object.entries(buyers).map(([item, {buyerList, coverImgURL}]) =>
                                 <div key={item} className = "item-on-shelf"> 
                                     <div className="parvus" onClick={() => this.show(item)}>item: {item}</div>
                                     <ul id={`give-${item}`} style = {showStyle}>
                                         {buyerList.map(id => 
-                                            <li key={id} onClick = {() => this.setItem(item, id)} style = {{cursor: "pointer"}}>{id}</li>
+                                            <li key={id} onClick = {() => this.setItem(item, id)} style = {{cursor: "pointer"}}>
+                                                <div className="mini-img-cont">
+                                                    <img className="mini-img" src={coverImgURL}/>
+                                                </div>
+                                                {id}
+                                            </li>
                                         )}
                                     </ul>
                                 </div>
