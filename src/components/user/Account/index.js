@@ -95,19 +95,25 @@ import {withAuthorization} from '../../auth/Session'
 import './account.scss'
 
 class MyEditor extends React.Component {
-
     constructor(props){
         super(props)
         //props.authUser should contain a url to the profile picture
         console.log("authuser", props.authUser)
         console.log("profile", props.authUser.profile)
+        console.log("porps", props)
 
         this.state = {
             url:"",
             imgName:"",
             scale: 1,
 
-            authUser: props.authUser
+            username: props.authUser.username,//eh prob don't need this in state
+            profile: props.authUser.profile, //need this to access pfp url
+            email: props.authUser.email,
+
+            progress: 0,
+            error: null,
+
         }
 
     }
@@ -115,8 +121,12 @@ class MyEditor extends React.Component {
     componentDidMount(){
        
     }
-    
-    onSubmit = () => {
+    //when user wants a new pfp
+    //first upload into storage
+    //get url of img in storage
+    //put url into user in firestore db
+    //can access photo url now thru authUser context
+    onSubmit = (e) => {
         const {imgName} = this.state
 
         if (this.editor) {
@@ -125,50 +135,76 @@ class MyEditor extends React.Component {
         const imgBlob = this.editor.getImage().toBlob(blob => {
             const cuid = this.props.authUser.uid
 
-            this.props.firebase.storageRef().child(`users/${cuid}/profile`).put(blob)
-            .then(()=>this.setState({url:"", imgName:"",}))
+            //take out .then() if uploadTask code fails?
+            const uploadTask = this.props.firebase.storageRef().child(`users/${cuid}/profile`).put(blob)//.then(()=>this.setState({url:"", imgName:"",}))
+            uploadTask.on('state-changed',
+                (snapshot) => {
+                    let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                    this.setState({progress})
+                },
+                (error) => {
+                    this.setState({error})
+                },
+                () => {
+                    uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
+                        this.props.firebase.user(this.props.authUser.uid).update({
+                            profile: downloadURL
+                        })
+                        .then(()=>
+                            this.setState({
+                                profile: downloadURL,
+                                url:"",
+                                imgName:"",
+                            }))
+                    })
+                }
+            )
         })
     }
+
+    e.preventDefault()
   }
 
 
   setEditorRef = (editor) => this.editor = editor
 
   render () {
-    const {scale, authUser} = this.state
+    const {scale, profile, username, email, progress, error} = this.state
 
     //[252, 249, 244, 0.6]
     return (
         <div className="page">
             <div className="profile-cont">
                 <div>
-                    {authUser.profile? 
-                        <div className="profile-circle">
-
-                        </div>: 
+                    {profile? 
+                       <img className="profile-circle" src = {profile}/>
+                        : 
                         <div className="profile-circle">
                             <div className="empty-profile"></div>
                         </div>
                     }
+                    <p>{progress}% uploaded</p>
+                    <p>{error}</p>
                 </div>
                 <div className="info-col">
                     <div className="info-cont">
                         <div className="info-cont-desc magnus">username:</div>
                         <input 
                             className="max"
-                            value = {authUser.username}
+                            value = {username}
                         />
                     </div>
                     <div className="info-cont">
                         <div className="info-cont-desc magnus">email:</div>
                         <input 
                             className="max"
-                            value = {authUser.email}
+                            value = {email}
                         />
                     </div>
                 </div>
             </div>
             
+            <form onSubmit={this.onSubmit}>
             <div className="avatar-cont">
                 <AvatarEditor
                     ref={this.setEditorRef}
@@ -194,9 +230,11 @@ class MyEditor extends React.Component {
                 />
                 <input type="range" name="scale" step="0.01" min="1" max="2" defaultValue = {scale} onChange = {e=> this.setState({scale: parseFloat(e.target.value)})}style={{width: "8em"}}/>
                 <label htmlFor="scale">zoom</label>
-
-                <button onClick = {this.onSubmit}>try me</button>
             </div>
+            <button type="submit">upload new profile</button>
+                
+            </form>
+            
         </div>
         
     )
