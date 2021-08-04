@@ -6,8 +6,6 @@ import ItemPageLayout from '../../layouts/ItemPageLayout'
 import "./item-page.scss"
 
 
-
-
 class ItemPage extends React.Component{
     constructor(props){
         super(props)
@@ -26,13 +24,11 @@ class ItemPage extends React.Component{
     }
 
     handleRoute = (id) => {
-
         this.props.history.push(`/item-page/${id}`)
     }
    
 
     componentDidMount= () => {
-        
         this.props.firebase.items()
             .where('isListed', '==', true)
             .get()

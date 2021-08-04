@@ -232,9 +232,7 @@ class MyEditor extends React.Component {
                 <label htmlFor="scale">zoom</label>
             </div>
             <button type="submit">upload new profile</button>
-                
             </form>
-            
         </div>
         
     )

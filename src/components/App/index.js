@@ -13,12 +13,11 @@ import Account from '../user/Account'
 import AdminPage from '../user/Admin';
 import ItemPage from '../pages/ItemPage'
 import Form from '../items/ItemForm'
-import Filter from '../pages/Filter'
 import Item from '../items/Item'
 import NewFilterPage from '../z-Test'
 //import TestPage from '../pages/TestPage'
 //import TestItemBig from '../TestItemBig'
-//import MyMessages from '../MyMessages'
+
 import MessageConsole from '../user/MessageConsole'
 
 import * as ROUTES from '../../constants/routes';
@@ -30,20 +29,6 @@ const App = () => (
   <Router>
     <div>
       <header>
-      {/* <div className="measurements">
-          <div>
-            <div className="first"></div> 
-            <h5>30px(1.8rem)</h5>
-          </div>
-          <div>
-            <div className="second"></div> 
-            <h5>50px(3.1rem)</h5>
-          </div>
-          <div>
-            <div className="third"></div> 
-            <h5>100px(6.6rem)</h5>
-          </div>
-        </div> */}
         <div className="header-brand">
           <h1 className="header-brand-name">closet to stage</h1>
         </div>
@@ -62,14 +47,11 @@ const App = () => (
         component={PasswordForgetPage}
       />
       <Route exact path={ROUTES.HOME} component={HomePage} />
-      
       {/* <Route exact path="/messages" component = {Messages} /> */}
       <Route exact path={ROUTES.ADMIN} component={AdminPage} />
       <Route exact path={ROUTES.WOMEN} component={ItemPage} />
       {/* <Route exact path={'/item-page2'} component={ItemPage2} /> */}
-      <Route exact path="/itemform" component = {Form} />
-      <Route exact path="/filter" component = {Filter} />
-      <Route exact path="/items/:itemID" component = {Item}/> {/*':' allows Item to access itemID */}
+      <Route exact path={ROUTES.LIST} component = {Form} />
       <Route exact path="/item-page/:itemID" component = {Item}/> {/*':' allows Item to access itemID */}
       {/* <Route exact path="/items/:type?/:color?/brand?:" component={NewFilterPage}/> */}
 

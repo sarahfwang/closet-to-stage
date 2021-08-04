@@ -41,7 +41,7 @@ const NavigationAuth = () =>( //use parentheses not bracket dumb b
           <Link to={ROUTES.MEN}>Men</Link>
         </li>
         <li className="list-button">
-          <Link to="/itemform">List</Link>
+          <Link to={ROUTES.LIST}>List</Link>
         </li>
        {/*  <li>
           <Link to={ROUTES.ADMIN}>Admin</Link>

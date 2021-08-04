@@ -14,6 +14,7 @@ const ItemCard = ({item, handleRoute, ...props}) => {
         event.preventDefault();
     }
 
+    //if we are in "my closet" with an authUser
     if(props.account){
         return(
             <div className="t-item-card">

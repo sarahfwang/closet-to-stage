@@ -38,7 +38,6 @@ class MyCloset extends Component {
       userItems.forEach(id => {
         const uiRef =  this.props.firebase.items().doc(id)
         uiRef.get().then(doc => {
-       
           newUserItems.push({id: doc.id, ...doc.data()})
         })
         .then(()=>{ //inefficient !!! but do not know how to call one after the other
