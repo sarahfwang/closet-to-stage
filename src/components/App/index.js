@@ -42,27 +42,17 @@ const App = () => (
       <Route exact path={ROUTES.LANDING} component={LandingPage} />
       <Route exact path={ROUTES.SIGN_UP} component={SignUpPage} />
       <Route exact path={ROUTES.SIGN_IN} component={SignInPage} />
-      <Route
-        exact
-        path={ROUTES.PASSWORD_FORGET}
-        component={PasswordForgetPage}
-      />
+      <Route exact path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
       <Route exact path={ROUTES.HOME} component={HomePage} />
-      {/* <Route exact path="/messages" component = {Messages} /> */}
       <Route exact path={ROUTES.ADMIN} component={AdminPage} />
       <Route exact path={ROUTES.WOMEN} component={ItemPage} />
       {/* <Route exact path={'/item-page2'} component={ItemPage2} /> */}
       <Route exact path={ROUTES.LIST} component = {Form} />
       <Route exact path="/item-page/:itemID" component = {Item}/> {/*':' allows Item to access itemID */}
       <Route exact path="/update-item/:itemID" component = {ItemUpdateForm}/> {/*':' allows Item to access itemID */}
-      {/* <Route exact path="/items/:type?/:color?/brand?:" component={NewFilterPage}/> */}
-
       <Route exact path="/my-closet" component={MyCloset} />
       <Route exact path="/messages" component = {MessageConsole} />
       <Route exact path="/account" component = {Account} />
-      {/* <Route exact path="/mymessages" component={MyMessages}/> */}
-      
-      
     </div>
   </Router>
 );

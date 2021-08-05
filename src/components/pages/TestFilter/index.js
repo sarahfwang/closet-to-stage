@@ -78,8 +78,6 @@ class TestFilter extends React.Component {
                 promises.push(promise)
 
             }
-
-
         })
 
         Promise.all(promises).then(()=> {

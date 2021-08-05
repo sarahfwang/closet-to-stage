@@ -2,9 +2,10 @@
 //TODO: make images changeable/ editable/ croppable
 import React, {Component} from 'react'
 import {compose} from 'recompose'
+import uuid from 'react-uuid'
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faPlus, faTrash} from '@fortawesome/free-solid-svg-icons'
+import {faCommentsDollar, faPlus, faTrash} from '@fortawesome/free-solid-svg-icons'
 
 import {withFirebase} from '../../firebase';
 import {withAuthorization} from '../../auth/Session'
@@ -190,13 +191,15 @@ class ItemUpdateForm extends Component {
   render(){
     const {item, images, error, progress, imgAllUrls, indicies} = this.state;
     const colors = ["red", "orange", "yellow", "green", "blue", "purple", "tan", "white", "black"]
-    
-
     const types = ["leotard", "dress", "pant"] //TODO: add something that will write a new type if it is not listed
+
+    console.log("UID", uuid(), )
+    console.log("UID", uuid(), )
 
     return(
         <div className="list-page">
       <h2> create listing </h2>
+      
       <form onSubmit={this.onSumbit}>
         <div className ="form-container">
           <div className="img-col">
@@ -210,7 +213,6 @@ class ItemUpdateForm extends Component {
                     //img-cont: for aspect ratio
                     //inner-cont: for img that fills up width and height of container
 
-        
                     <div className="img-cont" key={imgAllUrls[i]}>
                       <div className="inner-cont ">
                         <img src={imgAllUrls[i]}/>

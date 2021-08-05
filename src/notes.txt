@@ -1,3 +1,6 @@
+install recompose, avatar, uuid
+
+old ItemForm
 //don't use this page, everything's on ItemPage I think
 //TODO: make images changeable/ editable/ croppable
 import React, {Component} from 'react'
@@ -100,10 +103,6 @@ class Form extends Component {
         //uploadImage(): imgs => firebase storage
         //uses fb storage urls => fb items db
         this.uploadImage(doc.id)
-        .then(imgUUIDs => {
-          console.log("IMGLIST", imgUUIDs)
-        })
-        .catch(err => console.log(err))
 
         const cuid = this.props.authUser.uid
         const userRef = this.props.firebase.user(cuid)
@@ -118,7 +117,7 @@ class Form extends Component {
 
 
 
-  uploadImage = id =>{
+  uploadImage = async(id)=>{
     //need id for storing
     const {userID, imgFiles} = this.state
 
@@ -126,55 +125,49 @@ class Form extends Component {
     var imgUUIDs = [] //will store uuid names of img files => firebase items db
     //loop: loop thru all imgFiles
     //find imgFile.name => stoarge location
-    return new Promise((myResolve, myReject) => {
-      let counter = 0//just for resolve reject purposes
+    
 
-      imgFiles.forEach((imgFile) => {
-        //creates reference in storage for new photo
-        const imgUUID = uuid()
-        
-        const imagesRef = this.props.firebase.storageRef().child(`items/${id}/${imgUUID}`)//file has name prop
-        const uploadTask = imagesRef.put(imgFile)
-  
-        //uploadTask.on has  callbacks: next, error, complete
-        uploadTask.on('state-changed',
-          (snapshot) => {
-            var progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100) 
-            this.setState({progress})
-  
-            console.log(snapshot)
-          }, (error) => {
-            //handle errors
-            this.setState({error})
-            console.log(error)
-  
-          }, () => {
-            //once complete
-            //urls of img in storage ==> in items in firestore database
-            uploadTask.snapshot.ref.getDownloadURL()
-              .then(downloadUrl => {
-                const itemRef = this.props.firebase.item(id)
-                this.props.firebase.updatefbUrls(downloadUrl, itemRef)
-                console.log("downloadURL", downloadUrl)
-              })
-              .then(() => {
-                imgUUIDs = imgUUIDs.concat(imgUUID)
-                counter = counter + 1
-  
-                // const itemRef = this.props.firebase.item(id)
-                // this.props.firebase.updateArray(itemRef, "imagesRef", imgUUID)
-              })
-          }
-        )
-      }
-    )
+    const response = await each(imgFiles, (imgFile) => {
+      //creates reference in storage for new photo
+      const imgUUID = uuid()
+      
+      const imagesRef = this.props.firebase.storageRef().child(`items/${id}/${imgUUID}`)//file has name prop
+      const uploadTask = imagesRef.put(imgFile)
 
-    if(counter == imgFiles.length)
-      myResolve(imgUUIDs)
-    else
-      myReject("failed")
+      //uploadTask.on has  callbacks: next, error, complete
+      uploadTask.on('state-changed',
+        (snapshot) => {
+          var progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100) 
+          this.setState({progress})
+
+          console.log(snapshot)
+        }, (error) => {
+          //handle errors
+          this.setState({error})
+          console.log(error)
+
+        }, () => {
+          //once complete
+          //urls of img in storage ==> in items in firestore database
+          uploadTask.snapshot.ref.getDownloadURL()
+            .then(downloadUrl => {
+              const itemRef = this.props.firebase.item(id)
+              this.props.firebase.updatefbUrls(downloadUrl, itemRef)
+              console.log("downloadURL", downloadUrl)
+            })
+            .then(() => {
+              imgUUIDs = imgUUIDs.concat(imgUUID)
+              console.log(imgUUIDs)
+              this.onClear()
+
+              const itemRef = this.props.firebase.item(id)
+              this.props.firebase.updateArray(itemRef, "imagesRef", imgUUID)
+            })
+        }
+      )
     }
   )
+
 }
 
   onClear = () =>{
