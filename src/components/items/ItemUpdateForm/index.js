@@ -42,10 +42,11 @@ class ItemUpdateForm extends Component {
         
         lowerCase:{},
        
-        imgAddFiles: [],//this time, imgAddFiles only contains files of things TO BE ADDED
+        imgAddFiles:[],//this time, imgAddFiles only contains files of things TO BE ADDED
 
         imgAllUrls: [], //urls are just for show (so you can have all of them instead of j the ones being added)
         fbUrls:[], //fbUrls filled in compDidMount
+        imgRefs:[],
 
         error: null,
         progress: 0,
@@ -59,6 +60,7 @@ class ItemUpdateForm extends Component {
             item: doc.data(),
             imgAllUrls: doc.data().fbUrls,
             fbUrls: doc.data().fbUrls,
+            imgRefs: doc.data().imagesRef,
         }, () => console.log("state",this.state))
     })
   }
@@ -116,7 +118,9 @@ class ItemUpdateForm extends Component {
     //find imgFile.name => stoarge location
     imgAddFiles.forEach(imgFile => {
       //creates reference in storage for new photo
-      const imagesRef = this.props.firebase.storageRef().child(`users/${userID}/items/${id}/${imgFile.name}`)//file has name prop
+
+      //change this to a uuidTDOO
+      const imagesRef = this.props.firebase.storageRef().child(`items/${id}/${imgFile.name}`)//file has name prop
       const uploadTask = imagesRef.put(imgFile)
 
       //uploadTask.on has  callbacks: next, error, complete
@@ -137,10 +141,8 @@ class ItemUpdateForm extends Component {
           //urls of img in storage ==> in items in firestore database
           uploadTask.snapshot.ref.getDownloadURL()
             .then(downloadUrl => {
-
               const itemRef = this.props.firebase.item(id)
               this.props.firebase.updatefbUrls(downloadUrl, itemRef)
-              console.log(downloadUrl)
             })
             .then(this.onClear)
         }
@@ -184,7 +186,56 @@ class ItemUpdateForm extends Component {
   }
 
   //deleteImg will temporarily delete img url from state, but then delete from database...how though?
-  deleteImg = (e) =>{
+  deleteImg = (url) =>{
+    const {fbUrls, imgRefs, imgAllUrls, imgAddFiles, } = this.state
+
+    let i = imgAllUrls.indexOf(url)
+
+    if(i >= fbUrls.length)//if it was a recently added URL, aka. not put in storage yet
+    {
+      imgAllUrls.splice(i, 1)
+      imgAddFiles.splice(i-fbUrls.length, 1)
+
+      console.log(imgAllUrls)
+      console.log(imgAddFiles)
+
+      this.setState({
+        imgAllUrls,
+        imgAddFiles,
+      })
+    }
+    else{
+      //must also tame the other lists
+      //delete the fb url of it ( make a copy first)
+      //delete the imgUrl of it
+      //delete the storage with the name of the file
+      //fbUrl list and imgRef list should be the same, correspond to the same
+      fbUrls.splice(i,1)
+      imgAllUrls.splice(i,1)
+
+      const imgRefName = imgRefs[i]
+      imgRefs.splice(i,1)
+
+      const id = this.itemID
+
+      const storageRef = this.props.firebase.storageRef().child(`items/${id}/${imgRefName}`)//file has name prop
+      storageRef.delete().then(()=>{
+        this.props.firebase.item(id).update({imagesRef: imgRefs, fbUrls})
+      }).catch(err => {
+        console.log(err)
+      })
+
+      
+
+      this.setState({
+        imgAllUrls,
+        fbUrls,
+        imgRefs
+      })
+
+
+
+    }
 
   }
 
@@ -218,7 +269,7 @@ class ItemUpdateForm extends Component {
                         <img src={imgAllUrls[i]}/>
                       </div>
                       <div className="inner-cont trash-button-cont">
-                            <button className="trash-button" onClick ={()=>this.deleteImg(i)}>
+                            <button className="trash-button" onClick ={()=>this.deleteImg(imgAllUrls[i])}>
                               <FontAwesomeIcon className = "trash-icon" icon={faTrash}/>
                             </button>
                       </div>   
