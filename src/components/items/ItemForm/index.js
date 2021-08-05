@@ -100,10 +100,7 @@ class Form extends Component {
         //uploadImage(): imgs => firebase storage
         //uses fb storage urls => fb items db
         this.uploadImage(doc.id)
-        .then(imgUUIDs => {
-          console.log("IMGLIST", imgUUIDs)
-        })
-        .catch(err => console.log(err))
+        
 
         const cuid = this.props.authUser.uid
         const userRef = this.props.firebase.user(cuid)
@@ -126,13 +123,10 @@ class Form extends Component {
     var imgUUIDs = [] //will store uuid names of img files => firebase items db
     //loop: loop thru all imgFiles
     //find imgFile.name => stoarge location
-    return new Promise((myResolve, myReject) => {
-      let counter = 0//just for resolve reject purposes
 
       imgFiles.forEach((imgFile) => {
         //creates reference in storage for new photo
         const imgUUID = uuid()
-        
         const imagesRef = this.props.firebase.storageRef().child(`items/${id}/${imgUUID}`)//file has name prop
         const uploadTask = imagesRef.put(imgFile)
   
@@ -141,8 +135,6 @@ class Form extends Component {
           (snapshot) => {
             var progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100) 
             this.setState({progress})
-  
-            console.log(snapshot)
           }, (error) => {
             //handle errors
             this.setState({error})
@@ -159,22 +151,15 @@ class Form extends Component {
               })
               .then(() => {
                 imgUUIDs = imgUUIDs.concat(imgUUID)
-                counter = counter + 1
-  
-                // const itemRef = this.props.firebase.item(id)
-                // this.props.firebase.updateArray(itemRef, "imagesRef", imgUUID)
+                  
+                const itemRef = this.props.firebase.item(id)
+                this.props.firebase.updateArray(itemRef, "imagesRef", imgUUID)
               })
           }
         )
       }
     )
 
-    if(counter == imgFiles.length)
-      myResolve(imgUUIDs)
-    else
-      myReject("failed")
-    }
-  )
 }
 
   onClear = () =>{

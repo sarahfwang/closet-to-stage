@@ -80,6 +80,10 @@ const firebaseConfig = {
                 ...newItem
             })
         
+        updateData = (ref, updatedObj) => 
+            ref.update({
+                ...updatedObj
+            })
 
         
       //*** Auth API ***
