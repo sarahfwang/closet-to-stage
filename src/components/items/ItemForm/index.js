@@ -29,9 +29,7 @@ const INITIAL_STATE={
   },
   indicies:[0,1,2,3,4,5], //purely for mapping purposes
 
-  lowerCase:{
-
-  },
+  lowerCase:{},
  
   imgFiles: [],
   imgUrls: [],
@@ -97,7 +95,7 @@ class Form extends Component {
         //doc holds the item's info (no image urls yet)
         //uploadImage uploads imgs into firebase storage
         //and then updates img urls in firestore database 
-        this.uploadImage(doc, doc.id)
+        this.uploadImage(doc.id)
 
         const cuid = this.props.authUser.uid
         const userRef = this.props.firebase.user(cuid)
@@ -106,20 +104,26 @@ class Form extends Component {
         this.props.firebase.updateUserItems(userRef, doc.id)
 
       })
+      .then(()=>{//update counter in item db
+        
+      })
     } 
+    
   }
 
-  uploadImage = (ref, id) =>{
+  uploadImage = (id) =>{
     //need id for storing
     const {userID, imgFiles} = this.state
 
-    console.log("doc.id:",id)
+    //console.log("doc.id:",id)
 
     //loop: loop thru all imgFiles
     //find imgFile.name => stoarge location
-    imgFiles.forEach(imgFile => {
+
+    for (var i = 0; i < imgFiles.length; i++) {
+      let imgFile = imgFiles[i]
       //creates reference in storage for new photo
-      const imagesRef = this.props.firebase.storageRef().child(`users/${userID}/items/${id}/${imgFile.name}`)//file has name prop
+      const imagesRef = this.props.firebase.storageRef().child(`users/${userID}/items/${id}/${i}`)//file has name prop
       const uploadTask = imagesRef.put(imgFile)
 
       //uploadTask.on has  callbacks: next, error, complete
@@ -140,15 +144,17 @@ class Form extends Component {
           //urls of img in storage ==> in items in firestore database
           uploadTask.snapshot.ref.getDownloadURL()
             .then(downloadUrl => {
-
               const itemRef = this.props.firebase.item(id)
               this.props.firebase.updatefbUrls(downloadUrl, itemRef)
-              console.log(downloadUrl)
+              console.log("downloadURL", downloadUrl)
             })
-            .then(this.onClear)
+            .then(() => {
+              this.onClear()
+              console.log("i",i)
+            })
         }
       )
-    })
+    } 
   }
 
   onClear = () =>{
