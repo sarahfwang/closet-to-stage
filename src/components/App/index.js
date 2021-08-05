@@ -15,6 +15,7 @@ import ItemPage from '../pages/ItemPage'
 import Form from '../items/ItemForm'
 import Item from '../items/Item'
 import NewFilterPage from '../z-Test'
+import ItemUpdateForm from '../items/ItemUpdateForm'
 //import TestPage from '../pages/TestPage'
 //import TestItemBig from '../TestItemBig'
 
@@ -53,6 +54,7 @@ const App = () => (
       {/* <Route exact path={'/item-page2'} component={ItemPage2} /> */}
       <Route exact path={ROUTES.LIST} component = {Form} />
       <Route exact path="/item-page/:itemID" component = {Item}/> {/*':' allows Item to access itemID */}
+      <Route exact path="/update-item/:itemID" component = {ItemUpdateForm}/> {/*':' allows Item to access itemID */}
       {/* <Route exact path="/items/:type?/:color?/brand?:" component={NewFilterPage}/> */}
 
       <Route exact path="/my-closet" component={MyCloset} />

@@ -4,65 +4,65 @@ import React, {Component} from 'react'
 import {compose} from 'recompose'
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import { faCommentsDollar, faPlus } from '@fortawesome/free-solid-svg-icons'
-import {  } from '@fortawesome/free-regular-svg-icons'
+import {faPlus, faTrash} from '@fortawesome/free-solid-svg-icons'
 
-import { withFirebase } from '../../firebase';
+import {withFirebase} from '../../firebase';
 import {withAuthorization} from '../../auth/Session'
 
-import './itemform.scss'
-//TODO: HANDLE ERRORS
+import './itemupdate.scss'
 
-const INITIAL_STATE={
-  item:{
-    itemName:'',
-    type:'', //turn into a suggester input later
-    style:'',
-    description:'',
-    color:'',
-    size:'',
-    quantity:'',
-    brand:'',
-    price:'',
-    style:'',
-    isListed: false,  
-  },
-  indicies:[0,1,2,3,4,5], //purely for mapping purposes
-
-  lowerCase:{
-
-  },
- 
-  imgFiles: [],
-  imgUrls: [],
-  fbUrls:[],
-  error: null,
-  progress: 0,
-}
-
-const loop = [1,2,3,4,5,6]
-
-class Form extends Component {
+class ItemUpdateForm extends Component {
   constructor(props){
     super(props)  
     
-    let cuid = this.props.firebase.currentUser().uid
-    //console.log(cuid)
-    this.state={...INITIAL_STATE, userID: cuid}
+    const userID = this.props.firebase.currentUser().uid //well wait why do we need this? oh to edit, duh
+  
+    this.itemID = this.props.match.params.itemID //takes itemID from the Route in App
 
-    console.log(this.state)
+    console.log("this.", this.itemID)
+    //console.log(cuid)
+    this.state={
+        item:{
+            itemName:'',
+            type:'', //turn into a suggester input later
+            style:'',
+            description:'',
+            color:'',
+            size:'',
+            quantity:'',
+            brand:'',
+            price:'',
+            style:'',
+            isListed: false,  
+        },
+        userID: userID,
+
+        indicies:[0,1,2,3,4,5], //purely for mapping purposes
+        
+        lowerCase:{},
+       
+        imgAddFiles: [],//this time, imgAddFiles only contains files of things TO BE ADDED
+
+        imgAllUrls: [], //urls are just for show (so you can have all of them instead of j the ones being added)
+        fbUrls:[], //fbUrls filled in compDidMount
+
+        error: null,
+        progress: 0,
+    }
   }
 
   componentDidMount () {
-    console.log(this.props.firebase.currentUser().uid)
-
-    console.log(this.props.firebase.getDb())
-
-    
+    this.props.firebase.item(this.itemID).get() // change later?
+    .then(doc => {
+        this.setState({
+            item: doc.data(),
+            imgAllUrls: doc.data().fbUrls,
+            fbUrls: doc.data().fbUrls,
+        }, () => console.log("state",this.state))
+    })
   }
 
   onChange = event =>{
-    
     this.setState({
         item:{
           ...this.state.item,
@@ -79,45 +79,41 @@ class Form extends Component {
   }
 
   onSumbit = event =>{
-    const {lowerCase, userID, imgFiles } = this.state
+    const {lowerCase, imgAddFiles, imgAllUrls, item, userID } = this.state
+
     event.preventDefault()
 
     console.log('start of upload')
 
     //add to items
-    if(imgFiles.length === 0){
+    if(imgAllUrls.length === 0){
       this.setState({error:"please upload at least one image"})
     }
     else if(userID == null){
       this.setState({error:"user is null"})
     }
     else{
-      this.props.firebase.doAddItem({...lowerCase, userID, isListed: true, fbUrls:[]})
-      .then(doc => {
+      const itemRef = this.props.firebase.item(this.itemID)
+
+      this.props.firebase.updateItem(itemRef, item)
+      .then(() => {
         //doc holds the item's info (no image urls yet)
         //uploadImage uploads imgs into firebase storage
         //and then updates img urls in firestore database 
-        this.uploadImage(doc, doc.id)
-
-        const cuid = this.props.authUser.uid
-        const userRef = this.props.firebase.user(cuid)
-
-        //this.props.firebase.updateArray(userRef, "userItems", doc.id)
-        this.props.firebase.updateUserItems(userRef, doc.id)
-
+        this.uploadImage(this.itemID)
       })
     } 
   }
 
-  uploadImage = (ref, id) =>{
+  uploadImage = (id) =>{
     //need id for storing
-    const {userID, imgFiles} = this.state
+    const {userID, imgAddFiles} = this.state
 
     console.log("doc.id:",id)
 
-    //loop: loop thru all imgFiles
+    //loop: loop thru all imgAddFiles
     //find imgFile.name => stoarge location
-    imgFiles.forEach(imgFile => {
+    imgAddFiles.forEach(imgFile => {
       //creates reference in storage for new photo
       const imagesRef = this.props.firebase.storageRef().child(`users/${userID}/items/${id}/${imgFile.name}`)//file has name prop
       const uploadTask = imagesRef.put(imgFile)
@@ -151,10 +147,6 @@ class Form extends Component {
     })
   }
 
-  onClear = () =>{
-    this.setState({...INITIAL_STATE})
-  }
-
   handleImageAsFile = (e) =>{
     //uploads image file to state 
       const image = e.target.files[0]
@@ -165,18 +157,21 @@ class Form extends Component {
       console.log("url", url)
 
       this.setState(state => {
-        const imgUrls = state.imgUrls.concat(url)
-        const imgFiles = state.imgFiles.concat(image)
+
+        const imgAddFiles = state.imgAddFiles.concat(image)
+        const imgAllUrls = state.imgAllUrls.concat(url)
 
         return {
           ...state,
-          imgFiles,
-          imgUrls,
+          imgAddFiles,
+          imgAllUrls,
         }
       })
+
+      
   }
 
-/*   previewImg = (e) => {
+  previewImg = (e) => {
     var reader = new FileReader();
     reader.onload = () => {
       var output = document.getElementById('preview_img')
@@ -185,17 +180,22 @@ class Form extends Component {
 
     reader.readAsDataURL(e.target.files[0])
 
-  } */
+  }
+
+  //deleteImg will temporarily delete img url from state, but then delete from database...how though?
+  deleteImg = (e) =>{
+
+  }
 
   render(){
-    const {item, images, error, progress, imgUrls, indicies} = this.state;
+    const {item, images, error, progress, imgAllUrls, indicies} = this.state;
     const colors = ["red", "orange", "yellow", "green", "blue", "purple", "tan", "white", "black"]
     
 
     const types = ["leotard", "dress", "pant"] //TODO: add something that will write a new type if it is not listed
 
     return(
-      <div className="list-page">
+        <div className="list-page">
       <h2> create listing </h2>
       <form onSubmit={this.onSumbit}>
         <div className ="form-container">
@@ -205,16 +205,25 @@ class Form extends Component {
             </div>
             <div className="img-gallery">
                   {indicies.map(i => (
-                    imgUrls[i]?
+                    imgAllUrls[i]?
                     //if there is an imgUrl for an index 0-5, then show the img
-                    <div className="img-cont" key={imgUrls[i]}>
-                      <div className="inner-cont">
-                        <img src={imgUrls[i]}/>
-                        </div>
+                    //img-cont: for aspect ratio
+                    //inner-cont: for img that fills up width and height of container
+
+        
+                    <div className="img-cont" key={imgAllUrls[i]}>
+                      <div className="inner-cont ">
+                        <img src={imgAllUrls[i]}/>
+                      </div>
+                      <div className="inner-cont trash-button-cont">
+                            <button className="trash-button" onClick ={()=>this.deleteImg(i)}>
+                              <FontAwesomeIcon className = "trash-icon" icon={faTrash}/>
+                            </button>
+                      </div>   
                       </div>
                     :(
                       //if not, put a placeholder
-                      i == imgUrls.length?
+                      i == imgAllUrls.length?
                       //if the placeholder comes after the last shown image
                       //put add image icon
                       <div className="img-cont" key={i}>
@@ -442,10 +451,6 @@ class Form extends Component {
                     )}
                 </div>
               </div>
-
-      
-              
-
             </div>
         </div> {/*end of form-container */}
         <div>
@@ -465,7 +470,7 @@ class Form extends Component {
     
       </div>
       
-      )
+    )
   }
 }
 const condition = authUser => !! authUser
@@ -473,6 +478,6 @@ const condition = authUser => !! authUser
 export default compose(
   withFirebase,
   withAuthorization(condition), //somehow this fixed my staying logged in error???
-)(Form) //need to study compose
+)(ItemUpdateForm) //need to study compose
 
 //export default withFirebase(Form) //deosn't stay logged in

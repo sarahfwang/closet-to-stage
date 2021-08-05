@@ -25,7 +25,6 @@ class Item extends React.Component {
             fbUrls: [],
 
             show: false,
-           
         }
        
     }

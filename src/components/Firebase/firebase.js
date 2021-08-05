@@ -43,7 +43,6 @@ const firebaseConfig = {
         //array union functions
 
         updatefbUrls = (value, ref) => {
-
             ref.update({
                 fbUrls: firebase.firestore.FieldValue.arrayUnion(value)
             })
@@ -75,6 +74,12 @@ const firebaseConfig = {
                 [keyName]: firebase.firestore.FieldValue.arrayUnion(value)
             })
         }
+
+        updateItem = (ref, newItem) => 
+            ref.update({
+                ...newItem
+            })
+        
 
         
       //*** Auth API ***

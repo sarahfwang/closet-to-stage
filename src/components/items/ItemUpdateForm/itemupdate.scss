@@ -1,0 +1,38 @@
+/* .trash-button-cont{
+    height:100%;
+    width: 100%;
+
+    position: absolute;
+    top:0;
+
+    box-sizing: border-box;
+    //kinda sketch. Based off itemform css inner-cont padding of 0.5
+    padding-top: 0.5rem;
+    padding-right: 1rem;
+    padding-bottom: 0.5rem;
+} */
+
+.trash-button-cont{ //trash-button cont is also an inner-cont, layered on top of the img-cont
+    align-items:center;
+    display: flex;
+    justify-content: center;
+}
+
+.trash-button{
+    border: 1px solid white;
+    border-radius: 10%;
+    background-color: rgba(10,10,10,0.5);
+    color: white;
+    display: none;
+    font-size: 2rem;
+}
+
+.inner-cont:hover {
+    .trash-button{
+        display: block;
+    }
+}
+
+.trash-button:hover {
+    cursor: pointer;
+}
