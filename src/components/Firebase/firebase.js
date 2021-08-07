@@ -69,9 +69,15 @@ const firebaseConfig = {
             })
         }
 
-        updateArray = (ref, keyName, value) => {
+        updateArrayUnion = (ref, keyName, value) => {
             ref.update({
                 [keyName]: firebase.firestore.FieldValue.arrayUnion(value)
+            })
+        }
+
+        updateArrayRemove = (ref, keyName, value) => {
+            ref.update({
+                [keyName]: firebase.firestore.FieldValue.arrayRemove(value)
             })
         }
 
@@ -159,14 +165,35 @@ const firebaseConfig = {
         }
 
         doDeleteItem = (itemID, userID) => {
-            
-            this.db.collection('items').doc(itemID).delete()
-            this.db.collection('itemChats').doc(itemID).delete()
-            this.storage.ref().child(`users/${userID}/items/${itemID}`).delete().then(() => {
-                console.log("storage delete success")
-              }).catch((error) => {
-                console.log("storage delete fail", error)
-              });
+            //delete from user, items, chats
+            //delete from storage
+
+            const itemRef = this.item(itemID)
+            const userRef = this.user(userID)
+
+            //need list of filenames from itemRef
+            let imgRefs = []
+            itemRef.get().then(doc=>{
+                imgRefs = doc.data().imgRefs
+            })
+            .then(()=>{
+                 //delete imgRefs from storage
+                imgRefs.forEach(img => {
+                this.storage.ref().child(`items/${itemID}/${img}`).delete().then(() => {
+                    console.log("storage delete success")
+                  }).catch((error) => {
+                    console.log("storage delete fail", error)
+                  });
+
+                })
+            })
+            .then(()=>{
+                this.updateArrayRemove(userRef, "userItems", itemID) //delete from users
+                itemRef.delete() //delete from items
+                this.db.collection('itemChats').doc(itemID).delete() //delete from chats
+            })
+
+           
 
         }
 

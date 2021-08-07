@@ -14,14 +14,20 @@ const ItemCard = ({item, handleRoute, ...props}) => {
         event.preventDefault();
     }
 
-    //if we are in "my closet" with an authUser
+    const onEdit = () => {
+        const itemID = item.id
+
+        props.history.push(`edit-item/${itemID}`)
+    }
+
+    //if we are in "my closet" with an authUser, give user access to edit
     if(props.account){
         return(
             <div className="t-item-card">
             <div className="t-img" onClick= {()=>{handleRoute(item.id)}}>
-                <img src = {item.fbUrls[0]}/>
+                {item.fbUrls? <img src = {item.fbUrls[0]}/>: <img />}
             </div>
-            <button>Edit</button>
+            <button onClick={onEdit}>Edit</button>
             <button onClick={onDelete}>Delete</button>
 
             <div className="t-info-snipp">

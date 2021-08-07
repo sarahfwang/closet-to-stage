@@ -5,7 +5,7 @@ import {compose} from 'recompose'
 import uuid from 'react-uuid'
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faCommentsDollar, faPlus, faTrash} from '@fortawesome/free-solid-svg-icons'
+import {faPlus, faTrash} from '@fortawesome/free-solid-svg-icons'
 
 import {withFirebase} from '../../firebase';
 import {withAuthorization} from '../../auth/Session'
@@ -54,14 +54,18 @@ class ItemUpdateForm extends Component {
   }
 
   componentDidMount () {
+
     this.props.firebase.item(this.itemID).get() // change later?
     .then(doc => {
         this.setState({
             item: doc.data(),
             imgAllUrls: doc.data().fbUrls,
             fbUrls: doc.data().fbUrls,
-            imgRefs: doc.data().imagesRef,
+            imgRefs: doc.data().imgRefs,
         }, () => console.log("state",this.state))
+    })
+    .catch(()=>{ //make this error more special
+      console.log("we couldn't find your item")
     })
   }
 
@@ -120,8 +124,9 @@ class ItemUpdateForm extends Component {
       //creates reference in storage for new photo
 
       //change this to a uuidTDOO
-      const imagesRef = this.props.firebase.storageRef().child(`items/${id}/${imgFile.name}`)//file has name prop
-      const uploadTask = imagesRef.put(imgFile)
+      const imgUUID = uuid()
+      const imgRef = this.props.firebase.storageRef().child(`items/${id}/${imgUUID}`)//file has name prop
+      const uploadTask = imgRef.put(imgFile)
 
       //uploadTask.on has  callbacks: next, error, complete
       uploadTask.on('state-changed',
@@ -142,7 +147,8 @@ class ItemUpdateForm extends Component {
           uploadTask.snapshot.ref.getDownloadURL()
             .then(downloadUrl => {
               const itemRef = this.props.firebase.item(id)
-              this.props.firebase.updatefbUrls(downloadUrl, itemRef)
+              this.props.firebase.updateArrayUnion(itemRef, "fbUrls", downloadUrl)
+              this.props.firebase.updateArrayUnion(itemRef, "imgRefs", imgUUID)
             })
             .then(this.onClear)
         }
@@ -170,8 +176,6 @@ class ItemUpdateForm extends Component {
           imgAllUrls,
         }
       })
-
-      
   }
 
   previewImg = (e) => {
@@ -187,7 +191,7 @@ class ItemUpdateForm extends Component {
 
   //deleteImg will temporarily delete img url from state, but then delete from database...how though?
   deleteImg = (url) =>{
-    const {fbUrls, imgRefs, imgAllUrls, imgAddFiles, } = this.state
+    const {fbUrls, imgRefs, imgAllUrls, imgAddFiles, userID} = this.state
 
     let i = imgAllUrls.indexOf(url)
 
@@ -204,37 +208,38 @@ class ItemUpdateForm extends Component {
         imgAddFiles,
       })
     }
-    else{
-      //must also tame the other lists
-      //delete the fb url of it ( make a copy first)
+    else{//the img was already in items (firstore db), users (firstore db), and storage db
+      //delete the fbUrl of it ( make a copy first)
       //delete the imgUrl of it
       //delete the storage with the name of the file
       //fbUrl list and imgRef list should be the same, correspond to the same
-      fbUrls.splice(i,1)
-      imgAllUrls.splice(i,1)
 
-      const imgRefName = imgRefs[i]
+      //delete from local
+      const imgRefName = imgRefs[i]//save for deleting from db
       imgRefs.splice(i,1)
+      fbUrls.splice(i,1)
+      imgAllUrls.splice(i,1) //local
 
-      const id = this.itemID
+      const itemID = this.itemID
 
-      const storageRef = this.props.firebase.storageRef().child(`items/${id}/${imgRefName}`)//file has name prop
+      
+      const storageRef = this.props.firebase.storageRef().child(`items/${itemID}/${imgRefName}`)//delete from storage
       storageRef.delete().then(()=>{
-        this.props.firebase.item(id).update({imagesRef: imgRefs, fbUrls})
-      }).catch(err => {
+        this.props.firebase.item(itemID).update({imgRefs, fbUrls})//delete from items(firestore)
+      })
+      .then(()=>{
+        const userRef = this.props.firebase.user(userID)
+        this.props.firebase.updateArrayRemove(userRef, "userItems", itemID)//updates users(firestore)
+      })
+      .catch(err => {
         console.log(err)
       })
 
-      
-
-      this.setState({
+      this.setState({ //doesn't need to happen asynchronusly after firebase code
         imgAllUrls,
         fbUrls,
         imgRefs
       })
-
-
-
     }
 
   }
@@ -243,9 +248,6 @@ class ItemUpdateForm extends Component {
     const {item, images, error, progress, imgAllUrls, indicies} = this.state;
     const colors = ["red", "orange", "yellow", "green", "blue", "purple", "tan", "white", "black"]
     const types = ["leotard", "dress", "pant"] //TODO: add something that will write a new type if it is not listed
-
-    console.log("UID", uuid(), )
-    console.log("UID", uuid(), )
 
     return(
         <div className="list-page">
@@ -328,6 +330,7 @@ class ItemUpdateForm extends Component {
                   onChange={this.onChange}
                   placeholder="*"
                   maxLength="30"
+                  autoComplete="off"
                   required
                 />
               </div>
@@ -350,6 +353,7 @@ class ItemUpdateForm extends Component {
                     step="1"
                     onChange={this.onChange}
                     placeholder="*00.00"
+                    autoComplete="off"
                   />
                 </div>
               
@@ -367,6 +371,7 @@ class ItemUpdateForm extends Component {
                   type="text"
                   onChange={this.onChange}
                   placeholder="brand"
+                  autoComplete="off"
                 />
               </div>
 
@@ -387,6 +392,7 @@ class ItemUpdateForm extends Component {
                   onChange={this.onChange}
                   placeholder="*e.g. 'm' or '4'"
                   list="sizes"
+                  autoComplete="off"
                 />
 
                 <datalist id="sizes">
@@ -420,6 +426,7 @@ class ItemUpdateForm extends Component {
                   type="number"
                   onChange={this.onChange}
                   placeholder="quantity"
+                  autoComplete="off"
                 />
               </div>
 
@@ -436,6 +443,7 @@ class ItemUpdateForm extends Component {
                   type="text"
                   onChange={this.onChange}
                   placeholder="add notes here..."
+                  autoComplete="off"
                 />
               </div>
 
@@ -508,7 +516,7 @@ class ItemUpdateForm extends Component {
         </div> {/*end of form-container */}
         <div>
                 <button type= "submit" >
-                  Add
+                  Save Add Changes
                 </button>
 
                 <button onClick={this.onClear}>

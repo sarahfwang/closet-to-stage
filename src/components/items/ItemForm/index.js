@@ -87,27 +87,26 @@ class Form extends Component {
     console.log('start of upload')
 
     //add to items
-    if(imgFiles.length === 0){
+    if(imgFiles.length === 0){ //if there are no photos
       this.setState({error:"please upload at least one image"})
     }
-    else if(userID == null){
+    else if(userID == null){ //if the user is not logged in? just for debugging TODO
       this.setState({error:"user is null"})
     }
-    else{
+    else{//everything is good
+      //after putting item in db, get id of item
+      //=> place imgs at id in storage
       this.props.firebase.doAddItem({...lowerCase, userID, isListed: true, fbUrls:[]})
       .then(doc => {
-        //doc lacks fbUrls
         //uploadImage(): imgs => firebase storage
         //uses fb storage urls => fb items db
         this.uploadImage(doc.id)
-        
 
         const cuid = this.props.authUser.uid
         const userRef = this.props.firebase.user(cuid)
 
-        //this.props.firebase.updateArray(userRef, "userItems", doc.id) //another way
+        //this.props.firebase.updateArrayUnion(userRef, "userItems", doc.id) //another way
         this.props.firebase.updateUserItems(userRef, doc.id)
-
       })
     } 
     
@@ -127,8 +126,8 @@ class Form extends Component {
       imgFiles.forEach((imgFile) => {
         //creates reference in storage for new photo
         const imgUUID = uuid()
-        const imagesRef = this.props.firebase.storageRef().child(`items/${id}/${imgUUID}`)//file has name prop
-        const uploadTask = imagesRef.put(imgFile)
+        const imgRefs = this.props.firebase.storageRef().child(`items/${id}/${imgUUID}`)//file has name prop
+        const uploadTask = imgRefs.put(imgFile)
   
         //uploadTask.on has  callbacks: next, error, complete
         uploadTask.on('state-changed',
@@ -144,16 +143,19 @@ class Form extends Component {
             //once complete
             //urls of img in storage ==> in items in firestore database
             uploadTask.snapshot.ref.getDownloadURL()
-              .then(downloadUrl => {
+              .then(downloadUrl => {//update fbUrls (in user)
                 const itemRef = this.props.firebase.item(id)
                 this.props.firebase.updatefbUrls(downloadUrl, itemRef)
                 console.log("downloadURL", downloadUrl)
               })
-              .then(() => {
+              .then(() => {//update storage name loc (in user)
                 imgUUIDs = imgUUIDs.concat(imgUUID)
                   
                 const itemRef = this.props.firebase.item(id)
-                this.props.firebase.updateArray(itemRef, "imagesRef", imgUUID)
+                this.props.firebase.updateArrayUnion(itemRef, "imgRefs", imgUUID)
+              })
+              .then(()=>{//clear state
+                  this.setState({...INITIAL_STATE})
               })
           }
         )
@@ -277,6 +279,7 @@ class Form extends Component {
                   onChange={this.onChange}
                   placeholder="*"
                   maxLength="30"
+                  autoComplete="off"
                   required
                 />
               </div>
@@ -299,6 +302,7 @@ class Form extends Component {
                     step="1"
                     onChange={this.onChange}
                     placeholder="*00.00"
+                    autoComplete="off"
                   />
                 </div>
               
@@ -316,6 +320,7 @@ class Form extends Component {
                   type="text"
                   onChange={this.onChange}
                   placeholder="brand"
+                  autoComplete="off"
                 />
               </div>
 
@@ -336,6 +341,7 @@ class Form extends Component {
                   onChange={this.onChange}
                   placeholder="*e.g. 'm' or '4'"
                   list="sizes"
+                  autoComplete="off"
                 />
 
                 <datalist id="sizes">
@@ -369,6 +375,7 @@ class Form extends Component {
                   type="number"
                   onChange={this.onChange}
                   placeholder="quantity"
+                  autoComplete="off"
                 />
               </div>
 
@@ -385,6 +392,7 @@ class Form extends Component {
                   type="text"
                   onChange={this.onChange}
                   placeholder="add notes here..."
+                  autoComplete="off"
                 />
               </div>
 
@@ -403,7 +411,7 @@ class Form extends Component {
                   value={item.type}
                   type="text"
                   onChange={this.onChange}
-                  placeholder="type"
+                  placeholder="type in here..."
                   list="types"
                   autoComplete="off"
                 />
@@ -424,7 +432,7 @@ class Form extends Component {
                   value={item.style}
                   type="text"
                   onChange={this.onChange}
-                  placeholder="style"
+                  placeholder="type in here"
                   list="styles"
                   autoComplete="off"
                 />
