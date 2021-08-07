@@ -50,6 +50,7 @@ const firebaseConfig = {
 
         updateItemBuyers = (value, ref) => {
             //ref update only works if the doc exists
+            //for messages db
 
             //message database
             console.log("in firebase.js value", value, "ref", ref)
@@ -60,12 +61,6 @@ const firebaseConfig = {
                 else{
                     ref.set({buyers: [value]})
                 }
-            })
-        }
-
-        updateUserItems = (ref, value) => {
-            ref.update({
-                userItems: firebase.firestore.FieldValue.arrayUnion(value)
             })
         }
 
@@ -80,17 +75,6 @@ const firebaseConfig = {
                 [keyName]: firebase.firestore.FieldValue.arrayRemove(value)
             })
         }
-
-        updateItem = (ref, newItem) => 
-            ref.update({
-                ...newItem
-            })
-        
-        updateData = (ref, updatedObj) => 
-            ref.update({
-                ...updatedObj
-            })
-
         
       //*** Auth API ***
         doCreateUserWithEmailAndPassword = (email, password) =>
@@ -148,14 +132,6 @@ const firebaseConfig = {
 
         doAddItem = (item) => (
            this.db.collection('items').add(item)
-            
-            //var itemKey = itemRef.key //ref can refer to a push(), but not push().set()
-            //console.log("item key "+itemKey)
-
-            //don't store in two locations 
-            /*this.db.collection('users/' + uid +'/items').add({ 
-                item,
-            })  */
         )
 
         doEditItem = (editItem, itemID) => { //editItem is an object {itenName: ,color: ,}

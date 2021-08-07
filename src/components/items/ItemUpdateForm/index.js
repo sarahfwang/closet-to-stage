@@ -102,7 +102,8 @@ class ItemUpdateForm extends Component {
     else{
       const itemRef = this.props.firebase.item(this.itemID)
 
-      this.props.firebase.updateItem(itemRef, item)
+      this.props.firebase.item(this.itemID).update(item)
+      
       .then(() => {
         //doc holds the item's info (no image urls yet)
         //uploadImage uploads imgs into firebase storage

@@ -105,8 +105,7 @@ class Form extends Component {
         const cuid = this.props.authUser.uid
         const userRef = this.props.firebase.user(cuid)
 
-        //this.props.firebase.updateArrayUnion(userRef, "userItems", doc.id) //another way
-        this.props.firebase.updateUserItems(userRef, doc.id)
+        this.props.firebase.updateArrayUnion(userRef, "userItems", doc.id) //another way
       })
     } 
     
