@@ -121,44 +121,6 @@ class MyCloset extends Component {
 }
 
 
-const User = ({user}) => ( 
-    <div>
-      <ul>   
-          <li >
-              <span>
-                  <p>Email: {user.email}</p>
-              </span>
-              <span>
-                  <p> username: {user.username}</p>
-              </span>
-          </li>     
-      </ul>
-
-    </div>
-)
-
-const ItemsList = (props) => { //props: {items: [{item1}, {item2}, ...]}
-  
-  return (
-    <div className="itemslist">
-      <ul>
-        {props.items.map(item=> <li key={item.id}> <ItemEdit item={item}/> </li>)} 
-      </ul>
-    </div>
-  )
-}
-
-
- const Item =  (props) =>{ //or use ({item}) instead of (props) and change accoridngly
-  //console.log(props.item)
-return(
-    <div className="item">
-      <strong>itemName: {props.item.item.itemName}, color: {props.item.item.color} </strong>
-    </div>
-  )
-} 
- 
-
 
 const condition = authUser => !! authUser
 
