@@ -20,7 +20,7 @@ class ItemUpdateForm extends Component {
   
     this.itemID = this.props.match.params.itemID //takes itemID from the Route in App
 
-    console.log("this.", this.itemID)
+
     //console.log(cuid)
     this.state={
         item:{
@@ -36,7 +36,7 @@ class ItemUpdateForm extends Component {
             style:'',
             isListed: false,  
         },
-        userID: userID,
+        userID,
 
         indicies:[0,1,2,3,4,5], //purely for mapping purposes
         
@@ -44,9 +44,9 @@ class ItemUpdateForm extends Component {
        
         imgAddFiles:[],//this time, imgAddFiles only contains files of things TO BE ADDED
 
-        imgAllUrls: [], //urls are just for show (so you can have all of them instead of j the ones being added)
-        fbUrls:[], //fbUrls filled in compDidMount
-        imgRefs:[],
+        imgAllUrls: [''], //urls are just for show (so you can have all of them instead of j the ones being added)
+        fbUrls:[''], //fbUrls filled in compDidMount
+        imgRefs:[''],
 
         error: null,
         progress: 0,
@@ -54,7 +54,7 @@ class ItemUpdateForm extends Component {
   }
 
   componentDidMount () {
-
+    
     this.props.firebase.item(this.itemID).get() // change later?
     .then(doc => {
         this.setState({
@@ -505,7 +505,7 @@ class ItemUpdateForm extends Component {
                 <div className="color-selector">
                   {colors.map((color, index) => //loops through color array
                       <div key={index}>
-                        <label className="color-select" for={color}>
+                        <label className="color-select" htmlFor={color}>
                           <input type="radio" id={color} name="color" value={color} onChange={this.onChange}/>
                           <span className={`${color}-select`}></span> {/*square of color */}
                         </label> 

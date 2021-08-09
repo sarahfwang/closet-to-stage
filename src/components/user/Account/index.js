@@ -176,11 +176,10 @@ class MyEditor extends React.Component {
         <div className="page">
             <div className="profile-cont">
                 <div>
-                    {profile? 
+                    {profile? //profile exists?
                        <img className="profile-circle" src = {profile}/>
                         : 
-                        <div className="profile-circle">
-                            <div className="empty-profile"></div>
+                        <div className="profile-circle-empty"> 
                         </div>
                     }
                     <p>{progress}% uploaded</p>

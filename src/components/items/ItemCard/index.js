@@ -1,10 +1,17 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
+import {Link} from 'react-router-dom'
 
 import './itemCard.scss'
 import {withFirebase} from '../../firebase'
 
 const ItemCard = ({item, handleRoute, ...props}) => {
-    console.log("itemcard",props.auID)
+    const [itemID, setItemID] = useState('')
+    
+    useEffect(() => {
+        setItemID(item.id)
+        console.log("2:",item.id)
+    }, [item])
+  
 
     const onDelete = event => {//should they be allowed to delete?
         const itemID = item.id
@@ -14,20 +21,14 @@ const ItemCard = ({item, handleRoute, ...props}) => {
         event.preventDefault();
     }
 
-    const onEdit = () => {
-        const itemID = item.id
-
-        props.history.push(`edit-item/${itemID}`)
-    }
-
     //if we are in "my closet" with an authUser, give user access to edit
     if(props.account){
         return(
             <div className="t-item-card">
-            <div className="t-img" onClick= {()=>{handleRoute(item.id)}}>
+            <div className="t-img" onClick= {()=>{handleRoute(itemID)}}>
                 {item.fbUrls? <img src = {item.fbUrls[0]}/>: <img />}
             </div>
-            <button onClick={onEdit}>Edit</button>
+            <Link to={{pathname: `/update-item/${itemID}`}}>Edit</Link>
             <button onClick={onDelete}>Delete</button>
 
             <div className="t-info-snipp">
