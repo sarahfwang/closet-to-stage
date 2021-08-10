@@ -16,7 +16,7 @@ const withAuthentication = Component =>{
           componentDidMount () { 
             this.props.firebase.onAuthUserListener(
               authUser =>{ //arbitrary 'authUser' defined in firebase.js
-                this.setState({authUser}) 
+                this.setState({authUser}) //provides context with db user and authuser email and id
               },
               ()=>{
                 this.setState({authUser: null}) //arrow functions used to set 'this' properly
@@ -29,7 +29,6 @@ const withAuthentication = Component =>{
             //this.props.firebase.user().off(); //detatches callback
           }
         render(){
-            //console.log({...this.props})
             return(
                 <AuthUserContext.Provider value={this.state.authUser}>
                     <Component {...this.props} /> 

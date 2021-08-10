@@ -209,8 +209,6 @@ const firebaseConfig = {
                     promise.then(snapshot => { //could also get rid of 'promise' and go directly to '.then'
                         const dbUser = snapshot.data()
                         console.log("roles", dbUser.roles)
-
-
                         //console.log({roles})
 
                         if(!dbUser.roles || dbUser.roles===undefined){
@@ -226,7 +224,6 @@ const firebaseConfig = {
                         
                         //console.log(authUser)
                         //console.log(dbUser)
-
                         next(authUser) //OH this was outside 'if', which meant authUser was never passed to withAuthorization
                     })
                     

@@ -17,7 +17,6 @@ const withAuthorization = condition => Component => { //withAuthorization(condit
                 },
                 () => {
                     this.props.history.push(ROUTES.SIGN_IN)
-                    console.log("not an admin")
                     console.log(this.props.firebase.user())
                 },
             )

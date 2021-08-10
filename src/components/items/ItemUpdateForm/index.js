@@ -17,9 +17,7 @@ class ItemUpdateForm extends Component {
     super(props)  
     
     const userID = this.props.firebase.currentUser().uid //well wait why do we need this? oh to edit, duh
-  
     this.itemID = this.props.match.params.itemID //takes itemID from the Route in App
-
 
     //console.log(cuid)
     this.state={
@@ -87,7 +85,6 @@ class ItemUpdateForm extends Component {
 
   onSumbit = event =>{
     const {lowerCase, imgAddFiles, imgAllUrls, item, userID } = this.state
-
     event.preventDefault()
 
     console.log('start of upload')
@@ -246,11 +243,14 @@ class ItemUpdateForm extends Component {
   }
 
   render(){
-    const {item, images, error, progress, imgAllUrls, indicies} = this.state;
+    const {item, images, error, progress, imgAllUrls, indicies, userID} = this.state;
     const colors = ["red", "orange", "yellow", "green", "blue", "purple", "tan", "white", "black"]
     const types = ["leotard", "dress", "pant"] //TODO: add something that will write a new type if it is not listed
 
-    return(
+    const condition = (userID == item.userID)
+
+    if(condition)
+      return(
         <div className="list-page">
       <h2> create listing </h2>
       
@@ -531,15 +531,18 @@ class ItemUpdateForm extends Component {
       <p>{progress}% uploaded</p>
     
       </div>
-      
-    )
+      )
+      else{
+        return(
+          <div>no access, please sign in</div> //security check?
+        )
+      }
+    
   }
 }
-const condition = authUser => !! authUser
+const condition = authUser => !!authUser
 
 export default compose(
   withFirebase,
-  withAuthorization(condition), //somehow this fixed my staying logged in error???
-)(ItemUpdateForm) //need to study compose
-
-//export default withFirebase(Form) //deosn't stay logged in
+  withAuthorization(condition), //passes condition to withAuth
+)(ItemUpdateForm) //curried withAuthorization(condition)(ItemUpdateForm)
