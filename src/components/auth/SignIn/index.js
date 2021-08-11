@@ -14,9 +14,7 @@ const SignInPage =() =>{
             <SignInForm />
             <PasswordForgetLink />
             <SignUpLink />
-            
         </div>
-        
     )
 }
 
@@ -45,7 +43,6 @@ class SignInFormBase extends Component {
             .catch(error => {
                 this.setState({error})
             })
-        
         event.preventDefault()
     }
 

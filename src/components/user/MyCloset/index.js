@@ -8,7 +8,6 @@ import {withAuthorization} from '../../auth/Session'
 import ItemPageLayout from '../../layouts/ItemPageLayout'
 
 import PasswordChangeForm from '../PasswordChange' 
-import ItemEdit from '../../items/ItemEdit'
 
 
 
@@ -103,12 +102,12 @@ class MyCloset extends Component {
       //this.props.firebase.users().off()//removes the listener??? or user().off()
   }
   render() {
-      const { user, loading, userItems, filtered } = this.state //passing userItems as a prop into ItemsList
- 
+      const { loading, userItems, filtered} = this.state //passing userItems as a prop into ItemsList
+      console.log(this.state,"B")
     return (
       <div>
+
         <h1>My Closet</h1>
-     
         
         {loading && <p>Loading...</p>}
         {/*  <PasswordChangeForm/> */}

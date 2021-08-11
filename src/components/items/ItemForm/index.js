@@ -3,8 +3,6 @@
 import React, {Component} from 'react'
 import {compose} from 'recompose'
 import uuid from 'react-uuid'
-import async from 'async'
-import each from 'async/each';
 
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
@@ -42,7 +40,7 @@ const INITIAL_STATE={
   progress: 0,
 }
 
-const loop = [1,2,3,4,5,6]
+
 
 class Form extends Component {
   constructor(props){
@@ -57,9 +55,7 @@ class Form extends Component {
 
   componentDidMount () {
     console.log(this.props.firebase.currentUser().uid)
-
     console.log(this.props.firebase.getDb())
-
     
   }
 
@@ -236,7 +232,7 @@ class Form extends Component {
                               <FontAwesomeIcon icon={faPlus}/>
                               <input
                               type="file"
-                              accept="image/*"
+                              accept="image/jpg, image/jpeg, image/png"
                               onChange ={this.handleImageAsFile}
                               />
                             </label>

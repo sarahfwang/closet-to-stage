@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Link} from 'react'
 
 import {withFirebase} from '../../firebase'
 import {withAuthorization} from '../../auth/Session'
@@ -49,7 +49,7 @@ class Item extends React.Component {
     }
 
     render(){
-        const {index, itemID, itemName, price, brand, size, description, fbUrls, show} = this.state
+        const {index, itemID, itemName, price, brand, size, description, fbUrls, userID, show} = this.state
 
         console.log("props", this.props)
         return(
@@ -62,8 +62,15 @@ class Item extends React.Component {
                         <h2>${price}</h2>
                         {brand? <p className="smol">{brand}</p>: <p className="smol">no brand</p>}
                         {size? <h3>size: {size}</h3>: <h3>no size</h3>}
-                        <button onClick = {this.handlePopUp}>Message</button>
-                        {show ? <PopupMessage itemID = {itemID} toUser = {this.props.authUser.uid}/> : <div></div>}
+                        {
+                            userID == this.props.authUser.uid ?
+                            <button className="primary-button magnus">See Messages</button>: 
+                            <button onClick = {this.handlePopUp} className="primary-button magnus">Message</button>  
+                        }
+                        {
+                            show ? 
+                            <PopupMessage itemID = {itemID} toUser = {this.props.authUser.uid}/> :  <div></div>
+                        }
                         <p>notes: {description}</p>
                     </div>
                 </div>

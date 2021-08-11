@@ -1,10 +1,9 @@
 .mc-cont{
     display: flex;
-    margin: 1rem;
 }
 
 .mc-shelf{
-    width: 40%;
+    width: 25rem;
     box-sizing: border-box;
     border: 1px var(--highlight-color) dashed;
 
@@ -13,23 +12,36 @@
 
 .item-on-shelf{
     border: 1px var(--highlight-color) dashed;
+    display: flex;
+    align-items: center;
+
+    .mc-name{
+        padding-left: 0.5rem;
+    }
 }
+
 .mc-shelf ul{
     list-style-type: none;
 }
 .pm-cont{
-    width: 60%;
+    flex-grow: 1;
+    //width: 100%;
+}
+
+.item-buyers-cont{
+    margin:0 0 0.5rem 0;
+}
+
+.individual{
+    display: flex;
+    align-items: center;
+}
+
+.mc-username{
+    padding-left: 0.5rem;
 }
 
 .mini-img-cont{
-    width: 2.5rem;
-    height: 2.5rem;
-}
-
-.mini-img{
-    border-radius: 50%;
-
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    padding: 0.8rem;
+    box-sizing: border-box;
 }

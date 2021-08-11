@@ -48,18 +48,20 @@ const firebaseConfig = {
             })
         }
 
-        updateItemBuyers = (value, ref) => {
+        updateItemBuyers = (toUser, msg, ref) => {
             //ref update only works if the doc exists
             //for messages db
 
             //message database
-            console.log("in firebase.js value", value, "ref", ref)
+            console.log("in firebase.js value", toUser, "ref", ref)
             ref.get().then(doc=>{
                 if(doc.exists) {
-                    ref.update({buyers: firebase.firestore.FieldValue.arrayUnion(value)})
+                    ref.update({buyers: firebase.firestore.FieldValue.arrayUnion(toUser)})
+                    
                 }
-                else{
-                    ref.set({buyers: [value]})
+                else{ 
+                    ref.set({buyers: [toUser]})
+                    
                 }
             })
         }
@@ -129,6 +131,7 @@ const firebaseConfig = {
             
         serverTimestamp = () => 
             firebase.firestore.FieldValue.serverTimestamp()
+
 
         doAddItem = (item) => (
            this.db.collection('items').add(item)

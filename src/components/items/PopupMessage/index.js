@@ -19,7 +19,7 @@ const PopupMessage = props => {
 
         //console.log("auth", props.authUser)
 
-        const toUser = props.toUser
+        const toUser = props.toUser //toUser contains authUser's id
         const itemID = props.itemID
 
         //console.log("itemID", itemID, "to", toUser, "from", fromUser)
@@ -43,11 +43,12 @@ const PopupMessage = props => {
     const onSubmit = (event) => {
         const toUser = props.toUser
         const itemID = props.itemID
-
         const itemRef = props.firebase.itemChats().doc(itemID)
+        const userRef = props.firebase.user()
 
         //array union--firebase.js
-        props.firebase.updateItemBuyers(toUser, itemRef)
+        //on item.js, this will only show if the toUser is not equal to the authUser
+        props.firebase.updateItemBuyers(toUser, msg, itemRef)//pass the full userID, userprofile, 
 
         //add the message within the user within the item 
         itemRef.collection(toUser).add({
@@ -59,6 +60,16 @@ const PopupMessage = props => {
             //clears for next message
             setMsg("")
         })
+
+        //add meta data about chatrooms 
+        itemRef.collection("buyerChatMeta").doc(toUser).set({ //buyerID represents chatroom
+            lastMsg: msg,
+            lastTime: props.firebase.serverTimestamp(),
+        })
+
+        //
+
+
        
         event.preventDefault()
     }
@@ -85,8 +96,8 @@ const PopupMessage = props => {
             </div>
 
             <div className = "type-message">
-                <input type="text" placeholder="talk here" onChange ={onChange} name ="msg" value={msg}/>
-                <button type="submit">send</button>
+                <input className="parvus" type="text" placeholder="talk here" onChange ={onChange} name ="msg" value={msg}/>
+                <button className="primary-button parvus send-message" type="submit">send</button>
             </div>
             
             </form>

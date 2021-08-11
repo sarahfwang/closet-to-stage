@@ -1,4 +1,9 @@
 /*each rem is 16px (rem is for root directory font)*/
+
+/*
+small padding is 0.8rem
+
+*/
 :root{
     --highlight-color: rgb(97, 150, 230);
     --mid-color: rgb(252, 249, 244);
@@ -79,31 +84,30 @@ body {
     font-weight: bold;
 }
 
-/* .measurements {
-    display: flex;
-    margin: 1.8rem 0rem;
-    justify-content: space-around;
-    text-align: center;
-    align-items: center;
-}
-.measurements .first{
-    display: inline-block;
-    height: 1.875rem;
-    width: 30px;
-    background-color: red;
-    overflow-wrap: break-word
+.primary-button{
+    background-color: var(--highlight-color);
+    border: none;
+    border-radius: 0.5rem;
+    color: white;
+    cursor: pointer;
+    display: block;
+    padding: 0.5rem;
 }
 
-.measurements .second {
-    display: inline-block;
-    height: 3.125rem;
-    width: 50px;
-    background-color: yellow;
+.secondary-button{
+    background-color: rgba(10,10,10,0);
+    border: 0.1rem var(--highlight-color) solid;
+    border-radius: 0.125rem;
+    color:var(--highlight-color);
+    cursor: pointer;
+    display: block;
+    padding: 0.5rem;
 }
 
-.measurements .third {
-    display: inline-block;
-    height: 6.6rem;
-    width: 100px;
-    background-color: blue;
-} */
+.mini-img{
+    border-radius: 50%;
+
+    width: 2.5rem;
+    height: 2.5rem;
+    object-fit: cover;
+}

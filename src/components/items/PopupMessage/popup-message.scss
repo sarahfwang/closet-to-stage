@@ -80,14 +80,23 @@
 }
 
 .type-message{
-    display: flex;
-    width: 100%;
-    float: right;
-
-    position: absolute;
+    
     bottom: 0;
-
+    display: flex;
+    float: right;
+    padding: 0.5rem;
+    position: absolute;
+    width: 100%;
+    
     input{
+        border: 0.1rem var(--highlight-color) solid;
+        border-radius: 1rem;
+        padding: 0.5rem;
         width: 100%;
     }
 }
+
+.send-message{
+    margin-left: 0.5rem;
+}
+
