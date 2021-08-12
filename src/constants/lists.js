@@ -1,2 +1,2 @@
 export const sizes = []
-export const types = []
+export const TYPES = ["shoes leotards jumpsuits pants tops"]

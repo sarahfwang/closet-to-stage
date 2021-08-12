@@ -1,11 +1,9 @@
-import React from 'react'
-import {useLocation, withRouter} from 'react-router-dom'
+import React from 'react' //TODO: add rerouting to new link on filter click?
 
 import {withFirebase} from '../../firebase'
 import './test-filter.scss'
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import { fas, faUser } from '@fortawesome/free-regular-svg-icons'
 import { faCheck } from '@fortawesome/free-solid-svg-icons'
 
 class TestFilter extends React.Component {

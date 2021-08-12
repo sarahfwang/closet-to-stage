@@ -11,6 +11,8 @@ import {  } from '@fortawesome/free-regular-svg-icons'
 
 import { withFirebase } from '../../firebase';
 import {withAuthorization} from '../../auth/Session'
+import * as LISTS from '../../../constants/lists'
+
 
 import './itemform.scss'
 //TODO: HANDLE ERRORS
@@ -200,7 +202,7 @@ class Form extends Component {
     const colors = ["red", "orange", "yellow", "green", "blue", "purple", "tan", "white", "black"]
     
 
-    const types = ["leotard", "dress", "pant"] //TODO: add something that will write a new type if it is not listed
+    const types = LISTS.TYPES //TODO: add something that will write a new type if it is not listed
 
     return(
       <div className="list-page">
@@ -432,6 +434,7 @@ class Form extends Component {
                   autoComplete="off"
                 />
                 <datalist id="styles">
+                  {}
                     <option>contemporary</option>
                     <option>ballet</option>
                     <option>jazz</option>
