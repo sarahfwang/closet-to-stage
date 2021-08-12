@@ -1,47 +1,46 @@
-.mc-cont{
+.mc-cont{ //horizontal layout
     display: flex;
+    --border-test: 1px var(--highlight-color) dashed;
 }
 
 .mc-shelf{
-    width: 25rem;
     box-sizing: border-box;
-    border: 1px var(--highlight-color) dashed;
-
+    border: var(--border-test);
     overflow-wrap: break-word;
+    width: 25rem;
+
+    ul{
+        list-style-type: none;
+    }
 }
 
-.item-on-shelf{
-    border: 1px var(--highlight-color) dashed;
-    display: flex;
+.mc-item{ //div holds item contents horizontally
     align-items: center;
+    border: var(--border-test);
+    display: flex;
 
     .mc-name{
         padding-left: 0.5rem;
     }
 }
 
-.mc-shelf ul{
-    list-style-type: none;
-}
-.pm-cont{
-    flex-grow: 1;
-    //width: 100%;
-}
-
-.item-buyers-cont{
-    margin:0 0 0.5rem 0;
-}
-
-.individual{
-    display: flex;
+.mc-buyer{
     align-items: center;
+    border: var(--border-test);
+    display: flex;
 }
 
-.mc-username{
-    padding-left: 0.5rem;
+.pm-cont{
+    flex-grow: 1;//makes popup-messages fill width of screen
 }
 
-.mini-img-cont{
-    padding: 0.8rem;
-    box-sizing: border-box;
+.mc-buyers-list{
+    margin:0 0 0 0;
 }
+
+.mc-want-list{
+    margin:0;
+    padding:0; //gets rid of list default padding
+    
+}
+

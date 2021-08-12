@@ -166,47 +166,46 @@ class MessageConsole extends React.Component{
                 <div className="mc-cont page">
                     <div className="mc-shelf">
                     <h2>messages for {this.props.authUser.username}</h2>
-                        <div>
-                            <div className="magnus">clotheshanger</div>
+                        <div className="magnus">clotheshanger</div>
+                        <div className="mc-section">
                             {
-                            
-                            Object.entries(buyers).map(([itemID, {buyerIDs, buyerProfiles, buyerUsernames, coverImgURL, itemName}]) =>
-                                <div key={itemID}> 
-                                    <div className = "item-on-shelf">
-                                        <div className="mini-img-cont" onClick={() => this.show(itemID)}>
+                                Object.entries(buyers).map(([itemID, {buyerIDs, buyerProfiles, buyerUsernames, coverImgURL, itemName}]) =>
+                                    <div key={itemID}> 
+                                        <div className = "mc-item" onClick={() => this.show(itemID)}>
                                             <img className="mini-img" src={coverImgURL}/>
+                                            <div className="parvus mc-name">{itemName}</div>
                                         </div>
-                                        <div className="parvus mc-name">{itemName}</div>
+                                        
+                                        <ul id={`give-${itemID}`} style = {showStyle} className="mc-buyers-list">
+                                            {buyerIDs.map((id, index) => //list of buyers for closet item
+                                                <li key={id} onClick = {() => this.setItem(itemID, id)} style = {{cursor: "pointer"}} className="mc-buyer">
+                                                    <img className="mini-img" src={buyerProfiles[index]}/>
+                                                    <div className="parvus mc-name">{buyerUsernames[index]}</div>
+                                                </li>
+                                            )}
+                                        </ul>
                                     </div>
-                                    
-                                    <ul id={`give-${itemID}`} style = {showStyle} className="item-buyers-cont">
-                                        {buyerIDs.map((id, index) => //list of buyers for closet item
-                                            <li key={id} onClick = {() => this.setItem(itemID, id)} style = {{cursor: "pointer"}} className="item-on-shelf">
-                                                <img className="mini-img" src={buyerProfiles[index]}/>
-                                                <div className="parvus mc-name">{buyerUsernames[index]}</div>
-                                            </li>
-                                        )}
-                                    </ul>
-                                </div>
-
-                            
-                            )
-                             //if the user does not receive messages about their items  
-                        }
+                                )
+                                //if the user does not receive messages about their items  TODO
+                            }
                         </div>
-                        <div>
-                            <div className="magnus">want:</div>
-                                <ul>
-                                    {want? Object.entries(want).map(([itemID, {coverImg, itemName}])=>
-                                    <li key = {itemID} onClick = {() => this.setItem(itemID, this.props.authUser.uid)} style = {{cursor: "pointer"}} className="item-on-shelf">
-                                        <img className="mini-img" src={coverImg}/>
-                                        <div className="parvus mc-name" >{itemName}</div>
-                                    </li>
-                                    ):
-                                    <div></div>}
-                                
-                                </ul>
-                            </div>
+               
+                 
+                        <div className="magnus">want:</div>
+                        <div className="mc-section">
+                            <ul className="mc-want-list">
+                                {want? Object.entries(want).map(([itemID, {coverImg, itemName}])=>
+                                <li key = {itemID} onClick = {() => this.setItem(itemID, this.props.authUser.uid)} style = {{cursor: "pointer"}} className="mc-item">
+                                    <img className="mini-img" src={coverImg}/>
+                                    <div className="parvus mc-name" >{itemName}</div>
+                                </li>
+                                ):
+                                <div></div>}
+                            
+                            </ul>
+                        </div>
+                        
+                       
                         </div>
                     
                     {/*renders message box on right side if an item has the user, honestly don't need conditional
