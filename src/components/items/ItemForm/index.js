@@ -94,8 +94,14 @@ class Form extends Component {
     else{//everything is good
       //after putting item in db, get id of item
       //=> place imgs at id in storage
-      this.props.firebase.doAddItem({...lowerCase, userID, isListed: true, fbUrls:[]})
+      const item = {...lowerCase, userID, isListed: true, fbUrls:[]}
+      this.props.firebase.doAddItem(item)
       .then(doc => {
+        console.log(item, "item")
+        //const data = doc.data()
+        //this.props.firebase.doAddNote(data, doc.id, "items")
+        this.props.firebase.doAddNote(item, doc.id, "items")
+
         //uploadImage(): imgs => firebase storage
         //uses fb storage urls => fb items db
         this.uploadImage(doc.id)
@@ -105,6 +111,7 @@ class Form extends Component {
 
         this.props.firebase.updateArrayUnion(userRef, "userItems", doc.id) //another way
       })
+      
     } 
     
   }

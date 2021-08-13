@@ -3,6 +3,12 @@ import firebase from 'firebase/app'; //what's the diff btwn this and 'app'
 import 'firebase/auth' //is this right? they used this.auth instead
 import 'firebase/firestore'
 import 'firebase/storage'
+import 'firebase/functions'
+//import 'firebase/admin'
+import algoliasearch from "algoliasearch"
+
+
+const client = algoliasearch('YM62ZOQQ5L', 'ab7c1c24fa069b15221969369b1d63fd');//TODO: make private
 
 
 
@@ -21,13 +27,16 @@ const firebaseConfig = {
   
   class Firebase {
       constructor(){
-        firebase.initializeApp(firebaseConfig) //app.init
-        
+       firebase.initializeApp(firebaseConfig) //app.init
+        //firebase.admin().initializeApp()
         
         this.auth = firebase.auth() //app.auth()
         this.db = firebase.firestore() //app.database
         this.storage = firebase.storage()
+        this.functions = firebase.functions()
 
+
+        
       }
         //Images in storage
         storageRef = () => (
@@ -38,6 +47,15 @@ const firebaseConfig = {
             return(
                 this.storage.ref(`/images/${name}`).put(file)
             )
+        }
+
+        doAddNote = (doc, objectID, indexName) => {
+            console.log("doAddNote")
+
+            doc.objectID = objectID
+            console.log(doc)
+            const index = client.initIndex(indexName)
+            index.saveObject(doc)
         }
 
         //array union functions
@@ -258,11 +276,27 @@ const firebaseConfig = {
 
         arrayUnion = (add) =>
             this.firestore.FieldValue.arrayUnion(add)
-            
-        
 
         docPath = () =>
             firebase.firestore.FieldPath.documentId()
+
+        // onNoteCreated = (itemID) => {
+        //     console.log("hellow")
+
+        //     this.functions.firebase.document(`items/${itemID}`).onCreate((snap,context) => {
+        //         const note = snap.data()
+        //         console.log("note", note)
+
+        //         note.objectID = context.params.doSignInWithEmailAndPassword
+                
+        //         const client = algoliasearch('YM62ZOQQ5L', 'ab7c1c24fa069b15221969369b1d63fd');//TODO: make private
+
+        //         const index = client.initIndex('items')
+        //         return index.saveObject(note)
+        //     })
+        // }
+
+
             
         
   }

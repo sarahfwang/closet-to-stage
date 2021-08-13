@@ -1,4 +1,5 @@
 import React from 'react' //TODO: add rerouting to new link on filter click?
+import {Link} from 'react-router-dom'
 
 import {withFirebase} from '../../firebase'
 import './test-filter.scss'
@@ -125,6 +126,17 @@ class TestFilter extends React.Component {
                                 </label>
                             </div>
                             )}
+                    </div>
+
+                    <div>
+                        <Link
+                            to={{
+                                pathname:"/courses",
+                                search:"?sort=name?add=item",
+                                hash:"#the-hash",
+                                state: {fromhere: true}
+                            }}
+                        >Take me there</Link>
                     </div>
                 
                     {/* color */}
