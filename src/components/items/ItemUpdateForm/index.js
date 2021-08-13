@@ -99,8 +99,10 @@ class ItemUpdateForm extends Component {
     else{
       const itemRef = this.props.firebase.item(this.itemID)
 
+      //updates algolia, need itemID???
+      this.props.firebase.doUpdateNote(item, this.itemID, "items")
+
       this.props.firebase.item(this.itemID).update(item)
-      
       .then(() => {
         //doc holds the item's info (no image urls yet)
         //uploadImage uploads imgs into firebase storage
@@ -303,9 +305,7 @@ class ItemUpdateForm extends Component {
                       </div>
                     </div>)
                   ))}
-
               </div>
-
           </div>
             
 

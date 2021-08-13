@@ -16,9 +16,12 @@ const ItemCard = ({item, handleRoute, ...props}) => {
     const onDelete = event => {//should they be allowed to delete?
         const itemID = item.id
         
+        //deleted from firebase
         props.firebase.doDeleteItem(itemID, props.auID)
 
-        event.preventDefault();
+        //deletes from algolia
+        props.firebase.doDeleteNote(itemID, "items")
+
     }
 
     //if we are in "my closet" with an authUser, give user access to edit

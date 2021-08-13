@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 
 import {withFirebase} from '../../firebase' 
 import ItemPageLayout from '../../layouts/ItemPageLayout'
@@ -16,7 +17,8 @@ class ItemPage extends React.Component{
            loading:"false",
         }
 
-        console.log("itempage", this.state)
+        console.log("itemPage state", this.state)
+        console.log("itemPage loc", this.props.location)
     }
 
     handleFilterResultsChange = (filtered) =>{
@@ -29,6 +31,9 @@ class ItemPage extends React.Component{
    
 
     componentDidMount= () => {
+        const hits = this.props.location.hits
+        console.log("compodidmount", hits)
+
         this.props.firebase.items()
             .where('isListed', '==', true)
             .get()
@@ -39,10 +44,16 @@ class ItemPage extends React.Component{
                     tempList.push({id: doc.id, ...doc.data()})
                 })
 
-                this.setState({
-                    items: tempList,
-                    filtered: tempList,
-                })
+                if(hits){
+                    this.setState({
+                        items: tempList,
+                        filtered: hits,
+                    })}
+                else{
+                    this.setState({
+                        items: tempList,
+                        filtered: tempList,
+                    })}
         })  
             
     }

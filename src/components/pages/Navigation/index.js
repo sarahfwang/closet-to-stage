@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {} from '@fortawesome/free-solid-svg-icons'
-import { far, faUser, faComments } from '@fortawesome/free-regular-svg-icons'
+import {faUser, faComments } from '@fortawesome/free-regular-svg-icons'
  
 import SignOutButton from '../../auth/SignOut'
+import SearchBar from '../../items/SearchBar'
 import * as ROUTES from '../../../constants/routes';
 
 import {AuthUserContext} from '../../auth/Session'
@@ -66,7 +66,7 @@ const NavigationAuth = () =>( //use parentheses not bracket dumb b
           <SignOutButton />
         </li>
         <li className="search">
-          <input type="search"/>
+          <SearchBar />
         </li>
 
       </ul>
@@ -88,8 +88,8 @@ const NavigationNonAuth = () =>(
         <li>
           <Link to={ROUTES.MEN}>Men</Link>
         </li>
-        <li className="sell-button">
-          <Link to="/itemform">Sell</Link>
+        <li className="list-button">
+          <Link to={ROUTES.LIST}>List</Link>
         </li>
       </ul>
     </div>
@@ -105,8 +105,8 @@ const NavigationNonAuth = () =>(
           <Link to={ROUTES.SIGN_IN}>Log In</Link>
         </li>
         
-        <li>
-          <input type="search"/>
+        <li className="search">
+          <SearchBar />
         </li>
       </ul>
         

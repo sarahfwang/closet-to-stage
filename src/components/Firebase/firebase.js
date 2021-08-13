@@ -49,6 +49,7 @@ const firebaseConfig = {
             )
         }
 
+        //takes in object, an id (same as firestore db id), and 
         doAddNote = (doc, objectID, indexName) => {
             console.log("doAddNote")
 
@@ -56,6 +57,22 @@ const firebaseConfig = {
             console.log(doc)
             const index = client.initIndex(indexName)
             index.saveObject(doc)
+        }
+
+        doUpdateNote = (doc, objectID, indexName) => {
+            console.log("doUpdateNote")
+
+            doc.objectID = objectID //need objectID for algolia to identify!
+            const index = client.initIndex(indexName)
+            index.partialUpdateObject(doc)
+        }
+
+        //delete only needs ObjectID and index
+        doDeleteNote = (objectID, indexName) => {
+            console.log("doDeleteNote")
+
+            const index = client.initIndex(indexName)
+            index.deleteObject(objectID)
         }
 
         //array union functions
@@ -189,9 +206,6 @@ const firebaseConfig = {
                 itemRef.delete() //delete from items
                 this.db.collection('itemChats').doc(itemID).delete() //delete from chats
             })
-
-           
-
         }
 
         doChangeListing = (itemID) => {
@@ -280,25 +294,14 @@ const firebaseConfig = {
         docPath = () =>
             firebase.firestore.FieldPath.documentId()
 
-        // onNoteCreated = (itemID) => {
-        //     console.log("hellow")
+        doBasicSearch = (queryString, indexName) => {
+            const index = client.initIndex(indexName)
 
-        //     this.functions.firebase.document(`items/${itemID}`).onCreate((snap,context) => {
-        //         const note = snap.data()
-        //         console.log("note", note)
+            return(
+                index.search(queryString)
+            )
+        }
 
-        //         note.objectID = context.params.doSignInWithEmailAndPassword
-                
-        //         const client = algoliasearch('YM62ZOQQ5L', 'ab7c1c24fa069b15221969369b1d63fd');//TODO: make private
-
-        //         const index = client.initIndex('items')
-        //         return index.saveObject(note)
-        //     })
-        // }
-
-
-            
-        
   }
 
   export default Firebase

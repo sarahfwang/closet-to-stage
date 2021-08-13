@@ -1,14 +1,88 @@
-import React from 'react'
+import React, {useState} from 'react'
+import {Redirect} from 'react-router-dom'
+//REACT ROUTER STATES ARE PASSED TO LOCATION OHHHHHHHHHHHH
 
-const SearchBar = () => {
-    return(
-        <div>
-            <input
-                type="text"
-                placeholder="no search"
-            />
-        </div>
-    )
+import {withFirebase} from '../../firebase'
+
+class SearchBar extends React.Component{
+    constructor(props){
+        super(props)
+
+        this.state = {
+            search:"",
+            hits:[],
+            show: false,
+        }
+
+        console.log(this.state)
+
+    }
+
+    onChange = (e) => {
+        this.setState({
+            search: e.target.value
+        }, console.log("search", this.state.search))
+    }
+
+    onSubmit = (e) => {
+        const search = this.state.search
+        // console.log("search before submit", search)
+
+        // const hits = this.props.firebase.doBasicSearch(search, "items")
+        // console.log("hits!!", hits)
+        // this.setState({
+        //     hits,
+        // }, () => console.log(this.state.hits))
+
+        // e.preventDefault()
+
+        this.props.firebase.doBasicSearch(search, "items").then(({hits})=> {
+            this.setState({
+                hits,
+                show: true,
+            }, () => console.log(this.state))
+        })
+
+        e.preventDefault()
+    }
+
+    render(){
+        const {search, hits, show} = this.state
+        return(
+            show ? 
+            <div>
+                <Redirect to={{
+                pathname: "/women",
+                state: {hits},
+                }}/>
+                <form onSubmit={this.onSubmit}>
+                        <input
+                            type="search"
+                            value = {search}
+                            onChange = {this.onChange}
+                            name="q"
+                            placeholder="search"
+                            aria-label="search for an item here"
+                            spellCheck="true"
+                        />
+                </form>
+            </div>
+            :
+
+            <form onSubmit={this.onSubmit}>
+                    <input
+                        type="search"
+                        value = {search}
+                        onChange = {this.onChange}
+                        name="q"
+                        placeholder="search"
+                        aria-label="search for an item here"
+                        spellCheck="true"
+                    />
+            </form>
+
+        )
+    }
 }
 
-export default SearchBar
+export default withFirebase(SearchBar)

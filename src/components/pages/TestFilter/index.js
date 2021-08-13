@@ -17,7 +17,7 @@ class TestFilter extends React.Component {
             color:{Red:false, Green:false},
         }
         
-        console.log(this.props.loc)
+        console.log("testfilter loc", this.props.loc)
 
     }
 

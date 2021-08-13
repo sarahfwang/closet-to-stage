@@ -98,8 +98,8 @@ class Form extends Component {
       this.props.firebase.doAddItem(item)
       .then(doc => {
         console.log(item, "item")
-        //const data = doc.data()
-        //this.props.firebase.doAddNote(data, doc.id, "items")
+      
+        //put in algolia
         this.props.firebase.doAddNote(item, doc.id, "items")
 
         //uploadImage(): imgs => firebase storage
