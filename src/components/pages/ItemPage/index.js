@@ -11,14 +11,20 @@ class ItemPage extends React.Component{
     constructor(props){
         super(props)
 
-        this.state = {
-           items:[],
-           filtered:[],
-           loading:"false",
-        }
-
         console.log("itemPage state", this.state)
-        console.log("itemPage loc", this.props.location)
+        console.log("itemPage loc hits", this.props.location)
+
+        
+        this.state = {
+            items:[],
+            filtered: [],
+            loading:"false",
+         }
+       
+
+        //console.log("state", this.state)
+
+
     }
 
     handleFilterResultsChange = (filtered) =>{
@@ -31,31 +37,36 @@ class ItemPage extends React.Component{
    
 
     componentDidMount= () => {
-        const hits = this.props.location.hits
-        console.log("compodidmount", hits)
+        let hits = []
 
-        this.props.firebase.items()
-            .where('isListed', '==', true)
-            .get()
-            .then(snapshot => {
-                let tempList = [] 
+        if(this.props.location.state){
+            if(this.props.location.state.hits){ //if conjured with a search
+                hits = this.props.location.state.hits
 
-                snapshot.forEach(doc => {
-                    tempList.push({id: doc.id, ...doc.data()})
+                this.setState({
+                    items: hits,
+                    filtered: hits,
+                }, ()=>console.log("inside state", this.state))
+            }
+        }
+        else{
+            this.props.firebase.items()
+        .where('isListed', '==', true)
+        .get()
+        .then(snapshot => {
+            let tempList = [] 
+
+            snapshot.forEach(doc => {
+                tempList.push({id: doc.id, ...doc.data()})
+            })
+
+            this.setState({
+                items: tempList,
+                filtered: tempList,
                 })
+            })  
 
-                if(hits){
-                    this.setState({
-                        items: tempList,
-                        filtered: hits,
-                    })}
-                else{
-                    this.setState({
-                        items: tempList,
-                        filtered: tempList,
-                    })}
-        })  
-            
+        }
     }
 
     //cat is spec

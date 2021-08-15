@@ -26,16 +26,7 @@ class SearchBar extends React.Component{
 
     onSubmit = (e) => {
         const search = this.state.search
-        // console.log("search before submit", search)
-
-        // const hits = this.props.firebase.doBasicSearch(search, "items")
-        // console.log("hits!!", hits)
-        // this.setState({
-        //     hits,
-        // }, () => console.log(this.state.hits))
-
-        // e.preventDefault()
-
+       
         this.props.firebase.doBasicSearch(search, "items").then(({hits})=> {
             this.setState({
                 hits,

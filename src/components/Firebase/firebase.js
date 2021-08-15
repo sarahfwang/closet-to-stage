@@ -75,6 +75,34 @@ const firebaseConfig = {
             index.deleteObject(objectID)
         }
 
+        doAddArrayNote = (value, arrayName, objectID, indexName) => {
+
+            const index = client.initIndex(indexName)
+            console.log("doAddArrayNote")
+
+            return(index.partialUpdateObject({
+                [arrayName]:{
+                    _operation: 'AddUnique',
+                    value: value,
+                },
+                objectID: objectID,
+            }))
+
+        }
+
+        // doAddArrayNote = (value, arrayName, objectID, indexName) => {
+        //     console.log("doAddArrayNote")
+
+        //     const index = client.initIndex(indexName)
+        //     return(index.partialUpdateObject({
+        //         [arrayName]:{
+        //             _operation: "AddUnique",
+        //             value,
+        //         },
+        //         objectID,
+        //     }))
+        // }
+
         //array union functions
 
         updatefbUrls = (value, ref) => {

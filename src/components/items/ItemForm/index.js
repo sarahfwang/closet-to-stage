@@ -104,6 +104,7 @@ class Form extends Component {
 
         //uploadImage(): imgs => firebase storage
         //uses fb storage urls => fb items db
+        //update fbUrls => algolia
         this.uploadImage(doc.id)
 
         const cuid = this.props.authUser.uid
@@ -117,7 +118,7 @@ class Form extends Component {
   }
 
 
-
+  //takes in itemID
   uploadImage = id =>{
     //need id for storing
     const {userID, imgFiles} = this.state
@@ -150,6 +151,9 @@ class Form extends Component {
               .then(downloadUrl => {//update fbUrls (in user)
                 const itemRef = this.props.firebase.item(id)
                 this.props.firebase.updatefbUrls(downloadUrl, itemRef)
+                this.props.firebase.doAddArrayNote(downloadUrl, "fbUrls", id, "items")
+
+
                 console.log("downloadURL", downloadUrl)
               })
               .then(() => {//update storage name loc (in user)
