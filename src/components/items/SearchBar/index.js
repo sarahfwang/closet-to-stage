@@ -26,14 +26,12 @@ class SearchBar extends React.Component{
 
     onSubmit = (e) => {
         const search = this.state.search
-       
-        this.props.firebase.doBasicSearch(search, "items").then(({hits})=> {
-            this.setState({
-                hits,
-                show: true,
-            }, () => console.log(this.state))
-        })
 
+        this.props.history.push({
+            pathname: '/women',
+            search: `?search=${search}`
+        })
+       
         e.preventDefault()
     }
 

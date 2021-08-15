@@ -322,6 +322,8 @@ const firebaseConfig = {
         docPath = () =>
             firebase.firestore.FieldPath.documentId()
 
+        //takes in a string to search for 
+        //and Algolia index's name
         doBasicSearch = (queryString, indexName) => {
             const index = client.initIndex(indexName)
 
