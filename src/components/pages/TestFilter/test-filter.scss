@@ -87,20 +87,6 @@
 .selector-wrapper input:checked + .checkmark > .newcheckmark{
     opacity: 1;
 }
-/*
-.selector-wrapper input:checked + .checkmark:before{
-    content: "\2714 ";
-
-    display: flex;
-    justify-content: center;
-    align-self: center;
-
-    position: relative;
-    bottom: 0.125rem;
-
-    color: rgb(30,30,30);
-    font-weight: bold;
-} */
 
 .selector-wrapper:hover > .swatch-wrapper{
     border: 1px solid grey;

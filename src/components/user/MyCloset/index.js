@@ -95,7 +95,12 @@ class MyCloset extends Component {
   }
   handleFilterResultsChange = (filtered) =>{
     this.setState({filtered})
-} 
+  } 
+
+  handleRoute = (route) => {//TODO make it go to update-item/itemID 
+    this.props.history.push(route)
+  }
+
   componentWillUnmount() {
       //this.unsubscribeUser()
      
@@ -103,6 +108,7 @@ class MyCloset extends Component {
   }
   render() {
       const { loading, userItems, filtered} = this.state //passing userItems as a prop into ItemsList
+
       console.log(this.state,"B")
     return (
       <div>
@@ -112,7 +118,7 @@ class MyCloset extends Component {
         {loading && <p>Loading...</p>}
         {/*  <PasswordChangeForm/> */}
 
-        <ItemPageLayout items = {userItems} filtered = {filtered} handleFilterResultsChange={this.handleFilterResultsChange} handleRoute={()=>{}} account = {true} auID = {this.props.authUser.uid}/>
+        <ItemPageLayout items = {userItems} filtered = {filtered} handleFilterResultsChange={this.handleFilterResultsChange} handleRoute={this.handleRoute} account = {true} auID = {this.props.authUser.uid}/>
            
       </div>
     );

@@ -1,45 +1,88 @@
 import React from 'react' //TODO: add rerouting to new link on filter click?
 import {Link} from 'react-router-dom'
+import queryString from 'query-string'
 
 import {withFirebase} from '../../firebase'
 import './test-filter.scss'
+import * as LISTS from '../../../constants/lists'
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import { faCheck } from '@fortawesome/free-solid-svg-icons'
+
 
 class TestFilter extends React.Component {
     constructor(props){
         super(props)
 
+        // state will represent the queryStringobject to stringify
         this.state ={
-            type:{Top:false, Bottom:false, },
-            style:{Ballet:false, Jazz:false },
-            color:{Red:false, Green:false},
+            type:[],
+            style:[],
+            //color:"",
         }
-        
-        console.log("testfilter loc", this.props.loc)
-
     }
 
     
     onClick = (cat) => (e) => {
-        const id = e.target.id
-        const name = e.target.name
-
+        const id = e.target.id //e.g. type
+        const name = e.target.name //e.g. type
         const checkbox = document.getElementById(id)
+        const location = this.props.location
 
-        console.log("location", this.props.location)
+        console.log("location", location)
+        console.log("name", name)
+        console.log("cat", cat)
+        console.log(this.state[cat])
 
-        //changes to true or false, depending on checkmark
-        this.setState({
-            [cat]:{
-                ...this.state[cat],
-                [name]: checkbox.checked
-            }
-        }, this.updateItemsList)
+
+        if(checkbox.checked){
+            this.setState(state => {
+                const newList = state[cat].concat(name)
+
+                return({
+                    [cat]: newList,
+                })
+            }, ()=> {
+                console.log("state", this.state)
+                this.stringify()
+            })
+        }
+        else{
+            this.setState(state => {
+                const indexSpec = state[cat].indexOf(name)
+                let newList = state[cat]
+                newList.splice(indexSpec, 1) //splice returns array of those taken out
+
+                return({
+                    [cat]: newList
+                })
+            }, ()=> {
+                console.log("state", this.state)
+                this.stringify()
+            })
+            
+
+        }
     }
 
-    updateItemsList = () => {
+    stringify = () => {
+        /* Object.entries(this.state).forEach(([cat, specArr])=> {
+            console.log("key", cat, "value", specArr)
+        }) */
+
+        //TODO: GOTTA RESURFACE STATE as in, make state part of the itemPage
+
+        console.log(this.state)
+        const newQueryString = queryString.stringify(this.state, {arrayFormat: 'comma'})
+
+        console.log(newQueryString)
+        //this.props.history.push(`/women/?${newQueryString}`)
+        this.props.handleRoute(`/women/?${newQueryString}`) //TODO insetad of "women", make general
+        
+        
+    }
+
+    /* updateItemsList = () => {
         let promises = []
         let temp = this.props.items
 
@@ -83,6 +126,39 @@ class TestFilter extends React.Component {
             this.props.handleSearchResultsChange(temp)
             console.log(temp)
         })
+    } */
+
+    //DONT USE
+    handleFilter = (location) => ([cat,spec]) =>{
+        console.log("state", this.state)
+        //console.log("location", location)
+        console.log("cat", cat)
+        console.log("spec", spec)
+
+        const parsed = queryString.parse(location.search)
+        console.log("parsed", parsed)
+
+        if(this.state[cat].indexOf(spec) > 0){//already exists
+            this.setState(state => {
+                const indexSpec = state[cat].indexOf(spec)
+                const newCatArr = state[cat].splice(indexSpec, 1)
+
+                return({
+                    [cat]: newCatArr,
+                })
+            })
+        }
+        else{
+            this.setState(state => {
+                const newCatArr = state[cat].concat(spec)
+
+            return({
+                [cat]: newCatArr,
+            })
+
+            })
+        }
+        return(`${location.pathname}?sort=name`)
     }
 
     render(){
@@ -93,7 +169,7 @@ class TestFilter extends React.Component {
                 <div className="category">
                     <h3 className="category-title">Women</h3>
                 </div>
-    
+
                 <div className="filter-wrapper">
                     {/* with more categories, map keys of state */}
 
@@ -101,31 +177,41 @@ class TestFilter extends React.Component {
                     <div className="filter-cat">
                         <h4 className="filter-cat-title">Type</h4>
     
-                        {Object.keys(type).map(prop => 
+                        {/* {Object.keys(type).map(prop => 
                             <div key={prop}>
-                                <label className="selector-wrapper"> {/*label allows full click */}
+                                <label className="selector-wrapper"> 
                                     <input id={prop} name={prop} type="checkbox" onClick={this.onClick("type")}/>
                                     <span className="checkmark"><FontAwesomeIcon className = "newcheckmark" icon = {faCheck}/></span>
                                     <span className="smol">{prop}</span>
                                 </label>
                             </div>
-                            )}
+                            )} */}
+
+                        {LISTS.TYPES.map(type => 
+                            <label className="selector-wrapper" key={type} > {/*label allows full click */}
+                                <input id={type} name={type} type="checkbox" onClick={this.onClick("type")}/>
+                                <span className="checkmark"><FontAwesomeIcon className = "newcheckmark" icon = {faCheck}/></span>
+                                <span className="smol">{type}</span>
+                                {/* <span className="checkmark"><FontAwesomeIcon className = "newcheckmark" icon = {faCheck}/></span>
+                                <Link name={type} className="smol"  to={(location) => this.handleFilter(location)(["type", type])}>{type}</Link> */}
+                            </label>
+                        )}
                         
                     </div>
     
                     {/* dance style */}
                     <div className="filter-cat">
                         <h4 className="filter-cat-title">Style</h4>
+                        {LISTS.STYLES.map(style => 
+                            <label className="selector-wrapper" key={style}> {/*label allows full click */}
+                                <input id={style} name={style} type="checkbox" onClick={this.onClick("style")}/>
+                                <span className="checkmark"><FontAwesomeIcon className = "newcheckmark" icon = {faCheck}/></span>
+                                <span className="smol">{style}</span>
+                            </label>
+
+                        )}
     
-                        {Object.keys(style).map(prop => 
-                            <div key={prop}>
-                                <label className="selector-wrapper"> {/*label allows full click */}
-                                <input id={prop} name={prop} type="checkbox" onClick={this.onClick("style")}/>
-                                    <span className="checkmark"><FontAwesomeIcon className = "newcheckmark" icon = {faCheck}/></span>
-                                    <span className="smol">{prop}</span>
-                                </label>
-                            </div>
-                            )}
+                       
                     </div>
 
                     <div>
@@ -140,22 +226,23 @@ class TestFilter extends React.Component {
                     </div>
                 
                     {/* color */}
-                    <div className="filter-cat"> 
+                    {/* <div className="filter-cat"> 
                         <h4 className="filter-cat-title">Color</h4>
-                        {Object.keys(color).map(prop =>
-                            <div key={prop}>
-                                <label className="selector-wrapper">
-                                    <input type="checkbox" />
-                                    <div className="swatch-wrapper">
-                                        <div className={`swatch-${prop}`}></div>
-                                    </div>
-                                    <div className="swatch-label">
-                                    <span className="smol">{prop}</span>
-                                    </div>
-                                </label>
-                            </div>
-                            )}
-                    </div>
+
+                        
+                        {LISTS.COLORS.map(color => 
+                            <label className="selector-wrapper" key={color}>
+                                <input type="checkbox" />
+                                <div className="swatch-wrapper">
+                                    <div className={`swatch-${color}`}></div>
+                                </div>
+                                <div className="swatch-label">
+                                    <span className="smol">{color}</span>
+                                </div>
+                            </label>
+                        )}
+                    </div> */}
+
                 </div>
         
             </div>

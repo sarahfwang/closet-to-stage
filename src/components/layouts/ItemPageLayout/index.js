@@ -5,14 +5,14 @@ import ItemCard from '../../items/ItemCard'
 
 import './item-page-layout.scss'
 
-const ItemPageLayout = ({items, filtered, handleFilterResultsChange, handleRoute, loc, auID, ...props}) => {
+const ItemPageLayout = ({items, filtered, handleFilterResultsChange, handleRoute, location, auID, ...props}) => {
     const [numItems, setNumItems] = useState()
 
     return (
         <div className="page">
             <div className="item-layout-cont">
                 <div className="col-filter">
-                    <TestFilter items = {items} handleSearchResultsChange={handleFilterResultsChange} loc={loc} setNumItems={setNumItems}/>
+                    <TestFilter items = {items} handleSearchResultsChange={handleFilterResultsChange} handleRoute={handleRoute} location={location} setNumItems={setNumItems}/>
                 </div>
                 <div className="col-items">
                     <div className="path">

@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import {Redirect} from 'react-router-dom'
-//REACT ROUTER STATES ARE PASSED TO LOCATION OHHHHHHHHHHHH
+//REACT ROUTER STATES ARE PASSED TO LOCATION OHHHHHHHHHHHH. not the actual state.
 
 import {withFirebase} from '../../firebase'
 

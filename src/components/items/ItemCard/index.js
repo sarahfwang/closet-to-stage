@@ -9,7 +9,7 @@ const ItemCard = ({item, handleRoute, ...props}) => {
     
     useEffect(() => {
         setItemID(item.id)
-        console.log("2:",item.id)
+        console.log("itemcard itemID",item.id)
     }, [item])
   
 
@@ -28,7 +28,7 @@ const ItemCard = ({item, handleRoute, ...props}) => {
     
         return(
             <div className="t-item-card ">
-            <div className="t-img" onClick= {()=>{handleRoute(itemID)}}>
+            <div className="t-img" onClick= {()=>{handleRoute(`/item-page/${itemID}`)}}>
                 {item.fbUrls? <img src = {item.fbUrls[0]}/>: <img/>}
             </div>
             {props.account ?  
