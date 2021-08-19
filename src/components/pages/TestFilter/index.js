@@ -76,8 +76,8 @@ class TestFilter extends React.Component {
         const newQueryString = queryString.stringify(this.state, {arrayFormat: 'comma'})
 
         console.log(newQueryString)
-        //this.props.history.push(`/women/?${newQueryString}`)
-        this.props.handleRoute(`/women/?${newQueryString}`) //TODO insetad of "women", make general
+
+        this.props.handleRoute(`/listings/?${newQueryString}`) //must let handle route in page??
         
         
     }
@@ -167,7 +167,7 @@ class TestFilter extends React.Component {
         return(
             <div className="filter">
                 <div className="category">
-                    <h3 className="category-title">Women</h3>
+                    <h3 className="category-title">Listings</h3> {/*TODO: Make this category title change */}
                 </div>
 
                 <div className="filter-wrapper">

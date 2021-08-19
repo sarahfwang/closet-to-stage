@@ -32,13 +32,7 @@ const NavigationAuth = () =>( //use parentheses not bracket dumb b
           <Link to={ROUTES.HOME}>Home</Link>
         </li> */}
         <li>
-          <Link to={ROUTES.WOMEN}>Women</Link>
-        </li>
-        <li>
-          <Link to={ROUTES.GIRL}>Girl</Link>
-        </li>
-        <li>
-          <Link to={ROUTES.MEN}>Men</Link>
+          <Link to={ROUTES.LISTINGS}>Listings</Link>
         </li>
         <li className="list-button">
           <Link to={ROUTES.LIST}>List</Link>
@@ -80,14 +74,9 @@ const NavigationNonAuth = () =>(
     <div className="page-links">
       <ul>
         <li>
-          <Link to={ROUTES.WOMEN}>Women</Link>
+          <Link to={ROUTES.LISTINGS}>Listings</Link>
         </li>
-        <li>
-          <Link to={ROUTES.GIRL}>Girl</Link>
-        </li>
-        <li>
-          <Link to={ROUTES.MEN}>Men</Link>
-        </li>
+
         <li className="list-button">
           <Link to={ROUTES.LIST}>List</Link>
         </li>

@@ -45,7 +45,7 @@ const App = () => (
       <Route exact path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
       <Route exact path={ROUTES.HOME} component={HomePage} />
       <Route exact path={ROUTES.ADMIN} component={AdminPage} />
-      <Route exact path={ROUTES.WOMEN} component={ItemPage} />
+      <Route exact path={ROUTES.LISTINGS} component={ItemPage} />
       {/* <Route exact path={'/item-page2'} component={ItemPage2} /> */}
       <Route exact path={ROUTES.LIST} component = {Form} />
       <Route exact path="/item-page/:itemID" component = {Item}/> {/*':' allows Item to access itemID */}

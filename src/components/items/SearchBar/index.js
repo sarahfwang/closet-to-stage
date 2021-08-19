@@ -28,7 +28,7 @@ class SearchBar extends React.Component{
         const search = this.state.search
 
         this.props.history.push({
-            pathname: '/women',
+            pathname: '/listings',
             search: `?search=${search}`
         })
        
@@ -41,7 +41,7 @@ class SearchBar extends React.Component{
             show ? 
             <div>
                 <Redirect to={{
-                pathname: "/women",
+                pathname: "/listings",
                 state: {hits},
                 }}/>
                 <form onSubmit={this.onSubmit}>

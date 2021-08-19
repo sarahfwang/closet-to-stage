@@ -7,6 +7,4 @@ export const ACCOUNT = '/account';
 export const ADMIN = '/admin'; //cannot hav ./ either ;(
 export const PASSWORD_FORGET = '/pw-forget';
 export const PASSWORD_CHANGE = '/pw-change'; //you NEED THE '/' ermagurd
-export const WOMEN = '/women';
-export const GIRL = '/girl'
-export const MEN= '/men'
+export const LISTINGS = '/listings';
