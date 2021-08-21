@@ -18,7 +18,7 @@
     margin: .75rem 0;
 }
 
-.selector-wrapper input[type="checkbox"]{
+.selector-wrapper input{
     width:0;
     height:0;
 
@@ -27,28 +27,12 @@
     opacity: 0;
 }
 
-// > selector selects all checkmarks whose parent is a selector-wrapper
-/* .selector-wrapper:hover > .checkmark::before{
-    content: "\2705 ";
 
-    display: flex;
-    justify-content: center;
-    align-self: center;
-
-    // position: relative;
-    // bottom: 0.125rem;
-    position: absolute;
-    left: 0;
-
-    color: lightgrey;
-    font-weight: bold;
-}
-*/
 
 .checkmark{
     margin-right: .5em; //adds space between checkbox and words
     display: flex;
-    justify-content: center;
+    justify-content: center; //makes container for checkmark symbol to be centered
     align-items: center;
     
     border: 1px solid rgb(30,30,30);
@@ -62,18 +46,8 @@
 }
 
 .newcheckmark{
-//    position: absolute;
-//    left:0;
-
    font-size: 0.75em;
-
    opacity:0;
-
-//    width: 1em;
-//    height: 1em;
-
-//    border: 1px solid rgb(30,30,30);
-
 }
 
 //checkmark grey when hovered
@@ -88,10 +62,7 @@
     opacity: 1;
 }
 
-.selector-wrapper:hover > .swatch-wrapper{
-    border: 1px solid grey;
-    border-radius: 50%;
-}
+
 
 .swatch-wrapper{
     display: flex;
@@ -102,33 +73,42 @@
     border-radius: 50%;
 }
 
-.swatch-Red{
-    
-    width: 1.125em;
-    height: 1.125em;
+[class*="swatch-"]{
+    width: 1.125rem;
+    height: 1.125rem;
 
-    margin: .125em;
-
+    border: 1px solid rgba(10,10,10,0);
     border-radius: 50%;
+    
+    margin-right: .5em; //adds space between checkbox and words
+}
+//hover
+.selector-wrapper:hover > [class*="swatch-"]{
+    border: 1px solid grey;
+   
+}
 
+//checked
+input[type="radio"]:checked + [class*="swatch-"]{
+    border: 1px solid grey;
+}
+
+
+[class*="-red"]{
     background-color: tomato;
-
 }
-.swatch-Green{
-    
-    width: 1.125em;
-    height: 1.125em;
-
-    margin: .125em;
-
-    border-radius: 50%;
-
+[class*="-orange"]{
+    background-color: orange;
+}
+[class*="-yellow"]{
+    background-color: gold;
+}
+[class*="-green"]{
     background-color: yellowgreen;
-
 }
 
-.swatch-label{
-    margin-left:.5em;
-    padding-top: .175em; /*1.125+.125*2 - var(--lh)*/
-}
+// .swatch-label{
+//     margin-left:.5em;
+//     padding-top: .175em; /*1.125+.125*2 - var(--lh)*/
+// }
 

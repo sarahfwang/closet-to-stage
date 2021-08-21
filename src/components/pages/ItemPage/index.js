@@ -6,11 +6,12 @@ import ItemPageLayout from '../../layouts/ItemPageLayout'
 
 import "./item-page.scss"
 
-
+//keeps all info on items
 const ItemPage = (props) => {
     const [items, setItems] = useState([])
     const [filtered, setFiltered] = useState([])
     const [loading, setLoading] = useState("false")
+    const [parsed, setParsed] = useState(props.location)
 
 
     useEffect(() => { //going to set the objects based on the URL
@@ -19,21 +20,19 @@ const ItemPage = (props) => {
         let temp = items
         console.log("temp", temp)
 
-        // console.log("itemPage loc", location)
-
         console.log("search", location.search)
 
 
         if(location.search != ""){
-            //wanna do something
-            //then pass hits onto another search?
-
             console.log("if")
             const parsed = queryString.parse(location.search, {arrayFormat: 'comma'})
+            
 
             //define an array of items out here
 
             //for each category in the query object
+            //cat: string, category
+            //value: string or array, details of category
             Object.entries(parsed).forEach(([cat, value])=> {
                 let itemList = []
 
@@ -48,7 +47,7 @@ const ItemPage = (props) => {
                             if(doc.data().isListed){
                                 const found = temp.some(il => il.id === doc.id)
 
-                                if(found){ //why found instead of !found?
+                                if(found){ //is it saying that if it was found from previous list, add it in?? think so
                                     itemList.push({id: doc.id, ...doc.data()})
                                 }
                             }
@@ -69,7 +68,7 @@ const ItemPage = (props) => {
                             if(doc.data().isListed){
                                 const found = temp.some(il => il.id === doc.id)
 
-                                if(found){ //why found instead of !found?
+                                if(found){ 
                                     itemList.push({id: doc.id, ...doc.data()})
                                 }
                             }
@@ -80,7 +79,6 @@ const ItemPage = (props) => {
                     })
 
                     promises.push(promise)
-
                 }
             })
 
@@ -89,22 +87,6 @@ const ItemPage = (props) => {
                 console.log("filtered", filtered)
                 console.log("temp", temp)
             })
-
-
-
-
-
-
-            // console.log("parsed", parsed)
-            // const searchString = parsed.q
-            // console.log("searchString", searchString)
-            // console.log("location", location)
-
-            // props.firebase.doBasicSearch(searchString, "items").then(({hits})=> {
-            //     console.log(hits)
-            //     setItems(hits)
-            //     setFiltered(hits)
-            // })
 
         }
         else{

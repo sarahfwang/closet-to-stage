@@ -7,6 +7,8 @@ import './item-page-layout.scss'
 
 const ItemPageLayout = ({items, filtered, handleFilterResultsChange, handleRoute, location, auID, ...props}) => {
     const [numItems, setNumItems] = useState()
+  
+    
 
     return (
         <div className="page">
@@ -16,7 +18,10 @@ const ItemPageLayout = ({items, filtered, handleFilterResultsChange, handleRoute
                 </div>
                 <div className="col-items">
                     <div className="path">
-                        {/* {<p>{loc.pathname}</p>} */}
+                        {filtered.length} items found
+                        {/* Object.keys(parsed).map(key => 
+                            <div>{key}</div>
+                        ) */}
                     </div>
                     <div className = "items">
                         {filtered?
