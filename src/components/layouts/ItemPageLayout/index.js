@@ -5,10 +5,10 @@ import ItemCard from '../../items/ItemCard'
 
 import './item-page-layout.scss'
 
-const ItemPageLayout = ({items, filtered, handleFilterResultsChange, handleRoute, location, auID, ...props}) => {
+const ItemPageLayout = ({items, filtered, handleFilterResultsChange, handleRoute, handleChangeItems, location, auID, ...props}) => {
+    console.log("items- layout:", items)
+    console.log("filtered - layout:", filtered)
     const [numItems, setNumItems] = useState()
-  
-    
 
     return (
         <div className="page">
@@ -26,7 +26,7 @@ const ItemPageLayout = ({items, filtered, handleFilterResultsChange, handleRoute
                     <div className = "items">
                         {filtered?
                             filtered.map(item => (
-                                <ItemCard item = {item} handleRoute = {handleRoute} auID = {auID} {...props} key={item.id}/> 
+                                <ItemCard item = {item} handleRoute = {handleRoute} handleChangeItems={handleChangeItems} auID = {auID} {...props} key={item.id}/> 
                             )) : 
                             <div></div>
                         }

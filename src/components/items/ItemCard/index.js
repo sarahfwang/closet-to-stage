@@ -13,7 +13,8 @@ const ItemCard = ({item, handleRoute, ...props}) => {
     }, [item])
   
 
-    const onDelete = event => {//should they be allowed to delete?
+    const onDelete = event => {//should they be allowed to delete? TODO: Make delete
+
         const itemID = item.id
         
         //deleted from firebase
@@ -21,6 +22,9 @@ const ItemCard = ({item, handleRoute, ...props}) => {
 
         //deletes from algolia
         props.firebase.doDeleteNote(itemID, "items")
+
+        //delete from top-layer page (which keeps items)
+        props.handleChangeItems(itemID)
 
     }
 

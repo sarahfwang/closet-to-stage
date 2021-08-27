@@ -26,6 +26,8 @@ import { withAuthentication } from '../auth/Session';
 
 import './app.css'
 
+import parent from '../LiftingState/Parent'
+
 const App = () => (
   <Router>
     <div>
@@ -53,6 +55,7 @@ const App = () => (
       <Route exact path="/my-closet" component={MyCloset} />
       <Route exact path="/messages" component = {MessageConsole} />
       <Route exact path="/account" component = {Account} />
+      <Route exact path="/parent" component = {parent} />
     </div>
   </Router>
 );
