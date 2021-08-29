@@ -4,8 +4,12 @@ import 'firebase/auth' //is this right? they used this.auth instead
 import 'firebase/firestore'
 import 'firebase/storage'
 import 'firebase/functions'
-//import 'firebase/admin'
 import algoliasearch from "algoliasearch"
+import dotenv from 'dotenv'
+
+//dotenv.config()
+//import 'firebase/admin'
+
 
 
 const client = algoliasearch('YM62ZOQQ5L', 'ab7c1c24fa069b15221969369b1d63fd');//TODO: make private
@@ -16,13 +20,14 @@ const client = algoliasearch('YM62ZOQQ5L', 'ab7c1c24fa069b15221969369b1d63fd');/
 //console.log(process.env.REACT_APP_API_KEY) //restart local program to see env changes
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAy54gs5VLLS1aCQ8gJzauIu8zAbMC_ELY",
-    authDomain: "closet-to-stage-16bb6.firebaseapp.com",
+    apiKey: process.env.REACT_APP_API_KEY,
+    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+    //projectId: process.env.REACT_APP_PROJECT_ID,
     projectId: "closet-to-stage-16bb6",
-    storageBucket: "closet-to-stage-16bb6.appspot.com",
-    messagingSenderId: "601529027789",
-    appId: "1:601529027789:web:13b1b73191e399be9bed84",
-    measurementId: "G-H172SXJ9ZX"
+    storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER,
+    appId: process.env.REACT_APP_APP_ID,
+    measurementId: process.env.REACT_APP_MEASUREMENT_ID
   };
   
   class Firebase {
@@ -35,7 +40,7 @@ const firebaseConfig = {
         this.storage = firebase.storage()
         this.functions = firebase.functions()
 
-
+        console.log(process.env.REACT_APP_API_KEY, "project id")
         
       }
         //Images in storage
@@ -147,6 +152,28 @@ const firebaseConfig = {
       
         doSignInWithEmailAndPassword =(email, password) =>
           this.auth.signInWithEmailAndPassword(email, password)
+
+        /* doSignInWithGoogle = () => {
+            const provider = new firebase.auth.GoogleAuthProvider()
+            const auth = this.auth
+
+            this.auth.signInWithPopup(auth, provider)
+                .then((result) => {
+                    const credential = firebase.auth.GoogleAuthProvider.credentialFromResult(result)
+                    const token = credential.accessToken
+
+                    const user = result.user
+                    console.log("result.user", user)
+                }).catch((error) => {
+                    console.log("error", error)
+                    const errorCode = error.code;
+    const errorMessage = error.message;
+                    //TODO: HANDLE ERRORS
+                })
+
+        } */
+
+
       
          doSignOut = () =>
           this.auth.signOut();

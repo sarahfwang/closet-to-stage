@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from 'react'
+
+import {withFirebase} from '../firebase'
 import Child from './Child'
 
 class parent extends React.Component {
@@ -47,12 +49,20 @@ class parent extends React.Component {
         },()=> console.log(this.state))
     }
 
+    handleSignIn = () => {
+        console.log("signin")
+        //this.props.firebase.doSignInWithGoogle()
+        
+
+    }
+
     render(){
         return(
             <div>
                 <h1>Parent</h1>
                 <p>parent count: {this.state.count}</p>
                 <Child count={this.state.count} handleCountChange={this.handleCountChange}/>
+                <button onClick={this.handleSignIn}>SignInWithGoogle</button>
             </div>
         )
 
@@ -60,4 +70,4 @@ class parent extends React.Component {
     
 }
 
-export default parent
+export default withFirebase(parent)
