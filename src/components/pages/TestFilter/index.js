@@ -18,7 +18,7 @@ class TestFilter extends React.Component {
         this.state ={
             type:[],
             style:[],
-            color:[],
+            color:"",
         }
     }
     //TODO: MAKE NAV SHOW THE CURRENTLY SELECTED FILTERS< MAKE FILTER SHOW CURRENTLY SELECTED
@@ -44,7 +44,8 @@ class TestFilter extends React.Component {
         console.log("cat", cat)
         console.log(this.state[cat])//contains the array of specs
 
-        if(checkbox.checked){
+        console.log("checked", checkbox.checked)
+        if(checkbox.checked){ //if checkbox is checked put in array
             this.setState(state => {
                 const newList = state[cat].concat(value)
 
@@ -86,7 +87,24 @@ class TestFilter extends React.Component {
         })
     } */
 
-    stringify = () => {
+    onClickColor = (e) =>{
+        const color = e.target.value
+        console.log("color", color)
+        console.log("checked", e.target.checked)
+
+        //if it is checked, 
+        this.setState({
+            color,
+        }, ()=> {
+            console.log("state", this.state)
+            this.stringify()
+        })
+
+
+    }
+    
+
+    stringify = () => {//makes current state into a url, pushes new route
         console.log(this.state)
 
         const newQueryString = queryString.stringify(this.state, {arrayFormat: 'comma'})
@@ -142,7 +160,7 @@ class TestFilter extends React.Component {
                         <h4 className="filter-cat-title">Color</h4>
                         {LISTS.COLORS.map(color => ( //color is only one...so radio?
                             <label className="selector-wrapper" key={color}>
-                                <input id={color} value={color} name="color" type="radio" /* onClick={this.onClickMutExclusive("color")} *//>
+                                <input id={color} value={color} name="color" type="radio" onClick={this.onClickColor} /* onClick={this.onClickMutExclusive("color")} *//>
                                 
                                 <div className={`swatch-${color}`}></div>
                                 

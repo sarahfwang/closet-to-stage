@@ -106,7 +106,26 @@ input[type="radio"]:checked + [class*="swatch-"]{
 [class*="-green"]{
     background-color: yellowgreen;
 }
+[class*="-blue"]{
+    background-color: blue;
+}
+[class*="-purple"]{
+    background-color: purple;
+}
+[class*="-tan"]{
+    background-color: tan;
+}
+[class*="-white"]{
+    background-color: white;
+}
+[class*="-black"]{
+    background-color: black;
+}
+[class*="-multi"]{
+    background-color: grey;
+}
 
+//"blue", "purple", "tan", "white", "black", "multi"
 // .swatch-label{
 //     margin-left:.5em;
 //     padding-top: .175em; /*1.125+.125*2 - var(--lh)*/

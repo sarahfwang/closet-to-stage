@@ -29,6 +29,8 @@ class SignInFormBase extends Component {
         this.state = {
             ...INITIAL_STATE
         }
+
+        console.log("props", this.props)
     }
 
     onSubmit = event =>{
@@ -47,20 +49,25 @@ class SignInFormBase extends Component {
     }
 
     onChange = (event) =>{
-    
         this.setState(
             {
                 [event.target.name]: event.target.value
             }        
         )
-        
+    }
+
+    handleSignInWithGoogle = () => {
+        console.log("handleSignInWithGoogle")
+        this.props.firebase.doSignInWithGoogle()
     }
 
     render(){
         const {error} = this.state
-        
+
         return(
             <div>
+                <button onClick={this.handleSignInWithGoogle}>Sign in with google</button>
+
                 <form onSubmit = {this.onSubmit}>
                     <input 
                         name="email"

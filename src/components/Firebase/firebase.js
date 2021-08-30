@@ -4,10 +4,13 @@ import 'firebase/auth' //is this right? they used this.auth instead
 import 'firebase/firestore'
 import 'firebase/storage'
 import 'firebase/functions'
-import algoliasearch from "algoliasearch"
-import dotenv from 'dotenv'
+//import firebaseui from 'firebaseui'
+//import 'firebaseui/dist/firebaseui.css'
 
-//dotenv.config()
+import algoliasearch from "algoliasearch"
+
+import dotenv from 'dotenv'
+dotenv.config()
 //import 'firebase/admin'
 
 
@@ -15,13 +18,11 @@ import dotenv from 'dotenv'
 const client = algoliasearch('YM62ZOQQ5L', 'ab7c1c24fa069b15221969369b1d63fd');//TODO: make private
 
 
-
-
 //console.log(process.env.REACT_APP_API_KEY) //restart local program to see env changes
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_API_KEY,
-    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+    authDomain: "closet-to-stage-16bb6.firebaseapp.com",
     //projectId: process.env.REACT_APP_PROJECT_ID,
     projectId: "closet-to-stage-16bb6",
     storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
@@ -29,6 +30,8 @@ const firebaseConfig = {
     appId: process.env.REACT_APP_APP_ID,
     measurementId: process.env.REACT_APP_MEASUREMENT_ID
   };
+
+
   
   class Firebase {
       constructor(){
@@ -40,9 +43,13 @@ const firebaseConfig = {
         this.storage = firebase.storage()
         this.functions = firebase.functions()
 
-        console.log(process.env.REACT_APP_API_KEY, "project id")
+        //this.ui = new firebaseui.auth.AuthUI(firebase.auth())
         
       }
+        /* signInFirebaseUI = (elementID) => {
+            this.ui.start(elementID, uiConfig)
+        }  */
+
         //Images in storage
         storageRef = () => (
             this.storage.ref()
@@ -154,20 +161,27 @@ const firebaseConfig = {
           this.auth.signInWithEmailAndPassword(email, password)
 
         /* doSignInWithGoogle = () => {
-            const provider = new firebase.auth.GoogleAuthProvider()
-            const auth = this.auth
+            console.log("doSignInWithGoogle")
 
-            this.auth.signInWithPopup(auth, provider)
+            const googleProvider = new firebase.auth.GoogleAuthProvider()
+            console.log("googlePorvider", googleProvider)
+            
+            this.auth.signInWithPopup(googleProvider)
                 .then((result) => {
-                    const credential = firebase.auth.GoogleAuthProvider.credentialFromResult(result)
-                    const token = credential.accessToken
-
-                    const user = result.user
+                    //const credential = firebase.auth.GoogleAuthProvider.credentialFromResult(result)
+                    //const token = credential.accessToken
+                    const user = result.user 
+                    
                     console.log("result.user", user)
+                    const query = this.db.collection('users').where(firebase.firestore.FieldPath.documentId(), '==', user.uid).get()
+
+                    if(query.docs.length == 0) {
+
+                    }
+
                 }).catch((error) => {
-                    console.log("error", error)
-                    const errorCode = error.code;
-    const errorMessage = error.message;
+                    console.log("google error", error.message)
+                   
                     //TODO: HANDLE ERRORS
                 })
 
@@ -290,7 +304,6 @@ const firebaseConfig = {
         }
 
         //*** Merge Auth and DB User Api */
-
         onAuthUserListener = (next, fallback) => { //can this be turned into a promise?
             this.auth.onAuthStateChanged(authUser => { //onAuthStateChanged accepts a user
                 if(authUser) { //user is signed in
@@ -298,7 +311,10 @@ const firebaseConfig = {
                     
                     promise.then(snapshot => { //could also get rid of 'promise' and go directly to '.then'
                         const dbUser = snapshot.data()
-                        console.log("roles", dbUser.roles)
+                        if(dbUser){
+                            console.log("roles", dbUser.roles)
+                        }
+                        
                         //console.log({roles})
 
                         if(!dbUser.roles || dbUser.roles===undefined){

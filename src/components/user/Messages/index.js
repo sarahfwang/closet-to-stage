@@ -137,7 +137,7 @@ class Messages extends React.Component{
                     </div>
                     {itemIDs.map(itemID => (
                         //hmmm TODO: should have the item picture too
-                        <div className = "shelf-tab" onClick = {()=>{
+                        <div className = "shelf-tab" key={itemID} onClick = {()=>{
                             this.setSelect(itemID)
                             }}>
                             <div>{itemID}</div>

@@ -16,6 +16,7 @@ import Form from '../items/ItemForm'
 import Item from '../items/Item'
 import NewFilterPage from '../z-Test'
 import ItemUpdateForm from '../items/ItemUpdateForm'
+import NewSignIn from '../auth/NewSignIn'
 //import TestPage from '../pages/TestPage'
 //import TestItemBig from '../TestItemBig'
 
@@ -56,6 +57,7 @@ const App = () => (
       <Route exact path="/messages" component = {MessageConsole} />
       <Route exact path="/account" component = {Account} />
       <Route exact path="/parent" component = {parent} />
+      <Route exact path="/newsignin" component = {NewSignIn} />
     </div>
   </Router>
 );

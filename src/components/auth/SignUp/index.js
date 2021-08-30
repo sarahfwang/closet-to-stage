@@ -15,7 +15,6 @@ const SignUpPage =() =>{
         <div>
             <h1>SignUp</h1>
             <SignUpForm />
-            
         </div>
     )
 }
@@ -30,8 +29,6 @@ const INITIAL_STATE = {
 }
 
 class SignUpFormBase extends Component {
-
-    
     constructor(props){
         super(props)
         this.state = {...INITIAL_STATE}
@@ -48,8 +45,7 @@ class SignUpFormBase extends Component {
         this.props.firebase
             .doCreateUserWithEmailAndPassword(email, passwordOne)
             .then(authUser => {    //because createUser returns a Promise<UserCredential>
-                return this.props.firebase
-                    .user(authUser.user.uid)
+                return this.props.firebase.user(authUser.user.uid)
                     .set({
                         username,
                         email,
@@ -100,6 +96,7 @@ class SignUpFormBase extends Component {
 
         return (
             <form onSubmit={this.onSubmit}>
+                
                 <input 
                     name="username"
                     value={username}
