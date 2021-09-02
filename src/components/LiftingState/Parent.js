@@ -4,7 +4,6 @@ import {withFirebase} from '../firebase'
 import Child from './Child'
 
 class parent extends React.Component {
-
     constructor(props){
         super(props)
 
@@ -14,7 +13,6 @@ class parent extends React.Component {
     }
     componentDidMount(){
         const arr = [6,7,8,9,10]
-
         const promise = new Promise((resolve, reject)=> {
             let count = 0
 
@@ -29,7 +27,6 @@ class parent extends React.Component {
             else {
                 reject("Promise rejected");
             }
-
         })
 
         promise.then(result => {
@@ -52,8 +49,6 @@ class parent extends React.Component {
     handleSignIn = () => {
         console.log("signin")
         //this.props.firebase.doSignInWithGoogle()
-        
-
     }
 
     render(){
@@ -65,9 +60,7 @@ class parent extends React.Component {
                 <button onClick={this.handleSignIn}>SignInWithGoogle</button>
             </div>
         )
-
     }
-    
 }
 
 export default withFirebase(parent)

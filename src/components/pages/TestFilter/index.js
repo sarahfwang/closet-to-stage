@@ -18,15 +18,15 @@ class TestFilter extends React.Component {
         this.state ={
             type:[],
             style:[],
-            color:"",
+            color:[],
         }
     }
     //TODO: MAKE NAV SHOW THE CURRENTLY SELECTED FILTERS< MAKE FILTER SHOW CURRENTLY SELECTED
     componentDidMount(){ //TODO: get rid of parsed in upper component
+        console.log("componentDidMount")
+
         const parsed = this.props.location
         console.log(parsed, "filter, parsed")
-        
-
     }
     //TODO: if it is in state, make it checked
     onClick = (cat) => (e) => {
@@ -71,21 +71,8 @@ class TestFilter extends React.Component {
                 console.log("state", this.state)
                 this.stringify()
             })
-            
-
         }
     }
-    
-    /* onClickMutExclusive = (cat) => (e) => {
-        const value = e.target.value
-
-        this.setState({
-            [cat]: value,
-        }, ()=>{
-            console.log(this.state)
-            this.stringify()
-        })
-    } */
 
     onClickColor = (e) =>{
         const color = e.target.value
@@ -94,18 +81,16 @@ class TestFilter extends React.Component {
 
         //if it is checked, 
         this.setState({
-            color,
+            color:[color]
         }, ()=> {
             console.log("state", this.state)
             this.stringify()
         })
-
-
     }
     
 
     stringify = () => {//makes current state into a url, pushes new route
-        console.log(this.state)
+        console.log("stringify state", this.state)
 
         const newQueryString = queryString.stringify(this.state, {arrayFormat: 'comma'})
         console.log(newQueryString)
@@ -115,7 +100,6 @@ class TestFilter extends React.Component {
 
     
     render(){
-        const{type, style, color} = this.state
 
         return(
             <div className="filter">

@@ -62,8 +62,6 @@
     opacity: 1;
 }
 
-
-
 .swatch-wrapper{
     display: flex;
     justify-content: center;
@@ -85,14 +83,12 @@
 //hover
 .selector-wrapper:hover > [class*="swatch-"]{
     border: 1px solid grey;
-   
 }
 
 //checked
 input[type="radio"]:checked + [class*="swatch-"]{
     border: 1px solid grey;
 }
-
 
 [class*="-red"]{
     background-color: tomato;

@@ -59,8 +59,11 @@ class MessageConsole extends React.Component{
                         let buyerProfiles = []
                         let buyerUsernames = []
 
+                        //only after looping through all potential buyers
+                        let buyerPromises = []
+
                         buyerIDs.forEach(buyerID => {
-                            this.props.firebase.user(buyerID).get()
+                            const promise = this.props.firebase.user(buyerID).get()
                             .then(doc=>{
                                 let buyerProfile = doc.data().profile
                                 let buyerUsername = doc.data().username
@@ -76,19 +79,22 @@ class MessageConsole extends React.Component{
                                 buyerProfiles = buyerProfiles.concat(buyerProfile)
                                 buyerUsernames = buyerUsernames.concat(buyerUsername)
                             })
-                            .then(()=> {
-                                this.setState({
-                                    buyers:{
-                                        [doc.id]: {
-                                            buyerIDs,
-                                            buyerProfiles,
-                                            buyerUsernames,
-                                            coverImgURL,
-                                            itemName,
-                                        }
+
+                            buyerPromises.push(promise)
+                        })
+
+                        Promise.all(buyerPromises).then(()=> {
+                            this.setState({
+                                buyers:{
+                                    [doc.id]: {
+                                        buyerIDs,
+                                        buyerProfiles,
+                                        buyerUsernames,
+                                        coverImgURL,
+                                        itemName,
                                     }
-                                }, ()=>console.log(this.state,"A"))
-                            })
+                                }
+                            }, ()=>console.log(this.state,"buyer"))
                         })
                     }
                     else {

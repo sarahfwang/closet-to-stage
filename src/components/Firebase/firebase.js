@@ -7,9 +7,13 @@ import 'firebase/functions'
 //import firebaseui from 'firebaseui'
 //import 'firebaseui/dist/firebaseui.css'
 
+import * as firebaseui from "firebaseui";
+import 'firebaseui/dist/firebaseui.css'
+
 import algoliasearch from "algoliasearch"
 
 import dotenv from 'dotenv'
+import { getDisplayName } from 'recompose';
 dotenv.config()
 //import 'firebase/admin'
 
@@ -31,12 +35,29 @@ const firebaseConfig = {
     measurementId: process.env.REACT_APP_MEASUREMENT_ID
   };
 
+const uiConfig = {
+    callbacks: {
+        signInSuccessWithAuthResult: (authResult, redirectUrl) => {
+            console.log("authresult", authResult)
+            console.log("redirectUrls", redirectUrl)
+
+
+        }
+
+    },
+    signInOptions: [
+        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    ],
+    signInSuccessUrl:'/hello'
+} 
+
 
   
   class Firebase {
       constructor(){
        firebase.initializeApp(firebaseConfig) //app.init
         //firebase.admin().initializeApp()
+        
         
         this.auth = firebase.auth() //app.auth()
         this.db = firebase.firestore() //app.database
@@ -46,10 +67,39 @@ const firebaseConfig = {
         //this.ui = new firebaseui.auth.AuthUI(firebase.auth())
         
       }
-        /* signInFirebaseUI = (elementID) => {
-            this.ui.start(elementID, uiConfig)
-        }  */
+        startFirebaseUI = (elementID) => {
+            console.log("startFirebaseUI")
+            const ui = new firebaseui.auth.AuthUI(firebase.auth())
 
+            const uiConfig = {
+                callbacks: {
+                    signInSuccessWithAuthResult: (authResult, redirectUrl) => {
+                        console.log("authresult", authResult)
+                        console.log("user", authResult.user)
+                        //console.log("redirectUrls", redirectUrl)
+                        let photoURL=""
+
+                        authResult.user.photoURL? photoURL = authResult.user.photoURL : photoURL = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                        this.user(authResult.user.uid).set({
+                            userName: authResult.user.displayName,
+                            email: authResult.user.email,
+                            profile: photoURL,
+                            rolse:{},
+                        })
+            
+                        
+                    }
+            
+                },
+                signInOptions: [
+                    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+                ],
+                signInSuccessUrl:'/hello'
+            } 
+
+            ui.start(elementID, uiConfig)
+        }
+        
         //Images in storage
         storageRef = () => (
             this.storage.ref()
@@ -176,7 +226,9 @@ const firebaseConfig = {
                     const query = this.db.collection('users').where(firebase.firestore.FieldPath.documentId(), '==', user.uid).get()
 
                     if(query.docs.length == 0) {
+                        this.user(user.uid).set({
 
+                        })
                     }
 
                 }).catch((error) => {
@@ -311,10 +363,13 @@ const firebaseConfig = {
                     
                     promise.then(snapshot => { //could also get rid of 'promise' and go directly to '.then'
                         const dbUser = snapshot.data()
-                        if(dbUser){
+
+                        console.log("dbUser", dbUser, )
+
+
+                        /* if(dbUser){
                             console.log("roles", dbUser.roles)
                         }
-                        
                         //console.log({roles})
 
                         if(!dbUser.roles || dbUser.roles===undefined){
@@ -326,7 +381,7 @@ const firebaseConfig = {
                             uid: authUser.uid,
                             email: authUser.email,
                             ...dbUser
-                        }
+                        } */
                         
                         //console.log(authUser)
                         //console.log(dbUser)

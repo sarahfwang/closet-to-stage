@@ -18,6 +18,7 @@
     "fast-glob": "^3.2.5",
     "firebase": "^8.0.0",
     "firebase-admin": "^9.9.0",
+    "firebaseui": "^5.0.0",
     "fork-ts-checker-webpack-plugin": "^6.1.1",
     "immer": "^8.0.1",
     "node-sass": "^5.0.0",

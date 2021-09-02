@@ -12,52 +12,71 @@ const ItemPage = (props) => {
     const [filtered, setFiltered] = useState([])
     const [loading, setLoading] = useState("false")
     const [parsed, setParsed] = useState(props.location)
+    const [alist, setAList] = useState([])
 
 
     useEffect(() => { //going to set the objects based on the URL
         const location = props.location
-        let promises = []
-        let temp = items
-        console.log("temp", temp)
-
         console.log("search", location.search)
 
+        let temp = []
+        let promises = []
 
-        if(location.search != ""){
-            console.log("if")
+        //fixed this logic: DONE
+        if(location.search != ""){//if there is an query object
             const parsed = queryString.parse(location.search, {arrayFormat: 'comma'})
-            
-
-            //define an array of items out here
 
             //for each category in the query object
-            //cat: string, category
-            //value: string or array, details of category
+            //cat: string, category: type
+            //value: string or array, details of category: [shoe, dress]
             Object.entries(parsed).forEach(([cat, value])=> {
                 let itemList = []
-
                 console.log(cat, value)
 
                 //if value is an array
                 if(Array.isArray(value)){
-                    let promise = props.firebase.items().where(cat, 'in', value)
-                    .get()
-                    .then(snapshot => {
-                        snapshot.forEach(doc => {
-                            if(doc.data().isListed){
-                                const found = temp.some(il => il.id === doc.id)
-
-                                if(found){ //is it saying that if it was found from previous list, add it in?? think so
+                    if(temp.length){ //if temp is empty, say on the first cat
+                        console.log("first cat")
+                        let promise = props.firebase.items().where(cat, 'in', value)
+                        .get()
+                        .then(snapshot => {
+                            snapshot.forEach(doc => {
+                                if(doc.data().isListed){
                                     itemList.push({id: doc.id, ...doc.data()})
                                 }
-                            }
+                            })
                         })
-                    })
-                    .then(()=>{
-                        temp = itemList
-                    })
-                    
-                    promises.push(promise)
+                        .then(()=>{
+                            temp = itemList
+                        })
+                        promises.push(promise)
+                    }
+                    else{
+                        console.log("1< cat")
+                        let promise = props.firebase.items().where(cat, 'in', value)
+                        .get()
+                        .then(snapshot => {
+                            snapshot.forEach(doc => {
+                                if(doc.data().isListed){
+                                    /* const found = temp.some(il => il.id === doc.id)//problem is temp is empty if you just load it in
+                                    if(found){ //is it saying that if it was found from previous list, add it in?? think so
+                                        //I think it prevents from 
+                                        itemList.push({id: doc.id, ...doc.data()})
+                                    } */
+
+                                    //TODO: ERROR IN FILTER
+                                    const found = temp.some(il => il.id === doc.id)
+                                    if(found){
+                                        itemList.push({id: doc.id, ...doc.data()})
+                                    }
+                                }
+                            })
+                        })
+                        .then(()=>{
+                            temp = itemList
+                        })
+                        promises.push(promise)
+                    }
                 }
                 else{ //the value is a single string
                     console.log("single obj")
@@ -66,11 +85,13 @@ const ItemPage = (props) => {
                     .then(snapshot => {
                         snapshot.forEach(doc => {
                             if(doc.data().isListed){
-                                const found = temp.some(il => il.id === doc.id)
+                                /* const found = temp.some(il => il.id === doc.id)
 
                                 if(found){ 
                                     itemList.push({id: doc.id, ...doc.data()})
-                                }
+                                } */
+
+                                itemList.push({id: doc.id, ...doc.data()})
                             }
                         })
                     })
@@ -89,9 +110,7 @@ const ItemPage = (props) => {
             })
 
         }
-        else{
-            console.log("else")
-
+        else{ //show all items that exist
             let tempList = []
 
             props.firebase.items()
@@ -122,10 +141,13 @@ const ItemPage = (props) => {
     //cat is spec
        
     return(
-        <ItemPageLayout items = {items} filtered = {filtered} handleFilterResultsChange = {handleFilterResultsChange} handleRoute = {handleRoute} location={props.location}/>
-        
-    )
-    
-    
+        <ItemPageLayout 
+            items = {items} 
+            filtered = {filtered} 
+            handleFilterResultsChange = {handleFilterResultsChange} 
+            handleRoute = {handleRoute} 
+            location={props.location}
+        />
+    ) 
 }
 export default withFirebase(ItemPage)

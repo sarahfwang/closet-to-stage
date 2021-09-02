@@ -20,10 +20,10 @@ const ItemCard = ({item, handleRoute, ...props}) => {
         //deleted from firebase
         props.firebase.doDeleteItem(itemID, props.auID)
 
-        //deletes from algolia
-        props.firebase.doDeleteNote(itemID, "items")
+        //deletes from algolia TODO: FIX ALGOLIA
+        //props.firebase.doDeleteNote(itemID, "items")
 
-        //delete from top-layer page (which keeps items)
+        //delete from top-layer page (which keeps items) TODO
         props.handleChangeItems(itemID)
 
     }
