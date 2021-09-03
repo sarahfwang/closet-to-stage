@@ -11,8 +11,6 @@ const ItemPage = (props) => {
     const [items, setItems] = useState([])
     const [filtered, setFiltered] = useState([])
     const [loading, setLoading] = useState("false")
-    const [parsed, setParsed] = useState(props.location)
-    const [alist, setAList] = useState([])
 
 
     useEffect(() => { //going to set the objects based on the URL

@@ -25,8 +25,30 @@ class TestFilter extends React.Component {
     componentDidMount(){ //TODO: get rid of parsed in upper component
         console.log("componentDidMount")
 
-        const parsed = this.props.location
-        console.log(parsed, "filter, parsed")
+        const location = this.props.location
+        const parsed = queryString.parse(location.search, {arrayFormat: 'comma'})
+
+        Object.entries(parsed).forEach(([key, value]) => {
+
+            if(Array.isArray(value)){//
+                value.forEach(spec => {
+
+                    console.log("spec", spec)
+                    const checkbox = document.getElementById(spec)
+                    console.log("checked", checkbox.checked)
+                
+                })
+            }
+            else{
+                console.log("spec", value)
+                const checkbox = document.getElementById(value)
+                checkbox.checked = true
+                
+                console.log("checked", checkbox.checked)
+            }
+        })
+        
+        console.log("parsed", parsed)
     }
     //TODO: if it is in state, make it checked
     onClick = (cat) => (e) => {
@@ -116,7 +138,7 @@ class TestFilter extends React.Component {
 
                         {LISTS.TYPES.map(thisType => 
                             <label className="selector-wrapper" key={thisType} > {/*label allows full click */}                               
-                                <input id={thisType} name={thisType} value={thisType} type="checkbox" onClick={this.onClick("type")}/>
+                                <input id={thisType} name={thisType} value={thisType} type="checkbox" onClick={this.onClick("type")} />
                                 <span className="checkmark"><FontAwesomeIcon className = "newcheckmark" icon = {faCheck}/></span>
                                 <span className="smol">{thisType}</span>
                                 {/* <span className="checkmark"><FontAwesomeIcon className = "newcheckmark" icon = {faCheck}/></span>
