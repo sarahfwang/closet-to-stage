@@ -33,8 +33,8 @@ const ItemPage = (props) => {
 
                 //if value is an array
                 if(Array.isArray(value)){
+                    console.log("valllue", value)
                     if(temp.length){ //if temp is empty, say on the first cat
-                        console.log("first cat")
                         let promise = props.firebase.items().where(cat, 'in', value)
                         .get()
                         .then(snapshot => {
@@ -50,21 +50,13 @@ const ItemPage = (props) => {
                         promises.push(promise)
                     }
                     else{
-                        console.log("1< cat")
                         let promise = props.firebase.items().where(cat, 'in', value)
                         .get()
                         .then(snapshot => {
                             snapshot.forEach(doc => {
                                 if(doc.data().isListed){
-                                    /* const found = temp.some(il => il.id === doc.id)//problem is temp is empty if you just load it in
-                                    if(found){ //is it saying that if it was found from previous list, add it in?? think so
-                                        //I think it prevents from 
-                                        itemList.push({id: doc.id, ...doc.data()})
-                                    } */
-
-                                    //TODO: ERROR IN FILTER
                                     const found = temp.some(il => il.id === doc.id)
-                                    if(found){
+                                    if(!found){
                                         itemList.push({id: doc.id, ...doc.data()})
                                     }
                                 }
@@ -77,7 +69,6 @@ const ItemPage = (props) => {
                     }
                 }
                 else{ //the value is a single string
-                    console.log("single obj")
                     let promise = props.firebase.items().where(cat, '==', value)
                     .get()
                     .then(snapshot => {

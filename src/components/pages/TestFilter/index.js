@@ -32,23 +32,14 @@ class TestFilter extends React.Component {
 
             if(Array.isArray(value)){//
                 value.forEach(spec => {
-
-                    console.log("spec", spec)
                     const checkbox = document.getElementById(spec)
-                    console.log("checked", checkbox.checked)
-                
                 })
             }
             else{
-                console.log("spec", value)
                 const checkbox = document.getElementById(value)
                 checkbox.checked = true
-                
-                console.log("checked", checkbox.checked)
             }
         })
-        
-        console.log("parsed", parsed)
     }
     //TODO: if it is in state, make it checked
     onClick = (cat) => (e) => {
